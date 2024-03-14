@@ -16,7 +16,7 @@ HEIGHT = 700
 clock = pygame.time.Clock()
 
 pygame.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
 player = Player.init(1000)
 gamemap = HouseNormal(screen)

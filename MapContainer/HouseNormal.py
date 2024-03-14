@@ -6,9 +6,7 @@ from MapContainer import Tile
 
 class HouseNormal(Map):
     def __init__(self, screen):
-        super().__init__(screen)
-        self.path = "../Assets/House/housemap.tmx"
-        self.map = pytmx.load_pygame(self.path)
+        super().__init__(screen, "../Assets/House/housemap.tmx")
 
     def update_map(self):
         for layer in self.map.visible_layers:

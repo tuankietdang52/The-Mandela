@@ -10,7 +10,7 @@
     ],
     "fileStates": {
         "Tile/blackblock.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 1
         },
         "Tile/housetile.tsx": {
@@ -26,7 +26,7 @@
             }
         }
     },
-    "last.imagePath": "C:/Users/ADMIN/Downloads",
+    "last.imagePath": "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/House/Package",
     "map.height": 30,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
