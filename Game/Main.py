@@ -1,29 +1,39 @@
 import sys
 
 import pygame
+import pytmx
 
-import Enum.EState
-from Entity.PlayerContainer.Player import Player
+from Entity.PlayerContainer import Player
+from MapContainer import Map
+from MapContainer import HouseNormal
 
+# Attribute for game #
 
 FPS = 60
-Width = 700
-Height = 700
+WIDTH = 700
+HEIGHT = 700
+
 clock = pygame.time.Clock()
 
-player = Player.init(1000)
-player.set_state(Enum.EState.EState.DEAD)
+pygame.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
 
+player = Player.init(1000)
+gamemap = HouseNormal(screen)
+
+
+# Running Game #
 
 def running_game():
-    pygame.init()
-
     gameover = False
-    pygame.display.set_mode((Width, Height))
 
     while not gameover:
+        gamemap.update_map()
+
         __event_action()
         __pressing_key()
+
+        pygame.display.update()
 
         clock.tick(FPS)
 
