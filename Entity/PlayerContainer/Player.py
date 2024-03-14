@@ -5,7 +5,7 @@ from Enum.EState import EState
 
 class Player(pygame.sprite.Sprite):
     _instance = None
-    state = EState.FREE
+    __state = EState.FREE
 
     # Stats
     _health = 1000
@@ -54,15 +54,15 @@ class Player(pygame.sprite.Sprite):
         self._health -= damage
 
     def get_state(self) -> EState:
-        return self.state
+        return self.__state
 
     def set_state(self, state):
         """:param EState state:"""
-        self.state = state
+        self.__state = state
 
     # Movement #
     def moving(self, keys):
-        if self.state != EState.FREE:
+        if self.__state != EState.FREE:
             return
 
         ismoving = True
