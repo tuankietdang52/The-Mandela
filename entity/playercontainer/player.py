@@ -1,11 +1,10 @@
-import pygame
-
-from Enum.EState import EState
+from pjenum.estate import EState
 
 
-class Player(pygame.sprite.Sprite):
+class Player:
     _instance = None
     __state = EState.FREE
+    __speed = 2
 
     # Stats
     _health = 1000
@@ -14,7 +13,6 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self):
         """Call init() instead"""
-        pygame.sprite.Sprite.__init__(self)
         raise RuntimeError("Call init() instead")
 
     # Singleton init #
@@ -32,12 +30,11 @@ class Player(pygame.sprite.Sprite):
         :param float health:
         """
         if cls._instance is not None:
-            print("PlayerContainer is created before")
+            print("playercontainer is created before")
             return cls._instance
 
         cls._instance = cls.__new__(cls)
         cls._health = health
-        pygame.sprite.Sprite.__init__(cls._instance)
 
         return cls._instance
 
@@ -60,30 +57,30 @@ class Player(pygame.sprite.Sprite):
         """:param EState state:"""
         self.__state = state
 
+    def set_position(self, x, y):
+        """
+        :param int x:
+        :param int y:
+        """
+        self.x = x
+        self.y = y
+
+    def get_position(self) -> tuple[float, float]:
+        return self.x, self.y
+
+    def set_speed(self, speed):
+        """
+        :param float speed:
+        """
+        self.__speed = speed
+
+    def get_speed(self) -> float:
+        return self.__speed
+
     # Movement #
-    def moving(self, keys):
+    def moving(self, x, y):
         if self.__state != EState.FREE:
             return
 
-        ismoving = True
-
-        if keys[pygame.K_w]:
-            self.y += 1
-
-        elif keys[pygame.K_d]:
-            self.x += 1
-
-        elif keys[pygame.K_a]:
-            self.x -= 1
-
-        elif keys[pygame.K_s]:
-            self.y -= 1
-
-        else:
-            ismoving = False
-
-        if not ismoving:
-            return
-
-        print(f"x: {self.x}\n", f"y: {self.y}\n")
+        self.set_position(x, y)
 
