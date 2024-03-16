@@ -118,9 +118,9 @@
 </data>
  </layer>
  <objectgroup id="7" name="Start">
-  <object id="1" x="121.333" y="94.6667" width="22" height="24.3333"/>
+  <object id="1" name="Start" x="121.333" y="94.6667" width="22" height="24.3333"/>
  </objectgroup>
  <objectgroup id="8" name="Out">
-  <object id="2" x="243" y="272" width="40.6667" height="29.6667"/>
+  <object id="2" name="Out" x="243" y="272" width="40.6667" height="29.6667"/>
  </objectgroup>
 </map>

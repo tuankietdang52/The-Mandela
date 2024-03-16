@@ -3,10 +3,10 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "housemap.tmx",
     "expandedProjectPaths": [
-        "Tile",
-        "."
+        ".",
+        "Tile"
     ],
     "fileStates": {
         "Tile/blackblock.tsx": {
@@ -14,15 +14,15 @@
             "scaleInEditor": 1
         },
         "Tile/housetile.tsx": {
-            "scaleInDock": 1,
+            "scaleInDock": 2,
             "scaleInEditor": 1
         },
         "housemap.tmx": {
-            "scale": 0.75,
-            "selectedLayer": 0,
+            "scale": 2,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 491.3333333333333,
-                "y": 462.6666666666666
+                "x": 113.75,
+                "y": 220.5
             }
         }
     },
@@ -33,12 +33,15 @@
     "map.tileWidth": 16,
     "map.width": 40,
     "openFiles": [
+        "housemap.tmx",
+        "Tile/housetile.tsx",
+        "Tile/blackblock.tsx"
     ],
     "project": "house.tiled-project",
     "recentFiles": [
         "Tile/blackblock.tsx",
-        "housemap.tmx",
-        "Tile/housetile.tsx"
+        "Tile/housetile.tsx",
+        "housemap.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
