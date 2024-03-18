@@ -1,7 +1,8 @@
 import abc
 import os
+
+import pygame
 import pytmx
-import view
 
 
 class Map(abc.ABC):
@@ -10,18 +11,25 @@ class Map(abc.ABC):
 
     map = None
 
-    def __init__(self, screen, path):
+    tilegroup = pygame.sprite.Group()
+
+    def __init__(self, screen, path, group):
         self.screen = screen
         self.path = path
-        self.player = view.PlayerView.get_instance().get_model()
+        self.tilegroup = group
 
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.map = pytmx.load_pygame(path)
 
     @abc.abstractmethod
-    def init_obj_point(self):
+    def create_map(self):
         pass
 
-    @abc.abstractmethod
-    def update_map(self):
-        pass
+    def update_map(self, x, y):
+        group = self.tilegroup
+
+        for tile in group:
+            tile.rect.x -= x
+            tile.rect.y -= y
+
+        group.draw(self.screen)

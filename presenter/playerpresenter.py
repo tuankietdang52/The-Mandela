@@ -6,8 +6,8 @@ from pjenum import EState
 class PlayerPresenter:
     frame = 0
 
-    def __init__(self, health, view, centerx, centery, screen):
-        self.model = entity.Player(health, centerx, centery, screen)
+    def __init__(self, health, view, screen, gamemap):
+        self.model = entity.Player(health, screen, gamemap)
         self.view = view
 
     def set_img(self, img):
@@ -68,7 +68,7 @@ class PlayerPresenter:
         self.model.set_img(direction + str(index))
 
     def handle_moving(self, keys):
-        x, y = self.model.get_position()
+        x, y = 0, 0
 
         speed = self.model.get_speed()
 
@@ -93,6 +93,6 @@ class PlayerPresenter:
         else:
             return
 
-        self.moving_animation(direction)
-
-        self.model.moving(x, y)
+        if self.model.can_move(x, y):
+            self.model.moving(x, y)
+            self.moving_animation(direction)

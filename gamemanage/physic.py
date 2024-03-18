@@ -1,3 +1,5 @@
+import mapcontainer.map
+import pygame
 
 
 class Physic:
@@ -5,31 +7,18 @@ class Physic:
         pass
 
     @staticmethod
-    def collide(obj1, obj2) -> bool:
-        """
-        Please provide obj with x, y, width and height attribute
-        :param Any obj1:
-        :param Any obj2:
-        """
+    def is_collide_wall(rect, screen):
+        center = rect.center
+        botlf = rect.bottomleft
+        botrg = rect.bottomright
 
-        if (not hasattr(obj1, "x")
-                and hasattr(obj1, "y")
-                and hasattr(obj1, "width")
-                and hasattr(obj1, "height")):
+        walls = mapcontainer.Map.walls
 
-            raise ReferenceError
+        for wall in walls:
+            if (wall.rect.collidepoint(center)
+                    or wall.rect.collidepoint(botlf)
+                    or wall.rect.collidepoint(botrg)):
 
-        if (not hasattr(obj2, "x")
-                and hasattr(obj2, "y")
-                and hasattr(obj2, "width")
-                and hasattr(obj2, "height")):
-            raise ReferenceError
-
-        dx = (obj2.x, obj2.x + obj2.width)
-        dy = (obj2.y, obj2.y + obj2.height)
-
-        if dx[0] <= obj1.x <= dx[1] and dy[0] <= obj1.y <= dy[1]:
-            print(f"Collide with {obj2.oid}")
-            return True
+                return True
 
         return False

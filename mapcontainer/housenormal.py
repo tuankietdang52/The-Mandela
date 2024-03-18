@@ -7,48 +7,36 @@ from tilemap import TileObject
 
 class HouseNormal(Map):
     outpoint = None
-    OFFSETX = 400
-    OFFSETY = 200
+    OFFSETX = 0
+    OFFSETY = 0
 
-    def __init__(self, screen):
-        super().__init__(screen, "Assets/Map/House/housemap.tmx")
-        self.init_obj_point()
+    def __init__(self, screen, group):
+        super().__init__(screen, "Assets/Map/House/housemap.tmx", group)
 
-    def init_obj_point(self):
-        if self.map is None:
-            return
+        if screen.get_size() == (1024, 768):
+            self.OFFSETX = 474
+            self.OFFSETY = 368
 
-        obj = self.map.get_object_by_name("Start")
-        self.startpoint = TileObject((obj.x, obj.y), obj.width, obj.height)
+        else:
+            self.OFFSETX = 630
+            self.OFFSETY = 368
 
-        obj = self.map.get_object_by_name("Out")
-        self.outpoint = TileObject((obj.x, obj.y), obj.width, obj.height)
-
-    def get_start_point(self) -> tuple[float, float]:
-        x = self.startpoint.x + self.OFFSETX
-        y = self.startpoint.y + self.OFFSETY
-
-        return x, y
-
-    def update_map(self):
+    def create_map(self):
         if len(self.walls) != 0:
             self.walls.clear()
-
-        offsetx = self.player.x
-        offsety = self.player.y
-        speed = self.player.get_speed()
 
         for layer in self.map.layers:
             if hasattr(layer, "data"):
                 for x, y, surf in layer.tiles():
-                    pos = (x * 64 - offsetx,
-                           y * 64 - offsety)
+                    pos = x * 64 - self.OFFSETX, y * 64 - self.OFFSETY
 
                     surf = pygame.transform.scale(surf, (64, 64))
 
-                    tile = Tile(surf, pos, layer.name, layer.id)
+                    tile = Tile(surf, pos, layer.name, layer.id, self.screen)
 
-                    self.screen.blit(tile.img, tile.rect)
+                    self.screen.blit(tile.image, tile.rect)
+
+                    self.tilegroup.add(tile)
 
                     if "Wall" in layer.name or layer.name == "Object":
                         self.walls.append(tile)
