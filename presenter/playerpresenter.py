@@ -1,12 +1,20 @@
 import pygame
-from entity.playercontainer import Player
+import entity.playercontainer
 from pjenum import EState
 
 
 class PlayerPresenter:
-    def __init__(self, health, view):
-        self.model = Player.init(health)
+    frame = 0
+
+    def __init__(self, health, view, centerx, centery, screen):
+        self.model = entity.Player(health, centerx, centery, screen)
         self.view = view
+
+    def set_img(self, img):
+        self.model.set_img(img)
+
+    def get_img(self):
+        return self.model.get_img()
 
     def set_health(self, health):
         """:param float health:"""
@@ -17,7 +25,7 @@ class PlayerPresenter:
 
     def decrease_health(self, damage):
         """:param float damage:"""
-        self.model.decrease_health()
+        self.model.decrease_health(damage)
 
     def get_state(self) -> EState:
         return self.get_state()
@@ -32,21 +40,59 @@ class PlayerPresenter:
     def get_position(self) -> tuple[float, float]:
         return self.model.get_position()
 
+    def set_size(self, size):
+        """
+        :param tuple[float, float] size:
+        :return:
+        """
+        self.model.set_size(size)
+
+    def get_size(self) -> tuple[float, float]:
+        return self.model.get_size()
+
+    def get_model(self) -> entity.Player:
+        return self.model
+
+    def moving_animation(self, direction):
+        index = 0
+
+        if self.frame < 20:
+            index = 1
+        else:
+            index = 0
+
+        self.frame += 1
+        if self.frame > 40:
+            self.frame = 0
+
+        self.model.set_img(direction + str(index))
+
     def handle_moving(self, keys):
         x, y = self.model.get_position()
+
         speed = self.model.get_speed()
 
+        direction = "down"
+
         if keys[pygame.K_w]:
-            self.model.moving(x, y - speed)
+            y -= speed
+            direction = "up"
 
         elif keys[pygame.K_d]:
-            self.model.moving(x + speed, y)
+            x += speed
+            direction = "right"
 
         elif keys[pygame.K_a]:
-            self.model.moving(x - speed, y)
+            x -= speed
+            direction = "left"
 
         elif keys[pygame.K_s]:
-            self.model.moving(x, y + speed)
+            y += speed
+            direction = "down"
 
         else:
             return
+
+        self.moving_animation(direction)
+
+        self.model.moving(x, y)

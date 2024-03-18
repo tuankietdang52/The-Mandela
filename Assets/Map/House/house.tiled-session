@@ -5,8 +5,8 @@
     },
     "activeFile": "housemap.tmx",
     "expandedProjectPaths": [
-        ".",
-        "Tile"
+        "Tile",
+        "."
     ],
     "fileStates": {
         "Tile/blackblock.tsx": {
@@ -18,11 +18,11 @@
             "scaleInEditor": 1
         },
         "housemap.tmx": {
-            "scale": 2,
-            "selectedLayer": 5,
+            "scale": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 113.75,
-                "y": 220.5
+                "x": 263.16666666666663,
+                "y": 238.33333333333331
             }
         }
     },
