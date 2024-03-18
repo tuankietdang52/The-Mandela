@@ -12,16 +12,15 @@ class Game:
     WIDTH = 700
     HEIGHT = 700
 
-    centerx = WIDTH / 2
-    centery = HEIGHT / 2 + 10
-
     clock = pygame.time.Clock()
 
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-    player = PlayerView.init(screen, 1000, centerx, centery)
-    gamemap = HouseNormal(screen)
+    tilegroup = pygame.sprite.Group()
+
+    gamemap = HouseNormal(screen, tilegroup)
+    player = PlayerView.init(screen, 1000, gamemap)
 
     def __init__(self):
         pass
@@ -34,32 +33,20 @@ class Game:
         gamemap = self.gamemap
         player = self.player
 
-        startpoint = gamemap.get_start_point()
-
-        player.presenter.set_position(startpoint[0], startpoint[1])
-
-        gamemap.update_map()
+        gamemap.create_map()
         player.update_player()
 
     def running_game(self):
         gameover = False
-
-        gamemap = self.gamemap
-        player = self.player
         clock = self.clock
-
-        count = 0
 
         self.setup()
 
         while not gameover:
-            gamemap.update_map()
-            player.update_player()
-
             self.__event_action()
             self.__pressing_key()
 
-            pygame.display.update()
+            pygame.display.flip()
 
             clock.tick(self.FPS)
 

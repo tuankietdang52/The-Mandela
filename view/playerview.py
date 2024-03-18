@@ -1,5 +1,6 @@
 import pygame
 import entity.playercontainer
+import mapcontainer.map
 
 from presenter import PlayerPresenter
 
@@ -25,13 +26,12 @@ class PlayerView(pygame.sprite.Sprite):
         return cls._instance
 
     @classmethod
-    def init(cls, screen, health, centerx, centery):
+    def init(cls, screen, health, gamemap):
         """
         Init instance for Player
         :param float health:
-        :param float centerx: set x-axis for camera
-        :param float centery: set y-axis for camera
         :param pygame.Surface screen: game screen
+        :param mapcontainer.Map gamemap: game map
         """
 
         if cls._instance is not None:
@@ -39,16 +39,17 @@ class PlayerView(pygame.sprite.Sprite):
             return cls._instance
 
         cls._instance = cls.__new__(cls)
+        pygame.sprite.Sprite.__init__(cls.get_instance())
 
         cls.screen = screen
 
-        cls.presenter = PlayerPresenter(health, cls, centerx, centery, screen)
-        pygame.sprite.Sprite.__init__(cls.get_instance())
+        cls.presenter = PlayerPresenter(health, cls, screen, gamemap)
 
         return cls._instance
 
     def moving(self, keys):
         self.presenter.handle_moving(keys)
+        self.update_player()
 
     def update_player(self):
         size = self.presenter.get_size()

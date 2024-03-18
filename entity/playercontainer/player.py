@@ -4,13 +4,15 @@ import pygame
 
 import mapcontainer
 
+import gamemanage.physic
+
 from pjenum.estate import EState
 
 
 class Player:
     _instance = None
     __state = EState.FREE
-    __speed = 2
+    __speed = 3
     __path = "Assets/Ally/MainChar/"
     animatepth = "left0"
 
@@ -22,17 +24,17 @@ class Player:
     __health = 0
     __img = None
 
-    def __init__(self, health, centerx, centery, screen):
+    def __init__(self, health, screen, gamemap):
         """
         :param float health:
-        :param float centerx: set x-axis for camera
-        :param float centery: set y-axis for camera
         :param pygame.Surface screen: game screen
         """
         self.__health = health
-        self.centerx = centerx
-        self.centery = centery
         self.screen = screen
+
+        self.centerx = screen.get_size()[0] / 2
+        self.centery = screen.get_size()[1] / 2 + 10
+        self.gamemap = gamemap
 
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.set_img(self.animatepth)
@@ -110,31 +112,19 @@ class Player:
 
     # Movement #
     def moving(self, x, y):
-        prev = self.get_position()
-
-        # pygame.draw.rect(self.screen, (0, 255, 255), self.__img.get_rect(topleft=(self.centerx, self.centery)))
-
-        pos = tuple((x - prev[0], y - prev[1]))
-
         if self.__state != EState.FREE:
             return
 
-        if not self.can_move(self.centerx + pos[0], self.centery + pos[1]):
-            return
-
         self.set_position(x, y)
+        self.gamemap.update_map(x, y)
 
     def can_move(self, x, y):
-        walls = mapcontainer.Map.walls
+        pos = self.centerx + x, self.centery + y
+        rect = self.__img.get_rect(topleft=pos)
 
-        center = self.__img.get_rect(topleft=(x, y)).center
-        botlf = self.__img.get_rect(topleft=(x, y)).bottomleft
-        botrg = self.__img.get_rect(topleft=(x, y)).bottomright
+        self.gamemap.tilegroup.update()
 
-        for wall in walls:
-            if (wall.rect.collidepoint(center)
-                    or wall.rect.collidepoint(botlf)
-                    or wall.rect.collidepoint(botrg)):
-                return False
+        if gamemanage.physic.Physic.is_collide_wall(rect, self.screen):
+            return False
 
         return True
