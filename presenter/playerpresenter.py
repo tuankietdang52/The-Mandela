@@ -6,8 +6,8 @@ from pjenum import EState
 class PlayerPresenter:
     frame = 0
 
-    def __init__(self, health, view, screen, gamemap):
-        self.model = entity.Player(health, screen, gamemap)
+    def __init__(self, view, screen, health):
+        self.model = entity.Player(screen, health)
         self.view = view
 
     def set_img(self, img):
@@ -27,6 +27,13 @@ class PlayerPresenter:
         """:param float damage:"""
         self.model.decrease_health(damage)
 
+    def set_speed(self, speed):
+        """:param int speed:"""
+        self.model.set_speed(speed)
+
+    def get_speed(self) -> int:
+        return self.model.get_speed()
+
     def get_state(self) -> EState:
         return self.get_state()
 
@@ -34,11 +41,15 @@ class PlayerPresenter:
         """:param EState state:"""
         self.model.set_state(state)
 
-    def set_position(self, x, y):
-        self.model.set_position(x, y)
+    def set_position(self, pos):
+        """
+        :param tuple[int, int] pos:
+        """
+        self.model.set_position(pos)
 
     def get_position(self) -> tuple[float, float]:
-        return self.model.get_position()
+        """Get position of player (middle of screen)"""
+        return self.model.x, self.model.y
 
     def set_size(self, size):
         """
@@ -53,26 +64,35 @@ class PlayerPresenter:
     def get_model(self) -> entity.Player:
         return self.model
 
+    def get_rect(self):
+        return self.model.get_rect()
+
+    def set_sound_effect(self, sound_effect):
+        self.model.set_sound_effect(sound_effect)
+
+    def get_sound_effect(self) -> pygame.mixer.Sound:
+        return self.model.get_sound_effect()
+
     def moving_animation(self, direction):
-        index = 0
+        self.set_sound_effect("Assets/Sound/footstep.mp3")
 
         if self.frame < 20:
             index = 1
+
         else:
             index = 0
 
         self.frame += 1
         if self.frame > 40:
             self.frame = 0
+            self.get_sound_effect().play()
 
         self.model.set_img(direction + str(index))
 
     def handle_moving(self, keys):
-        x, y = 0, 0
+        x, y = self.model.get_position()
 
         speed = self.model.get_speed()
-
-        direction = "down"
 
         if keys[pygame.K_w]:
             y -= speed
@@ -93,6 +113,6 @@ class PlayerPresenter:
         else:
             return
 
-        if self.model.can_move(x, y):
-            self.model.moving(x, y)
+        if self.model.can_move((x, y)):
+            self.model.moving((x, y))
             self.moving_animation(direction)

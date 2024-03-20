@@ -1,26 +1,33 @@
 import sys
-import os
-
 import pygame
 
 from view import PlayerView
-from mapcontainer import HouseNormal
+from mapcontainer import *
 
 
 class Game:
+    music_path = "Assets/Music/"
+
     FPS = 120
-    WIDTH = 700
-    HEIGHT = 700
+    WIDTH = 800
+    HEIGHT = 800
 
     clock = pygame.time.Clock()
 
     pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-    tilegroup = pygame.sprite.Group()
+    # screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
 
-    gamemap = HouseNormal(screen, tilegroup)
-    player = PlayerView.init(screen, 1000, gamemap)
+    # Music Background init #
+    pygame.mixer.init()
+    pygame.mixer.music.load(f"{music_path}Lily.mp3")
+    # pygame.mixer.music.play(1)
+
+    # Object init #
+    gamemap = HouseNormal(screen)
+
+    player = PlayerView.init(screen, gamemap, 1000)
 
     def __init__(self):
         pass
@@ -33,7 +40,15 @@ class Game:
         gamemap = self.gamemap
         player = self.player
 
-        gamemap.create_map()
+        gamemap.sect.create_sect()
+
+        try:
+            start_point = gamemap.sect.get_spawn_point()
+        except AttributeError:
+            start_point = gamemap.sect.get_start_point()
+
+        player.set_position(start_point)
+
         player.update_player()
 
     def running_game(self):
@@ -46,7 +61,9 @@ class Game:
             self.__event_action()
             self.__pressing_key()
 
-            pygame.display.flip()
+            self.handle_change_sect()
+
+            pygame.display.update()
 
             clock.tick(self.FPS)
 
@@ -59,3 +76,31 @@ class Game:
         keys = pygame.key.get_pressed()
 
         self.player.moving(keys)
+
+    def repos_player(self):
+        start_pos = self.gamemap.sect.get_start_point()
+
+        self.player.set_position(start_pos)
+        self.player.update_player()
+
+    def handle_change_sect(self):
+        mapname = self.gamemap.sect.in_area(self.player.get_rect())
+
+        current = self.gamemap.sect
+
+        self.gamemap.change_sect(mapname)
+
+        if self.gamemap.sect == current:
+            return
+
+        self.restart_screen()
+
+        self.gamemap.sect.create_sect()
+        self.repos_player()
+
+    def restart_screen(self):
+        black_screen = pygame.Surface((self.WIDTH, self.HEIGHT))
+        black_screen.fill((0, 0, 0))
+        black_screen.set_alpha(250)
+
+        self.screen.blit(black_screen, (0, 0))
