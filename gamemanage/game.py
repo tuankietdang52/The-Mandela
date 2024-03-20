@@ -40,7 +40,7 @@ class Game:
         gamemap = self.gamemap
         player = self.player
 
-        gamemap.sect.create_sect()
+        gamemap.sect.create()
 
         try:
             start_point = gamemap.sect.get_spawn_point()
@@ -93,9 +93,7 @@ class Game:
         if self.gamemap.sect == current:
             return
 
-        self.restart_screen()
-
-        self.gamemap.sect.create_sect()
+        self.gamemap.sect.create()
         self.repos_player()
 
     def restart_screen(self):

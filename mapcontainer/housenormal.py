@@ -40,7 +40,7 @@ class Room(mapcontainer.map.Sect):
         super().__init__(screen, prev_sect)
         self.sectpath = path + "Room.tmx"
 
-        self.load_sect(self.sectpath)
+        self.load(self.sectpath)
         self.init_OFFSET((160, 170), (0, 160))
 
     def get_spawn_point(self) -> tuple[float, float] | None:
@@ -61,7 +61,7 @@ class Corridor(mapcontainer.map.Sect):
 
         self.sectpath = path + "Corridor.tmx"
 
-        self.load_sect(self.sectpath)
+        self.load(self.sectpath)
         self.init_OFFSET((150, 150), (0, 100))
 
 
@@ -75,7 +75,7 @@ class OutDoor(mapcontainer.map.Sect):
 
         self.sectpath = path + "OutDoor.tmx"
 
-        self.load_sect(self.sectpath)
+        self.load(self.sectpath)
         self.init_OFFSET((50, 100), (-170, 40))
 
 
@@ -89,7 +89,7 @@ class Kitchen(mapcontainer.map.Sect):
 
         self.sectpath = path + "Kitchen.tmx"
 
-        self.load_sect(self.sectpath)
+        self.load(self.sectpath)
         self.init_OFFSET((60, 120), (-150, 100))
 
 
@@ -103,5 +103,5 @@ class Toilet(mapcontainer.map.Sect):
 
         self.sectpath = path + "Toilet.tmx"
 
-        self.load_sect(self.sectpath)
+        self.load(self.sectpath)
         self.init_OFFSET((0, 120), (-170, 120))

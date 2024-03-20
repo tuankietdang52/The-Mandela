@@ -52,11 +52,11 @@ class Sect:
         else:
             self.CAM_OFFSETX, self.CAM_OFFSETY = offsetfullscr
 
-    def load_sect(self, path):
+    def load(self, path):
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.map = pytmx.load_pygame(path)
 
-    def redraw_sect(self):
+    def redraw(self):
         group = self.tilegroup
 
         group.draw(self.screen)
@@ -77,7 +77,7 @@ class Sect:
 
         return None
 
-    def create_sect(self):
+    def create(self):
         self.walls.clear()
         self.areas.clear()
         self.tilegroup.empty()

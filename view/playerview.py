@@ -88,7 +88,7 @@ class PlayerView(pygame.sprite.Sprite):
 
         img = self.presenter.get_img()
 
-        self.gamemap.sect.redraw_sect()
+        self.gamemap.sect.redraw()
         self.screen.blit(img, pos)
 
     def moving(self, keys):
