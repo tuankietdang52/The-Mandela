@@ -1,42 +1,107 @@
-import pygame
-
-from mapcontainer.map import Map
-from tilemap import Tile
-from tilemap import TileObject
+import mapcontainer.map
 
 
-class HouseNormal(Map):
-    outpoint = None
-    OFFSETX = 0
-    OFFSETY = 0
+class HouseNormal(mapcontainer.map.Map):
+    def __init__(self, screen):
+        self.screen = screen
+        self.path = "Assets/Map/House/MapSect/"
+        self.sect = Room(screen, self.path)
 
-    def __init__(self, screen, group):
-        super().__init__(screen, "Assets/Map/House/housemap.tmx", group)
+    def change_sect(self, name):
+        """
+        :param str name: name section
+        """
+        try:
+            prev_sect = self.sect.back_point[name]
+        except KeyError:
+            prev_sect = ""
 
-        if screen.get_size() == (1024, 768):
-            self.OFFSETX = 474
-            self.OFFSETY = 368
+        if name == "Room":
+            self.sect = Room(self.screen, self.path, prev_sect)
+
+        if name == "Corridor":
+            self.sect = Corridor(self.screen, self.path,  prev_sect)
+
+        if name == "OutDoor":
+            self.sect = OutDoor(self.screen, self.path, prev_sect)
+
+        if name == "Kitchen":
+            self.sect = Kitchen(self.screen, self.path, prev_sect)
+
+        if name == "Toilet":
+            self.sect = Toilet(self.screen, self.path, prev_sect)
 
         else:
-            self.OFFSETX = 630
-            self.OFFSETY = 368
+            return
 
-    def create_map(self):
-        if len(self.walls) != 0:
-            self.walls.clear()
 
-        for layer in self.map.layers:
-            if hasattr(layer, "data"):
-                for x, y, surf in layer.tiles():
-                    pos = x * 64 - self.OFFSETX, y * 64 - self.OFFSETY
+class Room(mapcontainer.map.Sect):
+    def __init__(self, screen, path, prev_sect=None):
+        super().__init__(screen, prev_sect)
+        self.sectpath = path + "Room.tmx"
 
-                    surf = pygame.transform.scale(surf, (64, 64))
+        self.load_sect(self.sectpath)
+        self.init_OFFSET((160, 170), (0, 160))
 
-                    tile = Tile(surf, pos, layer.name, layer.id, self.screen)
+    def get_spawn_point(self) -> tuple[float, float] | None:
+        for area in self.areas:
+            if area.name == "Spawn":
+                return area.x, area.y
 
-                    self.screen.blit(tile.image, tile.rect)
+        return None
 
-                    self.tilegroup.add(tile)
 
-                    if "Wall" in layer.name or layer.name == "Object":
-                        self.walls.append(tile)
+class Corridor(mapcontainer.map.Sect):
+    back_point = {
+        "Room": "RoomBk",
+    }
+
+    def __init__(self, screen, path, prev_sect=None):
+        super().__init__(screen, prev_sect)
+
+        self.sectpath = path + "Corridor.tmx"
+
+        self.load_sect(self.sectpath)
+        self.init_OFFSET((150, 150), (0, 100))
+
+
+class OutDoor(mapcontainer.map.Sect):
+    back_point = {
+        "Corridor": "CorridorBk"
+    }
+
+    def __init__(self, screen, path, prev_sect=None):
+        super().__init__(screen, prev_sect)
+
+        self.sectpath = path + "OutDoor.tmx"
+
+        self.load_sect(self.sectpath)
+        self.init_OFFSET((50, 100), (-170, 40))
+
+
+class Kitchen(mapcontainer.map.Sect):
+    back_point = {
+        "OutDoor": "OutDoorBk1"
+    }
+
+    def __init__(self, screen, path, prev_sect=None):
+        super().__init__(screen, prev_sect)
+
+        self.sectpath = path + "Kitchen.tmx"
+
+        self.load_sect(self.sectpath)
+        self.init_OFFSET((60, 120), (-150, 100))
+
+
+class Toilet(mapcontainer.map.Sect):
+    back_point = {
+        "OutDoor": "OutDoorBk2"
+    }
+
+    def __init__(self, screen, path, prev_sect=None):
+        super().__init__(screen, prev_sect)
+
+        self.sectpath = path + "Toilet.tmx"
+
+        self.load_sect(self.sectpath)
+        self.init_OFFSET((0, 120), (-170, 120))

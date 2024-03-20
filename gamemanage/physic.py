@@ -7,12 +7,12 @@ class Physic:
         pass
 
     @staticmethod
-    def is_collide_wall(rect, screen):
+    def is_collide_wall(rect):
         center = rect.center
         botlf = rect.bottomleft
         botrg = rect.bottomright
 
-        walls = mapcontainer.Map.walls
+        walls = mapcontainer.map.Sect.walls
 
         for wall in walls:
             if (wall.rect.collidepoint(center)
