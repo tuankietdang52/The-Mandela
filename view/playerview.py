@@ -1,6 +1,7 @@
 import pygame
 import entity.playercontainer
 import mapcontainer.map
+import presenter
 
 from presenter import PlayerPresenter
 
@@ -50,20 +51,19 @@ class PlayerView(pygame.sprite.Sprite):
 
         return cls._instance
 
-    def set_position(self, pos):
-        """:param tuple[int, int] pos: Set camera position"""
+    def set_position(self, pos: tuple[int, int]):
         self.presenter.set_position(pos)
 
-    def get_model(self) -> entity.playercontainer.Player:
-        return self.presenter.get_model()
+    def get_position(self):
+        return self.presenter.get_position()
+
+    def get_presenter(self) -> presenter.PlayerPresenter:
+        return self.presenter
 
     def get_rect(self) -> pygame.rect.Rect:
         return self.presenter.get_rect()
 
-    def set_map(self, gamemap):
-        """
-        :param mapcontainer.map.Map gamemap:
-        """
+    def set_map(self, gamemap: mapcontainer.map.Map):
         self.gamemap = gamemap
 
     def update_player(self):
@@ -73,12 +73,7 @@ class PlayerView(pygame.sprite.Sprite):
         self.draw(pos, size)
         # pygame.draw.rect(self.screen, (0, 255, 0), self.get_rect())
 
-    def draw(self, pos, size=None):
-        """
-        :param tuple[float, float] pos: player position
-        :param tuple[float, float] size:
-        """
-
+    def draw(self, pos: tuple[float, float], size: tuple[float, float] = None):
         if size is None:
             size = self.presenter.get_size()
             self.presenter.set_size(size)
@@ -94,4 +89,3 @@ class PlayerView(pygame.sprite.Sprite):
     def moving(self, keys):
         self.presenter.handle_moving(keys)
         self.update_player()
-

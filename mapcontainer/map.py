@@ -12,24 +12,12 @@ class Map(abc.ABC):
     screen = None
     sect = None
 
-    def change_sect(self, name):
-        """
-        :param str name: name section
-        """
+    def change_sect(self, name: str):
         pass
 
 
 class Sect:
-    areas = []
-
     walls = list()
-
-    map = None
-    prev_sect = None
-
-    back_point = {}
-
-    tilegroup = pygame.sprite.Group()
 
     CAM_OFFSETX = 0
     """Higher = Left, Lower = Right"""
@@ -41,6 +29,12 @@ class Sect:
 
     def __init__(self, screen, prev_sect=None):
         self.screen = screen
+
+        self.map = None
+        self.areas = []
+        self.back_point = {}
+        self.tilegroup = pygame.sprite.Group()
+        self.is_created = False
 
         if prev_sect is not None:
             self.prev_sect = prev_sect
@@ -61,8 +55,7 @@ class Sect:
 
         group.draw(self.screen)
 
-    def set_pre_sect(self, prev_sect):
-        """:param str prev_sect:"""
+    def set_pre_sect(self, prev_sect: str):
         self.prev_sect = prev_sect
 
     def get_start_point(self) -> tuple[float, float] | None:
@@ -81,6 +74,8 @@ class Sect:
         self.walls.clear()
         self.areas.clear()
         self.tilegroup.empty()
+
+        self.is_created = True
 
         for layer in self.map.layers:
             if hasattr(layer, "data"):

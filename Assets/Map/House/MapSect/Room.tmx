@@ -131,6 +131,6 @@
  <objectgroup id="8" name="Point">
   <object id="1" name="RoomBk" x="64.976" y="212.583" width="12.6418" height="9.9544"/>
   <object id="8" name="Corridor" x="48.6667" y="224.667" width="45" height="13.6667"/>
-  <object id="10" name="Spawn" x="175.75" y="145.5" width="18" height="21"/>
+  <object id="10" name="Spawn" x="193.125" y="143.5" width="18" height="21"/>
  </objectgroup>
 </map>

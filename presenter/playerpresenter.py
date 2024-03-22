@@ -16,19 +16,16 @@ class PlayerPresenter:
     def get_img(self):
         return self.model.get_img()
 
-    def set_health(self, health):
-        """:param float health:"""
+    def set_health(self, health: float):
         self.model.set_health(health)
 
     def get_health(self) -> float:
         return self.get_health()
 
-    def decrease_health(self, damage):
-        """:param float damage:"""
+    def decrease_health(self, damage: float):
         self.model.decrease_health(damage)
 
-    def set_speed(self, speed):
-        """:param int speed:"""
+    def set_speed(self, speed: int):
         self.model.set_speed(speed)
 
     def get_speed(self) -> int:
@@ -37,32 +34,21 @@ class PlayerPresenter:
     def get_state(self) -> EState:
         return self.get_state()
 
-    def set_state(self, state):
-        """:param EState state:"""
+    def set_state(self, state: EState):
         self.model.set_state(state)
 
-    def set_position(self, pos):
-        """
-        :param tuple[int, int] pos:
-        """
+    def set_position(self, pos: tuple[int, int]):
         self.model.set_position(pos)
 
     def get_position(self) -> tuple[float, float]:
         """Get position of player (middle of screen)"""
         return self.model.x, self.model.y
 
-    def set_size(self, size):
-        """
-        :param tuple[float, float] size:
-        :return:
-        """
+    def set_size(self, size: tuple[float, float]):
         self.model.set_size(size)
 
     def get_size(self) -> tuple[float, float]:
         return self.model.get_size()
-
-    def get_model(self) -> entity.Player:
-        return self.model
 
     def get_rect(self):
         return self.model.get_rect()
@@ -90,6 +76,9 @@ class PlayerPresenter:
         self.model.set_img(direction + str(index))
 
     def handle_moving(self, keys):
+        if self.model.get_state() != EState.FREE:
+            return
+
         x, y = self.model.get_position()
 
         speed = self.model.get_speed()

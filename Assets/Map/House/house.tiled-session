@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Corridor.tmx",
+    "activeFile": "MapSect/Room.tmx",
     "expandedProjectPaths": [
-        "Tile",
         ".",
         "World",
+        "Tile",
         "MapSect"
     ],
     "fileStates": {
@@ -15,11 +15,11 @@
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 2,
-            "selectedLayer": 2,
+            "scale": 3,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 267.75,
-                "y": 96.5
+                "x": 144.16666666666663,
+                "y": 136
             }
         },
         "MapSect/Kitchen.tmx": {
@@ -29,8 +29,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 202.75,
-                "y": 232
+                "x": 112.25,
+                "y": 128
             }
         },
         "MapSect/OutDoor.tmx": {
@@ -40,30 +40,30 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 66.33333333333331,
-                "y": 72.66666666666669
+                "x": 112.33333333333334,
+                "y": 128
             }
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 247.25,
-                "y": 128
+                "x": 177.875,
+                "y": 140
             }
         },
         "MapSect/Toilet.tmx": {
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 2,
+            "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 90.25,
-                "y": 231.5
+                "x": 112.16666666666664,
+                "y": 128
             }
         },
         "Tile/blackblock.tsx": {
@@ -107,10 +107,10 @@
     "project": "house.tiled-project",
     "recentFiles": [
         "MapSect/OutDoor.tmx",
-        "MapSect/Room.tmx",
-        "MapSect/Kitchen.tmx",
-        "MapSect/Toilet.tmx",
         "MapSect/Corridor.tmx",
+        "MapSect/Toilet.tmx",
+        "MapSect/Kitchen.tmx",
+        "MapSect/Room.tmx",
         "Tile/blackblock.tsx",
         "Tile/housetile.tsx",
         "housemap.tmx"
