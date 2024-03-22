@@ -12,24 +12,12 @@ class Map(abc.ABC):
     screen = None
     sect = None
 
-    def change_sect(self, name):
-        """
-        :param str name: name section
-        """
+    def change_sect(self, name: str):
         pass
 
 
 class Sect:
-    areas = []
-
     walls = list()
-
-    map = None
-    prev_sect = None
-
-    back_point = {}
-
-    tilegroup = pygame.sprite.Group()
 
     CAM_OFFSETX = 0
     """Higher = Left, Lower = Right"""
@@ -42,6 +30,12 @@ class Sect:
     def __init__(self, screen, prev_sect=None):
         self.screen = screen
 
+        self.map = None
+        self.areas = []
+        self.back_point = {}
+        self.tilegroup = pygame.sprite.Group()
+        self.is_created = False
+
         if prev_sect is not None:
             self.prev_sect = prev_sect
 
@@ -52,17 +46,16 @@ class Sect:
         else:
             self.CAM_OFFSETX, self.CAM_OFFSETY = offsetfullscr
 
-    def load_sect(self, path):
+    def load(self, path):
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.map = pytmx.load_pygame(path)
 
-    def redraw_sect(self):
+    def redraw(self):
         group = self.tilegroup
 
         group.draw(self.screen)
 
-    def set_pre_sect(self, prev_sect):
-        """:param str prev_sect:"""
+    def set_pre_sect(self, prev_sect: str):
         self.prev_sect = prev_sect
 
     def get_start_point(self) -> tuple[float, float] | None:
@@ -77,10 +70,12 @@ class Sect:
 
         return None
 
-    def create_sect(self):
+    def create(self):
         self.walls.clear()
         self.areas.clear()
         self.tilegroup.empty()
+
+        self.is_created = True
 
         for layer in self.map.layers:
             if hasattr(layer, "data"):

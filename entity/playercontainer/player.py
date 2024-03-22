@@ -9,39 +9,27 @@ from pjenum.estate import EState
 
 class Player:
     _instance = None
-    __state = EState.FREE
     __speed = 1
     __path = "Assets/Ally/MainChar/"
-    animatepth = "left0"
-
-    # Stats
-    width, height = (36, 80)
-
-    __health = 0
-    __img = None
-
-    x, y = 0, 0
+    animatepth = "sitleft"
 
     sound_effect = None
 
-    def __init__(self, screen, health):
-        """
-        :param pygame.Surface screen: game screen
-        :param float health:
-        """
+    def __init__(self, screen: pygame.Surface, health: float):
         self.screen = screen
         self.__health = health
+        self.__img = None
+        self.__state = EState.BUSY
+        self.width, self.height = (36, 80)
+
+        self.x, self.y = (0, 0)
 
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.set_img(self.animatepth)
             self.set_size(self.get_size())
 
     # Get Set #
-    def set_img(self, img, size=None):
-        """
-        :param str | pygame.Surface img:
-        :param tuple[float, float] size:
-        """
+    def set_img(self, img: str | pygame.Surface, size: tuple[float, float] = None):
         paratype = type(img)
 
         if paratype is pygame.Surface:
@@ -57,28 +45,22 @@ class Player:
     def get_img(self) -> pygame.Surface:
         return self.__img
 
-    def set_health(self, health):
-        """:param float health:"""
+    def set_health(self, health: float):
         self.__health = health
 
     def get_health(self) -> float:
         return self.__health
 
-    def decrease_health(self, damage):
-        """:param float damage:"""
+    def decrease_health(self, damage: float):
         self.__health -= damage
 
     def get_state(self) -> EState:
         return self.__state
 
-    def set_state(self, state):
-        """:param EState state:"""
+    def set_state(self, state: EState):
         self.__state = state
 
-    def set_position(self, pos):
-        """
-        :param tuple[float, float] pos:
-        """
+    def set_position(self, pos: tuple[float, float]):
         self.x, self.y = pos
 
     def get_position(self) -> tuple[float, float]:
@@ -106,8 +88,7 @@ class Player:
     def get_rect(self) -> pygame.rect.Rect:
         return self.get_img().get_rect(topleft=self.get_position())
 
-    def set_sound_effect(self, sound_effect):
-        """:param pygame.mixer.Sound | str sound_effect:"""
+    def set_sound_effect(self, sound_effect: pygame.mixer.Sound | str):
         if type(sound_effect) is str:
             self.sound_effect = pygame.mixer.Sound(sound_effect)
         else:
@@ -121,10 +102,6 @@ class Player:
         """
         :param tuple[float, float] pos: next position
         """
-
-        if self.__state != EState.FREE:
-            return
-
         self.set_position(pos)
 
     def can_move(self, pos) -> bool:

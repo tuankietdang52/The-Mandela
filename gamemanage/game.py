@@ -1,106 +1,77 @@
 import sys
 import pygame
 
-from view import PlayerView
+import mapcontainer.map
+from pjenum import EState
+from view.playerview import PlayerView
 from mapcontainer import *
+from gamepart import *
 
 
 class Game:
     music_path = "Assets/Music/"
+
+    game_part_index = 0
 
     FPS = 120
     WIDTH = 800
     HEIGHT = 800
 
     clock = pygame.time.Clock()
+    dt = 0
 
     pygame.init()
 
-    # screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    # screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+
+    screen.fill((0, 0, 0))
 
     # Music Background init #
     pygame.mixer.init()
-    pygame.mixer.music.load(f"{music_path}Lily.mp3")
-    # pygame.mixer.music.play(1)
-
-    # Object init #
-    gamemap = HouseNormal(screen)
-
-    player = PlayerView.init(screen, gamemap, 1000)
 
     def __init__(self):
-        pass
+        self.gamemap = HouseNormal(self.screen)
+        self.player = PlayerView.init(self.screen, self.gamemap, 1000)
+        self.gamepart = Start(self.screen, self.gamemap)
 
-    def change_map(self, gamemap):
-        """:param Map gamemap: """
+    @staticmethod
+    def get_time() -> int:
+        return Game.dt
+
+    def change_map(self, gamemap: mapcontainer.map.Map):
         self.gamemap = gamemap
 
-    def setup(self):
-        gamemap = self.gamemap
-        player = self.player
-
-        gamemap.sect.create_sect()
-
-        try:
-            start_point = gamemap.sect.get_spawn_point()
-        except AttributeError:
-            start_point = gamemap.sect.get_start_point()
-
-        player.set_position(start_point)
-
-        player.update_player()
-
     def running_game(self):
+        pygame.time.wait(1000)
+
         gameover = False
         clock = self.clock
 
-        self.setup()
-
         while not gameover:
-            self.__event_action()
-            self.__pressing_key()
+            if self.gamepart.is_changing_part:
+                self.changing_part(FirstPart(self.screen, self.gamemap))
+                self.player.presenter.set_state(EState.FREE)
+                self.gamepart.is_changing_part = False
 
-            self.handle_change_sect()
+            self.gamepart.event_action()
+            self.gamepart.pressing_key()
+
+            self.gamepart.update()
 
             pygame.display.update()
 
-            clock.tick(self.FPS)
+            dt = clock.tick(self.FPS)
 
-    def __event_action(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+    def changing_part(self, gamepart):
+        self.gamepart = gamepart
 
-    def __pressing_key(self):
-        keys = pygame.key.get_pressed()
+    def draw_black_sceen(self):
+        self.player.get_presenter().set_state(EState.BUSY)
 
-        self.player.moving(keys)
-
-    def repos_player(self):
-        start_pos = self.gamemap.sect.get_start_point()
-
-        self.player.set_position(start_pos)
-        self.player.update_player()
-
-    def handle_change_sect(self):
-        mapname = self.gamemap.sect.in_area(self.player.get_rect())
-
-        current = self.gamemap.sect
-
-        self.gamemap.change_sect(mapname)
-
-        if self.gamemap.sect == current:
-            return
-
-        self.restart_screen()
-
-        self.gamemap.sect.create_sect()
-        self.repos_player()
-
-    def restart_screen(self):
         black_screen = pygame.Surface((self.WIDTH, self.HEIGHT))
         black_screen.fill((0, 0, 0))
-        black_screen.set_alpha(250)
+        black_screen.set_alpha(0)
 
-        self.screen.blit(black_screen, (0, 0))
+        self.player.get_presenter().set_state(EState.FREE)
+
