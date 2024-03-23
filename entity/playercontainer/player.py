@@ -1,7 +1,5 @@
 import os
-
 import pygame
-
 import gamemanage.physic
 
 from pjenum.estate import EState
@@ -11,7 +9,7 @@ class Player:
     _instance = None
     __speed = 1
     __path = "Assets/Ally/MainChar/"
-    animatepth = "sitleft"
+    animatepth = "left1"
 
     sound_effect = None
 
@@ -19,7 +17,7 @@ class Player:
         self.screen = screen
         self.__health = health
         self.__img = None
-        self.__state = EState.BUSY
+        self.__state = EState.FREE
         self.width, self.height = (36, 80)
 
         self.x, self.y = (0, 0)
@@ -66,19 +64,13 @@ class Player:
     def get_position(self) -> tuple[float, float]:
         return self.x, self.y
 
-    def set_speed(self, speed):
-        """
-        :param int speed:
-        """
+    def set_speed(self, speed: int):
         self.__speed = speed
 
     def get_speed(self) -> int:
         return self.__speed
 
-    def set_size(self, size):
-        """
-        :param tuple[float, float] size:
-        """
+    def set_size(self, size: tuple[float, float]):
         self.width, self.height = size
         self.__img = pygame.transform.scale(self.__img, size)
 
@@ -98,15 +90,15 @@ class Player:
         return self.sound_effect
 
     # Movement #
-    def moving(self, pos):
+    def moving(self, pos: tuple[float, float]):
         """
-        :param tuple[float, float] pos: next position
+        :param pos: next position
         """
         self.set_position(pos)
 
-    def can_move(self, pos) -> bool:
+    def can_move(self, pos: tuple[float, float]) -> bool:
         """
-        :param tuple[float, float] pos: next position
+        :param pos: next position
         """
 
         rect = self.__img.get_rect(topleft=pos)

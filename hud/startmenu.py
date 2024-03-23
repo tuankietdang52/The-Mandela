@@ -1,19 +1,17 @@
 import pygame.image
 import gamemanage
-import hud.pointer
+from hud import Pointer
 
 
 class StartMenu:
-    path = "Assets/"
-
-    fontpath = f"{path}Font/Crang.ttf"
+    fontpath = "Assets/Font/Crang.ttf"
 
     __element = dict()
 
     def __init__(self, screen):
         self.screen = screen
 
-        self.pointer = hud.pointer.Pointer(self.screen)
+        self.pointer = Pointer(self.screen)
 
         self.init_element()
 

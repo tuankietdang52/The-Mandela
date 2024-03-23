@@ -50,11 +50,6 @@ class Sect:
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.map = pytmx.load_pygame(path)
 
-    def redraw(self):
-        group = self.tilegroup
-
-        group.draw(self.screen)
-
     def set_pre_sect(self, prev_sect: str):
         self.prev_sect = prev_sect
 
@@ -79,12 +74,12 @@ class Sect:
 
         for layer in self.map.layers:
             if hasattr(layer, "data"):
-                self.draw_tile(layer)
+                self.__draw_tile(layer)
 
             if isinstance(layer, pytmx.TiledObjectGroup):
-                self.init_areas(layer)
+                self.__init_areas(layer)
 
-    def draw_tile(self, layer):
+    def __draw_tile(self, layer):
         for x, y, surf in layer.tiles():
             pos = x * self.size - self.CAM_OFFSETX, y * self.size - self.CAM_OFFSETY
 
@@ -100,7 +95,7 @@ class Sect:
 
             self.screen.blit(tile.image, tile.rect)
 
-    def init_areas(self, layer):
+    def __init_areas(self, layer):
         for area in layer:
             pos = (area.x / 16 * self.size - self.CAM_OFFSETX,
                    area.y / 16 * self.size - self.CAM_OFFSETY)
@@ -118,3 +113,8 @@ class Sect:
                 return area.name
 
         return None
+
+    def redraw(self):
+        group = self.tilegroup
+
+        group.draw(self.screen)

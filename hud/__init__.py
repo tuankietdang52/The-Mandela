@@ -1,1 +1,1 @@
-from .startmenu import *
+from .hudcomp import *

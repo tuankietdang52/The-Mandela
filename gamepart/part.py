@@ -2,16 +2,19 @@ import abc
 import sys
 
 import pygame
-
+import hud.startmenu
 import gamemanage.effect
-from view.playerview import *
+import gamemanage.game
 
+from pjenum import EState
+from view.playerview import *
 from hud import *
 
 
 class Part(abc.ABC):
     next = 0
     is_changing_part = False
+    is_open_board = False
 
     @abc.abstractmethod
     def update(self):
@@ -35,13 +38,33 @@ class Start(Part):
 
         pygame.mixer.music.load("Assets/Sound/rain.mp3")
 
-        self.startmenu = StartMenu(screen)
+        self.startmenu = hud.startmenu.StartMenu(screen)
         self.title_start = self.startmenu.get_start_title()
         self.elements = self.startmenu.get_elements()
 
         self.alpha = 0
-        self.next = 0
         self.choice = 1
+
+    def __setup(self):
+        gamemap = self.gamemap
+        player = self.player
+
+        gamemap.sect.create()
+
+        try:
+            start_point = gamemap.sect.get_spawn_point()
+        except AttributeError:
+            start_point = gamemap.sect.get_start_point()
+
+        player.set_position(start_point)
+
+        player.presenter.set_state(EState.BUSY)
+        player.presenter.set_img("sitleft")
+
+        player.update()
+
+        pygame.display.update()
+        pygame.time.wait(1000)
 
     def __fade_in(self, ls):
         if self.alpha == 255:
@@ -51,15 +74,14 @@ class Start(Part):
         gamemanage.effect.Effect.set_opacity(self.screen, ls, self.alpha)
 
     def __redraw_other(self):
-        self.gamemap.sect.redraw()
-        self.player.update_player()
+        gamemanage.game.Manager.update_UI()
 
     def __fade_out(self, ls):
         if self.alpha <= 0:
             return
 
         if self.gamemap.sect.is_created:
-            self.__redraw_other()
+            gamemanage.game.Manager.update_UI()
 
         self.alpha -= 1
         gamemanage.effect.Effect.set_opacity(self.screen, ls, self.alpha)
@@ -68,12 +90,22 @@ class Start(Part):
         if self.next != 3 or self.alpha != 255:
             return
 
-    def __check_choice(self):
-        if self.choice == 1:
-            self.next = 4
+        keys = pygame.key.get_pressed()
 
-        elif self.choice == 3:
-            sys.exit()
+        if keys[pygame.K_ESCAPE]:
+            if self.is_open_board:
+                self.__closing_board()
+
+    def __open_board(self):
+        self.is_open_board = True
+        load_board = Board(self.screen, (400, 400), (700, 600))
+        load_board.draw()
+
+    def __closing_board(self):
+        self.is_open_board = False
+        self.__redraw_other()
+        self.startmenu.draw_elements()
+        self.startmenu.change_choice(2)
 
     def event_action(self):
         for event in pygame.event.get():
@@ -88,6 +120,9 @@ class Start(Part):
                 self.__move_cur(key)
 
     def __move_cur(self, key):
+        if self.is_open_board:
+            return
+
         if key == pygame.K_RETURN:
             self.startmenu.pointer.play_choose_sound()
             self.__check_choice()
@@ -106,71 +141,74 @@ class Start(Part):
         else:
             return
 
-        print(self.choice)
-
         self.__redraw_other()
         self.startmenu.draw_elements()
         self.startmenu.change_choice(self.choice)
 
-    def __setup(self):
-        gamemap = self.gamemap
-        player = self.player
+    def __check_choice(self):
+        if self.choice == 1:
+            self.next = 4
 
-        gamemap.sect.create()
+        elif self.choice == 2:
+            self.__open_board()
 
-        try:
-            start_point = gamemap.sect.get_spawn_point()
-        except AttributeError:
-            start_point = gamemap.sect.get_start_point()
-
-        player.set_position(start_point)
-
-        player.update_player()
-
-        pygame.display.update()
-        pygame.time.wait(1000)
-
-    def destroying(self):
-        self.is_changing_part = True
-
-        x, y = self.player.get_position()
-        self.player.set_position((x - 50, y))
-        self.player.presenter.set_img("left1")
+        elif self.choice == 3:
+            sys.exit()
 
     def update(self):
         if self.next == 0:
-            self.__fade_in([self.title_start])
-            if self.alpha == 255:
-                self.next = 1
+            self.__intro()
 
         if self.next == 1:
-            self.screen.fill((0, 0, 0))
-            self.__fade_out([self.title_start])
-            if self.alpha <= 0:
-                self.alpha = 0
-                self.next = 2
+            self.__to_start_menu()
 
         if self.next == 2:
             self.__setup()
             self.next = 3
 
         if self.next == 3:
-            if not pygame.mixer.music.get_busy():
-                pygame.mixer.music.play(1)
-            self.__fade_in(self.elements.values())
-            if self.alpha == 255 and not self.startmenu.pointer.is_set:
-                self.startmenu.change_choice(1)
+            self.__setup_start_menu()
 
         if self.next == 4:
             self.__fade_out(self.elements.values())
             if self.alpha <= 0:
                 self.destroying()
 
+    def __intro(self):
+        self.__fade_in([self.title_start])
+        if self.alpha == 255:
+            self.next = 1
+
+    def __to_start_menu(self):
+        self.screen.fill((0, 0, 0))
+        self.__fade_out([self.title_start])
+        if self.alpha <= 0:
+            self.alpha = 0
+            self.next = 2
+
+    def __setup_start_menu(self):
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.play(True)
+        self.__fade_in(self.elements.values())
+        if self.alpha == 255 and not self.startmenu.pointer.is_set:
+            self.startmenu.change_choice(1)
+
+    def destroying(self):
+        self.is_changing_part = True
+
+        x, y = self.player.get_position()
+
+        self.player.set_position((x - 50, y))
+        self.player.presenter.set_img("left1")
+
+        gamemanage.game.Manager.update_UI_ip()
+        self.player.presenter.set_state(EState.FREE)
+
 
 class FirstPart(Part):
     def __init__(self, screen, gamemap):
         pygame.mixer.music.load(f"Assets/Music/Lily.mp3")
-        pygame.mixer.music.play(1)
+        pygame.mixer.music.play(True)
 
         self.screen = screen
         self.gamemap = gamemap
@@ -181,7 +219,32 @@ class FirstPart(Part):
             if event.type == pygame.QUIT:
                 sys.exit()
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and self.is_open_board:
+                    self.__closing_board()
+
+    def __popup_tutorial(self):
+        self.is_open_board = True
+        pos = self.screen.get_width() / 2, self.screen.get_height() - 100
+
+        size = self.screen.get_width(), self.screen.get_height() - 500
+
+        tutorial = Board(self.screen, pos, size)
+        tutorial.draw()
+
+        txt = "Press AWDS to move, Enter to next"
+        StoryText(self.screen, txt, 20, tutorial)
+
+        self.next = 1
+
+    def __closing_board(self):
+        self.is_open_board = False
+        gamemanage.game.Manager.update_UI_ip()
+
     def pressing_key(self):
+        if self.is_open_board:
+            return
+
         keys = pygame.key.get_pressed()
 
         self.player.moving(keys)
@@ -204,7 +267,10 @@ class FirstPart(Part):
         start_pos = self.gamemap.sect.get_start_point()
 
         self.player.set_position(start_pos)
-        self.player.update_player()
+        self.player.update()
 
     def update(self):
         self.handle_change_sect()
+
+        if self.next == 0:
+            self.__popup_tutorial()

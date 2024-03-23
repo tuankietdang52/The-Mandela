@@ -1,5 +1,6 @@
 import pygame
 import entity.playercontainer
+import gamemanage.game
 from pjenum import EState
 
 
@@ -105,3 +106,4 @@ class PlayerPresenter:
         if self.model.can_move((x, y)):
             self.model.moving((x, y))
             self.moving_animation(direction)
+            gamemanage.game.Manager.update_UI_ip()
