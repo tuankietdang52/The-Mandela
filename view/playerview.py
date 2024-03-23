@@ -7,13 +7,17 @@ from presenter import PlayerPresenter
 
 
 class PlayerView(pygame.sprite.Sprite):
+    """Position by topleft"""
     _instance = None
     screen = None
     gamemap = None
 
+    image = None
+    rect = None
+
     def __init__(self):
         """
-        Call init instead.
+        Call init() instead.
         :exception RuntimeError: when calling
         """
         pygame.sprite.Sprite.__init__(self)
@@ -29,16 +33,13 @@ class PlayerView(pygame.sprite.Sprite):
         return cls._instance
 
     @classmethod
-    def init(cls, screen, gamemap, health):
+    def init(cls, screen: pygame.Surface, gamemap: mapcontainer.map.Map, health: float):
         """
         Init instance for Player
-        :param pygame.Surface screen: game screen
-        :param mapcontainer.map.Map gamemap:
-        :param float health:
         """
 
         if cls._instance is not None:
-            print("player is created before")
+            print("Player is created before")
             return cls._instance
 
         cls._instance = cls.__new__(cls)
@@ -57,16 +58,13 @@ class PlayerView(pygame.sprite.Sprite):
     def get_position(self):
         return self.presenter.get_position()
 
-    def get_presenter(self) -> presenter.PlayerPresenter:
-        return self.presenter
-
     def get_rect(self) -> pygame.rect.Rect:
         return self.presenter.get_rect()
 
     def set_map(self, gamemap: mapcontainer.map.Map):
         self.gamemap = gamemap
 
-    def update_player(self):
+    def update(self):
         size = self.presenter.get_size()
         pos = self.presenter.get_position()
 
@@ -81,11 +79,10 @@ class PlayerView(pygame.sprite.Sprite):
         else:
             self.presenter.set_size(size)
 
-        img = self.presenter.get_img()
+        self.image = self.presenter.get_img()
+        self.rect = self.presenter.get_rect()
 
-        self.gamemap.sect.redraw()
-        self.screen.blit(img, pos)
+        self.screen.blit(self.image, pos)
 
     def moving(self, keys):
         self.presenter.handle_moving(keys)
-        self.update_player()

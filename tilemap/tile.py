@@ -2,6 +2,7 @@ import pygame
 
 
 class Tile(pygame.sprite.Sprite):
+    """Position by topleft"""
     def __init__(self, img, pos, layername, tid, screen):
         pygame.sprite.Sprite.__init__(self)
         self.pos = pos

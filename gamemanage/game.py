@@ -35,6 +35,26 @@ class Game:
         self.player = PlayerView.init(self.screen, self.gamemap, 1000)
         self.gamepart = Start(self.screen, self.gamemap)
 
+        Manager.entities.add(self.player)
+        Manager.gamemap = self.gamemap
+
+    # def setup(self):
+    #     gamemap = self.gamemap
+    #     player = self.player
+    #
+    #     gamemap.sect.create()
+    #
+    #     try:
+    #         start_point = gamemap.sect.get_spawn_point()
+    #     except AttributeError:
+    #         start_point = gamemap.sect.get_start_point()
+    #
+    #     start_point = start_point[0] - 100, start_point[1]
+    #
+    #     player.set_position(start_point)
+    #
+    #     Manager.update_UI()
+
     @staticmethod
     def get_time() -> int:
         return Game.dt
@@ -51,7 +71,6 @@ class Game:
         while not gameover:
             if self.gamepart.is_changing_part:
                 self.changing_part(FirstPart(self.screen, self.gamemap))
-                self.player.presenter.set_state(EState.FREE)
                 self.gamepart.is_changing_part = False
 
             self.gamepart.event_action()
@@ -66,12 +85,19 @@ class Game:
     def changing_part(self, gamepart):
         self.gamepart = gamepart
 
-    def draw_black_sceen(self):
-        self.player.get_presenter().set_state(EState.BUSY)
 
-        black_screen = pygame.Surface((self.WIDTH, self.HEIGHT))
-        black_screen.fill((0, 0, 0))
-        black_screen.set_alpha(0)
+class Manager:
+    entities = pygame.sprite.Group()
+    gamemap = None
 
-        self.player.get_presenter().set_state(EState.FREE)
+    @classmethod
+    def update_UI(cls):
+        cls.gamemap.sect.redraw()
+        cls.entities.update()
 
+    @classmethod
+    def update_UI_ip(cls):
+        cls.gamemap.sect.redraw()
+        cls.entities.update()
+
+        pygame.display.update()

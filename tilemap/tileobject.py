@@ -2,7 +2,8 @@ import pygame
 
 
 class Area:
-    def __init__(self, name: str, pos: tuple[float,float], width: float, height: float):
+    """Position by topleft"""
+    def __init__(self, name: str, pos: tuple[float, float], width: float, height: float):
         self.name = name
         self.x, self.y = pos
         self.width = width
