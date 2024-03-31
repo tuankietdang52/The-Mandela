@@ -13,17 +13,19 @@ class Physic:
         """
 
         center = rect.center
-        botlf = rect.bottomleft
-        botrg = rect.bottomright
+        bottom_left = rect.bottomleft
+        bottom_right = rect.bottomright
+        left = rect.midleft
+        right = rect.midright
 
         walls = mapcontainer.map.Sect.walls
 
-        for wall in walls:
-            if (wall.rect.collidepoint(center)
-                    or wall.rect.collidepoint(botlf)
-                    or wall.rect.collidepoint(botrg)):
-
-                return True
+        if (center in walls
+                or bottom_left in walls
+                or bottom_right in walls
+                or left in walls
+                or right in walls):
+            return True
 
         return False
 

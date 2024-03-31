@@ -26,7 +26,7 @@ class Demon(entity.enemycontainer.enemy.Enemy):
         if not self.is_appear():
             return
 
-        self.chase_player()
+        self.chasing()
 
     def chase_player(self):
         player_rect = view.playerview.PlayerView.get_instance().get_rect()
@@ -41,4 +41,29 @@ class Demon(entity.enemycontainer.enemy.Enemy):
         x, y = pair.x, pair.y
 
         self.rect = self.image.get_rect(topleft=(x, y))
+
+    def chasing(self):
+        player_rect = view.playerview.PlayerView.get_instance().get_rect()
+        x, y = self.rect.x, self.rect.y
+
+        if x < player_rect.x:
+            x += 1
+
+        elif x > player_rect.x:
+            x -= 1
+
+        if y < player_rect.y:
+            y += 1
+
+        elif y > player_rect.y:
+            y -= 1
+
+        if not self.can_move((x, y)):
+            print("cant")
+            self.chase_player()
+
+        else:
+            print("can")
+            self.path.clear()
+            self.rect = self.image.get_rect(topleft=(x, y))
 

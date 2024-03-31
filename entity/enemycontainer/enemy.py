@@ -129,7 +129,6 @@ class Enemy(pygame.sprite.Sprite, abc.ABC):
         row = self.screen.get_height() * 2
 
         detail = numpy.ndarray((row, col), dtype=numpy.object_)
-
         closed_list = set()
 
         x, y = src[0], src[1]
@@ -150,7 +149,7 @@ class Enemy(pygame.sprite.Sprite, abc.ABC):
                     detail,
                     closed_list: set) -> list | None:
 
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (1, -1), (-1, 1), (-1, -1)]
+        directions = [(0, 1), (1, 0), (-1, 0), (0, -1)]
 
         while len(open_list) > 0:
             p = heapq.heappop(open_list)
@@ -177,8 +176,8 @@ class Enemy(pygame.sprite.Sprite, abc.ABC):
                 if detail[nx_pos.y][nx_pos.x] is None or detail[nx_pos.y][nx_pos.x].f > f_new:
                     heapq.heappush(open_list, new_cell)
                     detail[nx_pos.y][nx_pos.x] = new_cell
-                    pygame.draw.circle(self.screen, (0, 0, 150), (nx_pos.x, nx_pos.y), 5)
-                    pygame.display.update()
+                    # pygame.draw.circle(self.screen, (0, 0, 150), (nx_pos.x, nx_pos.y), 5)
+                    # pygame.display.update()
 
         return None
 
@@ -201,4 +200,4 @@ class Enemy(pygame.sprite.Sprite, abc.ABC):
         return False
 
     def __get_heuristic(self, cur: Pair, dest: Pair) -> float:
-        return math.sqrt(math.pow(cur.x - dest.x, 2) + math.pow(cur.y - dest.y, 2))
+        return abs(cur.x - dest.x) + abs(cur.y - dest.y)

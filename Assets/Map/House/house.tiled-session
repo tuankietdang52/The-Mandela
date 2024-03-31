@@ -15,11 +15,11 @@
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 3,
-            "selectedLayer": 2,
+            "scale": 5.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 235.16666666666666,
-                "y": 22
+                "x": 190.63636363636365,
+                "y": -5.454545454545453
             }
         },
         "MapSect/Kitchen.tmx": {
@@ -29,30 +29,30 @@
             "scale": 3,
             "selectedLayer": 2,
             "viewCenter": {
-                "x": 43.83333333333334,
-                "y": 166.66666666666663
+                "x": 112.16666666666664,
+                "y": 128
             }
         },
         "MapSect/OutDoor.tmx": {
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 3,
-            "selectedLayer": 2,
+            "scale": 5.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 10.833333333333343,
-                "y": 5.666666666666686
+                "x": 67.90909090909092,
+                "y": 56.727272727272734
             }
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 3,
-            "selectedLayer": 2,
+            "scale": 5.5,
+            "selectedLayer": 5,
             "viewCenter": {
-                "x": 136.16666666666663,
-                "y": 136
+                "x": 310.27272727272725,
+                "y": 256.1818181818182
             }
         },
         "MapSect/Toilet.tmx": {
