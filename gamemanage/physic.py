@@ -7,7 +7,11 @@ class Physic:
         pass
 
     @staticmethod
-    def is_collide_wall(rect):
+    def is_collide_wall(rect: pygame.Rect):
+        """
+        :param rect: Next rect
+        """
+
         center = rect.center
         botlf = rect.bottomleft
         botrg = rect.bottomright
@@ -20,5 +24,19 @@ class Physic:
                     or wall.rect.collidepoint(botrg)):
 
                 return True
+
+        return False
+
+    @staticmethod
+    def is_collide(rect1, rect2):
+        center = rect1.center
+        botlf = rect1.bottomleft
+        botrg = rect1.bottomright
+
+        if (rect2.collidepoint(center)
+                or rect2.collidepoint(botlf)
+                or rect2.collidepoint(botrg)):
+
+            return True
 
         return False

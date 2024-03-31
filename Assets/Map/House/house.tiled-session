@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Room.tmx",
+    "activeFile": "MapSect/OutDoor.tmx",
     "expandedProjectPaths": [
         ".",
-        "World",
         "Tile",
+        "World",
         "MapSect"
     ],
     "fileStates": {
@@ -16,43 +16,43 @@
                 7
             ],
             "scale": 3,
-            "selectedLayer": 0,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 144.16666666666663,
-                "y": 136
+                "x": 235.16666666666666,
+                "y": 22
             }
         },
         "MapSect/Kitchen.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 112.25,
-                "y": 128
+                "x": 43.83333333333334,
+                "y": 166.66666666666663
             }
         },
         "MapSect/OutDoor.tmx": {
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 1.5,
-            "selectedLayer": 0,
+            "scale": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 112.33333333333334,
-                "y": 128
+                "x": 10.833333333333343,
+                "y": 5.666666666666686
             }
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 4,
-            "selectedLayer": 6,
+            "scale": 3,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 177.875,
-                "y": 140
+                "x": 136.16666666666663,
+                "y": 136
             }
         },
         "MapSect/Toilet.tmx": {
@@ -60,7 +60,7 @@
                 7
             ],
             "scale": 3,
-            "selectedLayer": 0,
+            "selectedLayer": 5,
             "viewCenter": {
                 "x": 112.16666666666664,
                 "y": 128
@@ -106,11 +106,11 @@
     ],
     "project": "house.tiled-project",
     "recentFiles": [
-        "MapSect/OutDoor.tmx",
         "MapSect/Corridor.tmx",
         "MapSect/Toilet.tmx",
         "MapSect/Kitchen.tmx",
         "MapSect/Room.tmx",
+        "MapSect/OutDoor.tmx",
         "Tile/blackblock.tsx",
         "Tile/housetile.tsx",
         "housemap.tmx"

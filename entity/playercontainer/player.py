@@ -7,7 +7,7 @@ from pjenum.estate import EState
 
 class Player:
     _instance = None
-    __speed = 1
+    __speed = 1.5
     __path = "Assets/Ally/MainChar/"
     animatepth = "left1"
 
@@ -16,7 +16,7 @@ class Player:
     def __init__(self, screen: pygame.Surface, health: float):
         self.screen = screen
         self.__health = health
-        self.__img = None
+        self.__image = None
         self.__state = EState.FREE
         self.width, self.height = (36, 80)
 
@@ -31,17 +31,17 @@ class Player:
         paratype = type(img)
 
         if paratype is pygame.Surface:
-            self.__img = img
+            self.__image = img
 
         if paratype is str:
-            self.__img = pygame.image.load(f"{self.__path + img}.png")
+            self.__image = pygame.image.load(f"{self.__path + img}.png")
 
         size = self.get_size() if size is None else size
 
         self.set_size(size)
 
     def get_img(self) -> pygame.Surface:
-        return self.__img
+        return self.__image
 
     def set_health(self, health: float):
         self.__health = health
@@ -72,7 +72,7 @@ class Player:
 
     def set_size(self, size: tuple[float, float]):
         self.width, self.height = size
-        self.__img = pygame.transform.scale(self.__img, size)
+        self.__image = pygame.transform.scale(self.__image, size)
 
     def get_size(self) -> tuple[float, float]:
         return self.width, self.height
@@ -101,7 +101,7 @@ class Player:
         :param pos: next position
         """
 
-        rect = self.__img.get_rect(topleft=pos)
+        rect = self.__image.get_rect(topleft=pos)
 
         if gamemanage.physic.Physic.is_collide_wall(rect):
             return False

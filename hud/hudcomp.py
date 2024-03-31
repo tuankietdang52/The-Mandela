@@ -95,4 +95,25 @@ class StoryText:
 
             self.board.insert_content(surf, rect)
 
-            pos = pos[0] + space, pos[1]
+            if word != "i" and word != "I":
+                pos = pos[0] + space, pos[1]
+            else:
+                pos = pos[0] + space / 2, pos[1]
+
+
+class BoardText:
+    def __init__(self,
+                 screen: pygame.Surface,
+                 text: str,
+                 fontsize: int,
+                 pos: tuple[float, float],
+                 size: tuple[float, float]):
+        """
+        :param pos: position of board
+        :param size: size of board
+        """
+        self.board = Board(screen, pos, size)
+        self.board.draw()
+        self.txt = StoryText(screen, text, fontsize, self.board)
+
+        self.rect = self.board.rect

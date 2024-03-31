@@ -114,6 +114,24 @@ class Sect:
 
         return None
 
+    def get_area(self, name: str) -> Area | None:
+        """Return area with "name" """
+        for area in self.areas:
+            if area.name == name:
+                return area
+
+        return None
+
+    def get_list_area(self, name: str) -> list[Area]:
+        """Return list of area have "name" in their name"""
+        ls = list()
+
+        for area in self.areas:
+            if name in area.name:
+                ls.append(area)
+
+        return ls
+
     def redraw(self):
         group = self.tilegroup
 
