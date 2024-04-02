@@ -1,6 +1,7 @@
 import pygame as pg
 
 import gamepart.housemap.firstpart as fp
+import gamepart.housemap.startpart as sp
 
 from view.player.playerview import PlayerView
 from mapcontainer import *
@@ -28,51 +29,51 @@ class Game:
     # Music Background init #
     pg.mixer.init()
 
-    # def __init__(self):
-    #     self.gamemap = HouseNormal(self.screen)
-    #     self.player = PlayerView.init(self.screen, self.gamemap, 1000)
-    #     self.gamepart = startpart.Start(self.screen, self.gamemap)
-    #
-    #     self.setup_manager()
+    def __init__(self):
+        self.gamemap = HouseNormal(self.screen)
+        self.player = PlayerView.init(self.screen, self.gamemap, 1000)
+        self.gamepart = sp.Start(self.screen, self.gamemap)
+
+        self.setup_manager()
 
     def setup_manager(self):
         Manager.player = self.player
         Manager.gamemap = self.gamemap
         Manager.screen = self.screen
 
-    def __init__(self):
-        self.gamemap = HouseNormal(self.screen)
-
-        self.player = PlayerView.init(self.screen, self.gamemap, 1000)
-
-        self.gamepart = fp.FirstPart(self.screen, self.gamemap)
-
-        self.test()
-
-    def test(self):
-        """test element"""
-        self.gamemap.change_sect("OutDoor")
-        self.gamepart.next = 0
-
-        self.setup_manager()
-
-    def setup(self):
-        """For test"""
-        gamemap = self.gamemap
-        player = self.player
-
-        gamemap.sect.create()
-
-        try:
-            start_point = gamemap.sect.get_spawn_point()
-        except AttributeError:
-            start_point = gamemap.sect.get_start_point()
-
-        start_point = start_point[0] - 100, start_point[1]
-
-        player.set_position(start_point)
-
-        Manager.update_UI()
+    # def __init__(self):
+    #     self.gamemap = HouseNormal(self.screen)
+    #
+    #     self.player = PlayerView.init(self.screen, self.gamemap, 1000)
+    #
+    #     self.gamepart = fp.FirstPart(self.screen, self.gamemap)
+    #
+    #     self.test()
+    #
+    # def test(self):
+    #     """test element"""
+    #     self.gamemap.change_sect("OutDoor")
+    #     self.gamepart.next = 0
+    #
+    #     self.setup_manager()
+    #
+    # def setup(self):
+    #     """For test"""
+    #     gamemap = self.gamemap
+    #     player = self.player
+    #
+    #     gamemap.sect.create()
+    #
+    #     try:
+    #         start_point = gamemap.sect.get_spawn_point()
+    #     except AttributeError:
+    #         start_point = gamemap.sect.get_start_point()
+    #
+    #     start_point = start_point[0] - 100, start_point[1]
+    #
+    #     player.set_position(start_point)
+    #
+    #     Manager.update_UI()
 
     @staticmethod
     def get_time() -> int:
@@ -87,7 +88,7 @@ class Game:
         gameover = False
         clock = self.clock
 
-        self.setup()
+        # self.setup()
 
         while not gameover:
             if self.gamepart.is_changing_part:
