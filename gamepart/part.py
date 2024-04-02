@@ -1,10 +1,7 @@
 import abc
 import sys
-
-import pygame.key
-
-import entity.enemycontainer.enemy
-import gamemanage.game
+import pygame as pg
+import gamemanage.game as gm
 
 from hud import *
 
@@ -56,21 +53,21 @@ class Part(abc.ABC):
         self.gamemap.sect.create()
         self.repos_player()
 
-        gamemanage.game.Manager.update_UI_ip()
+        gm.Manager.update_UI_ip()
 
-    def add_enemy(self, enemy: entity.enemycontainer.enemy.Enemy):
+    def add_enemy(self, enemy: pg.sprite.Sprite):
         self.enemies.append(enemy)
         self.update_list_entities()
 
-    def remove_enemy(self, enemy: entity.enemycontainer.enemy.Enemy):
+    def remove_enemy(self, enemy: pg.sprite.Sprite):
         self.enemies.remove(enemy)
         self.update_list_entities()
 
     def update_list_entities(self):
-        gamemanage.game.Manager.appear_entities.empty()
+        gm.Manager.appear_entities.empty()
         for enemy in self.enemies:
             if enemy.is_appear():
-                gamemanage.game.Manager.appear_entities.add(enemy)
+                gm.Manager.appear_entities.add(enemy)
 
     def repos_player(self):
         """Place player in map section start point"""
@@ -84,25 +81,25 @@ class Part(abc.ABC):
             return
 
         self.is_open_board = True
-        pos = self.screen.get_width() / 2, self.screen.get_height() - 100
+        pos = self.screen.get_width() / 2 + 10, self.screen.get_height() - 100
 
-        size = self.screen.get_width(), self.screen.get_height() - 500
+        size = self.screen.get_width() - 20, self.screen.get_height() - 500
 
         board = BoardText(self.screen, text, 20, pos, size)
 
-        pygame.display.update(board.rect)
+        pg.display.update(board.rect)
 
         while self.is_open_board:
             self.__check_closing_board()
 
-        gamemanage.game.Manager.update_UI_ip()
+        gm.Manager.update_UI_ip()
 
     def __check_closing_board(self):
-        for event in pygame.event.get():
+        for event in pg.event.get():
             """Prevent game to freezing itself"""
-            if event.type == pygame.QUIT:
+            if event.type == pg.QUIT:
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN:
-                if self.is_open_board and event.key == pygame.K_RETURN:
+            if event.type == pg.KEYDOWN:
+                if self.is_open_board and event.key == pg.K_RETURN:
                     self.is_open_board = False

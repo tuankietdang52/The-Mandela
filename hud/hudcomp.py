@@ -1,4 +1,4 @@
-import pygame.image
+import pygame as pg
 
 
 class Pointer:
@@ -6,9 +6,9 @@ class Pointer:
     size = (20, 30)
 
     def __init__(self, screen):
-        self.image = pygame.image.load("Assets/HUD/pointer.png")
+        self.image = pg.image.load("Assets/HUD/pointer.png")
 
-        self.image = pygame.transform.scale(self.image, self.size)
+        self.image = pg.transform.scale(self.image, self.size)
         self.screen = screen
         self.is_set = False
 
@@ -19,21 +19,21 @@ class Pointer:
         self.is_set = True
 
         self.screen.blit(self.image, rect)
-        pygame.display.update(rect)
+        pg.display.update(rect)
 
     def play_select_sound(self):
-        pygame.mixer.Sound("Assets/Sound/select.mp3").play()
+        pg.mixer.Sound("Assets/Sound/select.mp3").play()
 
     def play_choose_sound(self):
-        pygame.mixer.Sound("Assets/Sound/choose.mp3").play()
+        pg.mixer.Sound("Assets/Sound/choose.mp3").play()
 
 
 class Board:
     """Position by center"""
-    def __init__(self, screen: pygame.Surface, pos: tuple[float, float], size: tuple[float, float]):
+    def __init__(self, screen: pg.Surface, pos: tuple[float, float], size: tuple[float, float]):
         self.screen = screen
 
-        self.surf = pygame.Surface(size)
+        self.surf = pg.Surface(size)
 
         self.surf.fill((0, 0, 0))
         self.surf.set_alpha(100)
@@ -50,9 +50,9 @@ class Board:
             self.rect.bottomleft
         ]
 
-        pygame.draw.lines(self.screen, (0, 0, 0), True, points, 7)
+        pg.draw.lines(self.screen, (0, 0, 0), True, points, 7)
 
-    def insert_content(self, content: pygame.Surface, rect):
+    def insert_content(self, content: pg.Surface, rect):
         inside_rect = rect.clamp(self.rect)
         rect = inside_rect.move(inside_rect.x, 20)
 
@@ -63,7 +63,7 @@ class StoryText:
     """Position by topleft"""
     fontpath = "Assets/Font/Crang.ttf"
 
-    def __init__(self, screen: pygame.Surface, text: str, size: int, board: Board):
+    def __init__(self, screen: pg.Surface, text: str, size: int, board: Board):
         """Write text to board"""
         self.screen = screen
 
@@ -75,7 +75,7 @@ class StoryText:
         self.write()
 
     def write(self):
-        font = pygame.font.Font(self.fontpath, self.size)
+        font = pg.font.Font(self.fontpath, self.size)
 
         start = self.board.rect.topleft
         width = self.board.rect.width
@@ -88,22 +88,38 @@ class StoryText:
 
         for word in self.text:
             if pos[0] >= end:
-                pos = start[0], pos[1] + space * 2
+                pos = start[0], pos[1] + space * 4
 
             surf = font.render(word, 1, (255, 255, 255))
             rect = surf.get_rect(topleft=pos)
 
             self.board.insert_content(surf, rect)
 
-            if word != "i" and word != "I":
-                pos = pos[0] + space, pos[1]
-            else:
-                pos = pos[0] + space / 2, pos[1]
+            pos = self.__spacing(word, pos, space)
+
+    def __spacing(self, word, pos, space):
+        word_extra_space = {'n'}
+        word_extra_space_x2 = {'M', 'm', 'N'}
+        word_decrease_space = {'I', 'i'}
+
+        if word in word_decrease_space:
+            pos = pos[0] + space / 2, pos[1]
+
+        elif word in word_extra_space:
+            pos = pos[0] + space + 1, pos[1]
+
+        elif word in word_extra_space_x2:
+            pos = pos[0] + space + 3, pos[1]
+
+        else:
+            pos = pos[0] + space, pos[1]
+
+        return pos
 
 
 class BoardText:
     def __init__(self,
-                 screen: pygame.Surface,
+                 screen: pg.Surface,
                  text: str,
                  fontsize: int,
                  pos: tuple[float, float],

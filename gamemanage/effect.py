@@ -1,9 +1,9 @@
-import pygame.display
+import pygame as pg
 
 
 class Effect:
     @staticmethod
-    def set_opacity(screen: pygame.Surface, lssurf, alpha: int):
+    def set_opacity(screen: pg.Surface, lssurf, alpha: int):
         """
         Set opacity for list of surface
 
@@ -13,7 +13,7 @@ class Effect:
         for surf in lssurf:
             surf[0].set_alpha(alpha)
             screen.blit(surf[0], surf[1])
-            pygame.display.update(surf[1])
+            pg.display.update(surf[1])
 
     """
         Outline text
@@ -49,7 +49,7 @@ class Effect:
         w = textsurface.get_width() + 2 * outline_size
         h = font.get_height()
 
-        osurf = pygame.Surface((w, h + 6 * outline_size)).convert_alpha()
+        osurf = pg.Surface((w, h + 6 * outline_size)).convert_alpha()
         osurf.fill((0, 0, 0, 0))
 
         surf = osurf.copy()

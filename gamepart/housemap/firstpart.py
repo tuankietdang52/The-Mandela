@@ -1,41 +1,40 @@
-import pygame
 import sys
-import gamemanage.game
-import gamepart.part
+import pygame as pg
+import gamemanage.game as gm
+import gamepart.part as gp
+import mapcontainer.housenormal as mphouse
+import view.player.playerview as pv
+import view.enemy.lilyview as lilyv
 
-from entity.enemycontainer.demon import *
-from view.playerview import *
-from hud import *
 
-
-class FirstPart(gamepart.part.Part):
+class FirstPart(gp.Part):
     def __init__(self, screen, gamemap):
         self.screen = screen
         self.gamemap = gamemap
-        self.player = PlayerView.get_instance()
+        self.player = pv.PlayerView.get_instance()
 
     def begin(self):
-        pygame.mixer.music.load(f"Assets/Music/Lily.mp3")
-        pygame.mixer.music.play(True)
+        pg.mixer.music.load(f"Assets/Music/Lily.mp3")
+        pg.mixer.music.play(True)
 
     def event_action(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN and self.is_open_board:
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_RETURN and self.is_open_board:
                     self.__closing_board()
 
     def __closing_board(self):
         self.is_open_board = False
-        gamemanage.game.Manager.update_UI_ip()
+        gm.Manager.update_UI_ip()
 
     def pressing_key(self):
         if self.is_open_board:
             return
 
-        keys = pygame.key.get_pressed()
+        keys = pg.key.get_pressed()
 
         self.player.moving(keys)
 
@@ -54,7 +53,7 @@ class FirstPart(gamepart.part.Part):
             self.next = 1
 
         elif self.next == 1:
-            if type(self.gamemap.sect) is not mapcontainer.housenormal.Kitchen:
+            if type(self.gamemap.sect) is not mphouse.Kitchen:
                 return
 
             self.create_board_text("Let check the refrigerator")
@@ -70,8 +69,10 @@ class FirstPart(gamepart.part.Part):
 
         elif self.next == 3:
             offset = self.gamemap.sect.CAM_OFFSETX, self.gamemap.sect.CAM_OFFSETY
-            demon = Demon(self.screen, self.gamemap, type(self.gamemap.sect), (370 - offset[0], 550 - offset[1]))
-            self.add_enemy(demon)
+            start_pos = pg.math.Vector2(370 - offset[0], 550 - offset[1])
+            lily = lilyv.LilyView(self.screen, self.gamemap, start_pos)
+            self.add_enemy(lily)
+
             self.next = 4
 
     def __tutorial(self):
@@ -80,14 +81,14 @@ class FirstPart(gamepart.part.Part):
 
     def __checking_fridge(self):
         sect = self.gamemap.sect
-        if type(sect) is not mapcontainer.housenormal.Kitchen:
+        if type(sect) is not mphouse.Kitchen:
             return False
 
         area = sect.get_area("Fridge")
 
-        keys = pygame.key.get_pressed()
+        keys = pg.key.get_pressed()
 
-        if area.is_overlap(self.player.get_rect()) and keys[pygame.K_f]:
+        if area.is_overlap(self.player.get_rect()) and keys[pg.K_f]:
             return True
 
         return False

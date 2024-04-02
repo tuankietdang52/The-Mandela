@@ -1,12 +1,8 @@
-import sys
-import pygame
+import pygame as pg
 
-import gamepart.housemap.firstpart
-import mapcontainer.map
+import gamepart.housemap.firstpart as fp
 
-from gamepart.housemap import startpart
-from pjenum import EState
-from view.playerview import PlayerView
+from view.player.playerview import PlayerView
 from mapcontainer import *
 
 
@@ -19,18 +15,18 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    clock = pygame.time.Clock()
+    clock = pg.time.Clock()
     dt = 0
 
-    pygame.init()
+    pg.init()
 
-    screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    # screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.FULLSCREEN)
+    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    # screen = pg.display.set_mode((WIDTH, HEIGHT), pg.FULLSCREEN)
 
     screen.fill((0, 0, 0))
 
     # Music Background init #
-    pygame.mixer.init()
+    pg.mixer.init()
 
     # def __init__(self):
     #     self.gamemap = HouseNormal(self.screen)
@@ -49,7 +45,7 @@ class Game:
 
         self.player = PlayerView.init(self.screen, self.gamemap, 1000)
 
-        self.gamepart = gamepart.housemap.firstpart.FirstPart(self.screen, self.gamemap)
+        self.gamepart = fp.FirstPart(self.screen, self.gamemap)
 
         self.test()
 
@@ -82,11 +78,11 @@ class Game:
     def get_time() -> int:
         return Game.dt
 
-    def change_map(self, gamemap: mapcontainer.map.Map):
+    def change_map(self, gamemap: mp.Map):
         self.gamemap = gamemap
 
     def running_game(self):
-        pygame.time.wait(1000)
+        pg.time.wait(1000)
 
         gameover = False
         clock = self.clock
@@ -105,7 +101,7 @@ class Game:
 
             Manager.update_enemy()
 
-            pygame.display.flip()
+            pg.display.flip()
 
             dt = clock.tick(self.FPS)
 
@@ -116,7 +112,7 @@ class Game:
 class Manager:
     gamemap = None
     player = None
-    appear_entities = pygame.sprite.Group()
+    appear_entities = pg.sprite.Group()
     screen = None
 
     @classmethod
@@ -131,7 +127,7 @@ class Manager:
         cls.appear_entities.draw(cls.screen)
         cls.player.update()
 
-        pygame.display.update()
+        pg.display.update()
 
     @classmethod
     def update_enemy(cls):

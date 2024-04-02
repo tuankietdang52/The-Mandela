@@ -1,7 +1,7 @@
 import abc
 import os
 
-import pygame
+import pygame as pg
 import pytmx
 
 from tilemap import Area, Tile
@@ -34,7 +34,7 @@ class Sect:
         self.map = None
         self.areas = []
         self.back_point = {}
-        self.tilegroup = pygame.sprite.Group()
+        self.tilegroup = pg.sprite.Group()
         self.is_created = False
 
         if prev_sect is not None:
@@ -89,10 +89,9 @@ class Sect:
 
             tilesize = self.size, self.size
 
-            surf = pygame.transform.scale(surf, tilesize)
+            surf = pg.transform.scale(surf, tilesize)
 
-            tile = Tile(surf, pos, layer.name, layer.id, self.screen, layer.data[y][x])
-            self.tilegroup.add(tile)
+            tile = Tile(surf, pos, layer.name, layer.id, self.screen, layer.data[y][x], self.tilegroup)
 
             if "Wall" in layer.name or layer.name == "Object":
                 self.__wall_tile.append(tile)

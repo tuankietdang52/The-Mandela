@@ -1,17 +1,17 @@
 import sys
 
-import hud.startmenu
-import gamemanage.effect
-import gamemanage.game
-import gamepart.housemap.firstpart
-import gamepart.part
+import hud.startmenu as hud_sm
+import gamemanage.effect as ge
+import gamemanage.game as gm
+import gamepart.housemap.firstpart as fp
+import gamepart.part as gp
 
 from pjenum import EState
-from view.playerview import *
+from view.player.playerview import *
 from hud import *
 
 
-class Start(gamepart.part.Part):
+class Start(gp.Part):
     def __init__(self, screen, gamemap):
         self.screen = screen
         self.gamemap = gamemap
@@ -20,11 +20,11 @@ class Start(gamepart.part.Part):
 
         pygame.mixer.music.load("Assets/Sound/rain.mp3")
 
-        self.startmenu = hud.startmenu.StartMenu(screen)
+        self.startmenu = hud_sm.StartMenu(screen)
         self.title_start = self.startmenu.get_start_title()
         self.elements = self.startmenu.get_elements()
 
-        self.nextpart = gamepart.housemap.firstpart.FirstPart(self.screen, self.gamemap)
+        self.nextpart = fp.FirstPart(self.screen, self.gamemap)
 
         self.alpha = 0
         self.choice = 1
@@ -55,20 +55,20 @@ class Start(gamepart.part.Part):
             return
 
         self.alpha += 1
-        gamemanage.effect.Effect.set_opacity(self.screen, ls, self.alpha)
+        ge.Effect.set_opacity(self.screen, ls, self.alpha)
 
     def __redraw_other(self):
-        gamemanage.game.Manager.update_UI()
+        gm.Manager.update_UI()
 
     def __fade_out(self, ls):
         if self.alpha <= 0:
             return
 
         if self.gamemap.sect.is_created:
-            gamemanage.game.Manager.update_UI()
+            gm.Manager.update_UI()
 
         self.alpha -= 1
-        gamemanage.effect.Effect.set_opacity(self.screen, ls, self.alpha)
+        ge.Effect.set_opacity(self.screen, ls, self.alpha)
 
     def pressing_key(self):
         if self.next != 3 or self.alpha != 255:
@@ -188,5 +188,5 @@ class Start(gamepart.part.Part):
         self.player.set_position((x - 50, y))
         self.player.presenter.set_img("left1")
 
-        gamemanage.game.Manager.update_UI_ip()
+        gm.Manager.update_UI_ip()
         self.player.presenter.set_state(EState.FREE)

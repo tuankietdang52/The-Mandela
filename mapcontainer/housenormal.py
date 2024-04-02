@@ -1,7 +1,7 @@
-import mapcontainer.map
+import mapcontainer.map as mp
 
 
-class HouseNormal(mapcontainer.map.Map):
+class HouseNormal(mp.Map):
     def __init__(self, screen):
         self.screen = screen
         self.path = "Assets/Map/House/MapSect/"
@@ -32,7 +32,7 @@ class HouseNormal(mapcontainer.map.Map):
             return
 
 
-class Room(mapcontainer.map.Sect):
+class Room(mp.Sect):
     def __init__(self, screen, path, prev_sect=None):
         super().__init__(screen, prev_sect)
         self.sectpath = path + "Room.tmx"
@@ -48,7 +48,7 @@ class Room(mapcontainer.map.Sect):
         return None
 
 
-class Corridor(mapcontainer.map.Sect):
+class Corridor(mp.Sect):
     def __init__(self, screen, path, prev_sect=None):
         super().__init__(screen, prev_sect)
 
@@ -62,7 +62,7 @@ class Corridor(mapcontainer.map.Sect):
         self.init_OFFSET((150, 150), (0, 100))
 
 
-class OutDoor(mapcontainer.map.Sect):
+class OutDoor(mp.Sect):
     def __init__(self, screen, path, prev_sect=None):
         super().__init__(screen, prev_sect)
 
@@ -76,7 +76,7 @@ class OutDoor(mapcontainer.map.Sect):
         self.init_OFFSET((50, 100), (-170, 40))
 
 
-class Kitchen(mapcontainer.map.Sect):
+class Kitchen(mp.Sect):
     def __init__(self, screen, path, prev_sect=None):
         super().__init__(screen, prev_sect)
 
@@ -87,10 +87,10 @@ class Kitchen(mapcontainer.map.Sect):
         }
 
         self.load(self.sectpath)
-        self.init_OFFSET((60, 120), (-150, 100))
+        self.init_OFFSET((170, 120), (-5, 100))
 
 
-class Toilet(mapcontainer.map.Sect):
+class Toilet(mp.Sect):
     def __init__(self, screen, path, prev_sect=None):
         super().__init__(screen, prev_sect)
 

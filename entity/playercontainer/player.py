@@ -1,6 +1,6 @@
 import os
-import pygame
-import gamemanage.physic
+import pygame as pg
+import gamemanage.physic as gp
 
 from pjenum.estate import EState
 
@@ -13,34 +13,34 @@ class Player:
 
     sound_effect = None
 
-    def __init__(self, screen: pygame.Surface, health: float):
+    def __init__(self, screen: pg.Surface, health: float):
         self.screen = screen
         self.__health = health
         self.__image = None
         self.__state = EState.FREE
         self.width, self.height = (36, 80)
 
-        self.x, self.y = (0, 0)
+        self.position = pg.math.Vector2()
 
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare":
             self.set_img(self.animatepth)
             self.set_size(self.get_size())
 
     # Get Set #
-    def set_img(self, img: str | pygame.Surface, size: tuple[float, float] = None):
+    def set_img(self, img: str | pg.Surface, size: tuple[float, float] = None):
         paratype = type(img)
 
-        if paratype is pygame.Surface:
+        if paratype is pg.Surface:
             self.__image = img
 
         if paratype is str:
-            self.__image = pygame.image.load(f"{self.__path + img}.png")
+            self.__image = pg.image.load(f"{self.__path + img}.png")
 
         size = self.get_size() if size is None else size
 
         self.set_size(size)
 
-    def get_img(self) -> pygame.Surface:
+    def get_img(self) -> pg.Surface:
         return self.__image
 
     def set_health(self, health: float):
@@ -58,11 +58,14 @@ class Player:
     def set_state(self, state: EState):
         self.__state = state
 
-    def set_position(self, pos: tuple[float, float]):
-        self.x, self.y = pos
+    def set_position(self, pos: tuple[float, float] | pg.math.Vector2):
+        if type(pos) is pg.math.Vector2:
+            self.position = pos
+        else:
+            self.position = pg.math.Vector2(pos)
 
-    def get_position(self) -> tuple[float, float]:
-        return self.x, self.y
+    def get_position(self) -> pg.math.Vector2:
+        return self.position
 
     def set_speed(self, speed: int):
         self.__speed = speed
@@ -72,38 +75,33 @@ class Player:
 
     def set_size(self, size: tuple[float, float]):
         self.width, self.height = size
-        self.__image = pygame.transform.scale(self.__image, size)
+        self.__image = pg.transform.scale(self.__image, size)
 
     def get_size(self) -> tuple[float, float]:
         return self.width, self.height
 
-    def get_rect(self) -> pygame.rect.Rect:
+    def get_rect(self) -> pg.rect.Rect:
         return self.get_img().get_rect(topleft=self.get_position())
 
-    def set_sound_effect(self, sound_effect: pygame.mixer.Sound | str):
+    def set_sound_effect(self, sound_effect: pg.mixer.Sound | str):
         if type(sound_effect) is str:
-            self.sound_effect = pygame.mixer.Sound(sound_effect)
+            self.sound_effect = pg.mixer.Sound(sound_effect)
         else:
             self.sound_effect = sound_effect
 
-    def get_sound_effect(self) -> pygame.mixer.Sound:
+    def get_sound_effect(self) -> pg.mixer.Sound:
         return self.sound_effect
 
     # Movement #
-    def moving(self, pos: tuple[float, float]):
-        """
-        :param pos: next position
-        """
-        self.set_position(pos)
+    def moving(self, velocity: pg.math.Vector2):
+        self.position += velocity
 
-    def can_move(self, pos: tuple[float, float]) -> bool:
-        """
-        :param pos: next position
-        """
+    def can_move(self, velocity: pg.math.Vector2) -> bool:
+        next_pos = self.position + velocity
 
-        rect = self.__image.get_rect(topleft=pos)
+        rect = self.__image.get_rect(topleft=next_pos)
 
-        if gamemanage.physic.Physic.is_collide_wall(rect):
+        if gp.Physic.is_collide_wall(rect):
             return False
 
         return True
