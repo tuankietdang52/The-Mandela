@@ -1,19 +1,19 @@
-import pygame
+import pygame as pg
 
 
-class Tile(pygame.sprite.Sprite):
+class Tile(pg.sprite.Sprite):
     """Position by topleft"""
-    def __init__(self, img, pos, layername, tid, screen):
-        pygame.sprite.Sprite.__init__(self)
+    def __init__(self, img, pos, layername, tid, screen, data, groups: pg.sprite.Group):
+        pg.sprite.Sprite.__init__(self, groups)
         self.pos = pos
         self.image = img
         self.rect = self.image.get_rect(topleft=pos)
         self.layername = layername
         self.tid = tid
+        self.data = data
 
         self.screen = screen
 
     def update(self, *args, **kwargs):
-        pass
-       # if "Wall" in self.layername:
-            #pygame.draw.rect(self.screen, (255, 0, 0), self.rect)
+        if "Wall" in self.layername:
+            pg.draw.rect(self.screen, (0, 0, 50), self.rect)

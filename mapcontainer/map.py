@@ -1,7 +1,7 @@
 import abc
 import os
 
-import pygame
+import pygame as pg
 import pytmx
 
 from tilemap import Area, Tile
@@ -17,7 +17,8 @@ class Map(abc.ABC):
 
 
 class Sect:
-    walls = list()
+    __wall_tile = list()
+    walls = set()
 
     CAM_OFFSETX = 0
     """Higher = Left, Lower = Right"""
@@ -33,7 +34,7 @@ class Sect:
         self.map = None
         self.areas = []
         self.back_point = {}
-        self.tilegroup = pygame.sprite.Group()
+        self.tilegroup = pg.sprite.Group()
         self.is_created = False
 
         if prev_sect is not None:
@@ -66,6 +67,7 @@ class Sect:
         return None
 
     def create(self):
+        self.__wall_tile.clear()
         self.walls.clear()
         self.areas.clear()
         self.tilegroup.empty()
@@ -79,19 +81,20 @@ class Sect:
             if isinstance(layer, pytmx.TiledObjectGroup):
                 self.__init_areas(layer)
 
+        self.__init_walls()
+
     def __draw_tile(self, layer):
         for x, y, surf in layer.tiles():
             pos = x * self.size - self.CAM_OFFSETX, y * self.size - self.CAM_OFFSETY
 
             tilesize = self.size, self.size
 
-            surf = pygame.transform.scale(surf, tilesize)
+            surf = pg.transform.scale(surf, tilesize)
 
-            tile = Tile(surf, pos, layer.name, layer.id, self.screen)
-            self.tilegroup.add(tile)
+            tile = Tile(surf, pos, layer.name, layer.id, self.screen, layer.data[y][x], self.tilegroup)
 
             if "Wall" in layer.name or layer.name == "Object":
-                self.walls.append(tile)
+                self.__wall_tile.append(tile)
 
             self.screen.blit(tile.image, tile.rect)
 
@@ -107,6 +110,20 @@ class Sect:
 
             self.areas.append(tileobj)
 
+    def __init_walls(self):
+        for wall in self.__wall_tile:
+            left_x, top_y = wall.rect.topleft
+            width = wall.rect.width
+            height = wall.rect.height
+
+            right_x = left_x + width
+            bot_y = top_y + height
+
+            for y in range(top_y, bot_y):
+                for x in range(left_x, right_x):
+                    self.walls.add((x, y))
+                    self.walls.add((x, y))
+
     def in_area(self, rect) -> str | None:
         for area in self.areas:
             if area.is_overlap(rect):
@@ -114,7 +131,26 @@ class Sect:
 
         return None
 
+    def get_area(self, name: str) -> Area | None:
+        """Return area with "name" """
+        for area in self.areas:
+            if area.name == name:
+                return area
+
+        return None
+
+    def get_list_area(self, name: str) -> list[Area]:
+        """Return list of area have "name" in their name"""
+        ls = list()
+
+        for area in self.areas:
+            if name in area.name:
+                ls.append(area)
+
+        return ls
+
     def redraw(self):
         group = self.tilegroup
 
         group.draw(self.screen)
+        # group.update()

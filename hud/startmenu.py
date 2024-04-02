@@ -1,4 +1,4 @@
-import pygame.image
+import pygame as pg
 import gamemanage
 from hud import Pointer
 
@@ -15,10 +15,10 @@ class StartMenu:
 
         self.init_element()
 
-    def get_start_title(self) -> tuple[pygame.Surface, pygame.Rect]:
+    def get_start_title(self) -> tuple[pg.Surface, pg.Rect]:
         pos = (self.screen.get_width() / 2, self.screen.get_height() / 2)
 
-        font = pygame.font.Font(self.fontpath, 40)
+        font = pg.font.Font(self.fontpath, 40)
         title = gamemanage.effect.Effect.create_text_outline(font,
                                                              "For Python Project",
                                                              (255, 255, 255),
@@ -29,8 +29,8 @@ class StartMenu:
 
         return title, title_rect
 
-    def __write_text(self, text: str, size: int) -> pygame.Surface:
-        font = pygame.font.Font(self.fontpath, size)
+    def __write_text(self, text: str, size: int) -> pg.Surface:
+        font = pg.font.Font(self.fontpath, size)
         text = gamemanage.effect.Effect.create_text_outline(font,
                                                             text,
                                                             (255, 255, 255),
@@ -57,14 +57,14 @@ class StartMenu:
         self.init_txt_element("LoadChoice", "Load", 30, (width / 2, height - 200))
         self.init_txt_element("QuitChoice", "Quit", 30, (width / 2, height - 150))
 
-    def add_element(self, name: str, value: tuple[pygame.Surface, pygame.Rect]):
+    def add_element(self, name: str, value: tuple[pg.Surface, pg.Rect]):
         mp = {
             name: value
         }
 
         self.__element.update(mp)
 
-    def get_elements(self) -> dict[str, tuple[pygame.Surface, pygame.Rect]]:
+    def get_elements(self) -> dict[str, tuple[pg.Surface, pg.Rect]]:
         return self.__element
 
     def draw_elements(self):
