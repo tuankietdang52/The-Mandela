@@ -10,12 +10,11 @@ from mapcontainer import *
 class Game:
     music_path = "Assets/Music/"
 
-    game_part_index = 0
-
     FPS = 120
     WIDTH = 800
     HEIGHT = 800
 
+    game_part_index = 0
     clock = pg.time.Clock()
     dt = 0
 
