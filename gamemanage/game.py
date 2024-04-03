@@ -57,7 +57,7 @@ class Game:
     #     self.setup_manager()
     #
     # def setup(self):
-    #     """For test"""
+    #     """For testing"""
     #     gamemap = self.gamemap
     #     player = self.player
     #
