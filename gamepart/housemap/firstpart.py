@@ -13,6 +13,8 @@ class FirstPart(gp.Part):
         self.gamemap = gamemap
         self.player = pv.PlayerView.get_instance()
 
+        self.can_press_key = True
+
     def begin(self):
         pg.mixer.music.load(f"Assets/Music/Lily.mp3")
         pg.mixer.music.play(True)

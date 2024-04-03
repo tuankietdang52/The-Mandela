@@ -12,6 +12,7 @@ class Part(abc.ABC):
 
     is_changing_part = False
     is_open_board = False
+    can_press_key = False
 
     gamemap = None
     player = None

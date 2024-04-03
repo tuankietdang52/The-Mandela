@@ -18,7 +18,7 @@ class Start(gp.Part):
 
         self.player = PlayerView.get_instance()
 
-        pygame.mixer.music.load("Assets/Sound/rain.mp3")
+        pg.mixer.music.load("Assets/Sound/rain.mp3")
 
         self.startmenu = hud_sm.StartMenu(screen)
         self.title_start = self.startmenu.get_start_title()
@@ -47,8 +47,8 @@ class Start(gp.Part):
 
         player.update()
 
-        pygame.display.update()
-        pygame.time.wait(1000)
+        pg.display.update()
+        pg.time.wait(1000)
 
     def __fade_in(self, ls):
         if self.alpha == 255:
@@ -71,12 +71,12 @@ class Start(gp.Part):
         ge.Effect.set_opacity(self.screen, ls, self.alpha)
 
     def pressing_key(self):
-        if self.next != 3 or self.alpha != 255:
+        if not self.can_press_key:
             return
 
-        keys = pygame.key.get_pressed()
+        keys = pg.key.get_pressed()
 
-        if keys[pygame.K_ESCAPE]:
+        if keys[pg.K_ESCAPE]:
             if self.is_open_board:
                 self.__closing_board()
 
@@ -92,12 +92,12 @@ class Start(gp.Part):
         self.startmenu.change_choice(2)
 
     def event_action(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
                 sys.exit()
 
-            if event.type == pygame.KEYDOWN:
-                if self.next != 3 or self.alpha != 255:
+            if event.type == pg.KEYDOWN:
+                if not self.can_press_key:
                     return
 
                 key = event.key
@@ -107,17 +107,17 @@ class Start(gp.Part):
         if self.is_open_board:
             return
 
-        if key == pygame.K_RETURN:
+        if key == pg.K_RETURN:
             self.startmenu.pointer.play_choose_sound()
             self.__check_choice()
             return
 
-        elif key == pygame.K_w:
+        elif key == pg.K_w:
             if self.choice == 1:
                 return
             self.choice -= 1
 
-        elif key == pygame.K_s:
+        elif key == pg.K_s:
             if self.choice == 3:
                 return
             self.choice += 1
@@ -146,17 +146,17 @@ class Start(gp.Part):
         if self.next == 0:
             self.begin()
 
-        if self.next == 1:
+        elif self.next == 1:
             self.__to_start_menu()
 
-        if self.next == 2:
+        elif self.next == 2:
             self.__setup()
             self.next = 3
 
-        if self.next == 3:
+        elif self.next == 3:
             self.__setup_start_menu()
 
-        if self.next == 4:
+        elif self.next == 4:
             self.__fade_out(self.elements.values())
             if self.alpha <= 0:
                 self.__destroying()
@@ -174,11 +174,13 @@ class Start(gp.Part):
             self.next = 2
 
     def __setup_start_menu(self):
-        if not pygame.mixer.music.get_busy():
-            pygame.mixer.music.play(True)
+        if not pg.mixer.music.get_busy():
+            pg.mixer.music.play(True)
         self.__fade_in(self.elements.values())
+
         if self.alpha == 255 and not self.startmenu.pointer.is_set:
             self.startmenu.change_choice(1)
+            self.can_press_key = True
 
     def __destroying(self):
         self.is_changing_part = True
