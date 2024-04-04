@@ -41,28 +41,5 @@ class LilyPresenter:
     def is_appear(self):
         return self.model.is_appear()
 
-    def chase_player(self):
-        rect = self.get_rect()
-
-        if self.model.check_hit_player(rect):
-            return
-
-        position = self.model.get_position()
-        player_position = pv.PlayerView.get_instance().get_position()
-
-        distance = (player_position - position).magnitude()
-
-        if distance > 0:
-            direction = (player_position - position).normalize()
-
-        else:
-            direction = pg.math.Vector2()
-
-        direction = pg.math.Vector2(round(direction.x), round(direction.y))
-        velocity = direction * self.model.speed
-
-        if self.model.can_move(self.model.get_position() + velocity):
-            self.model.moving(velocity)
-
-        else:
-            self.model.bypass_to_player()
+    def update(self):
+        self.model.moving()

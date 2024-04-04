@@ -1,6 +1,7 @@
 import pygame as pg
 
 import gamepart.housemap.firstpart as fp
+import gamepart.housemap.startpart as sp
 
 from view.player.playerview import PlayerView
 from mapcontainer import *
@@ -9,12 +10,11 @@ from mapcontainer import *
 class Game:
     music_path = "Assets/Music/"
 
-    game_part_index = 0
-
     FPS = 120
     WIDTH = 800
     HEIGHT = 800
 
+    game_part_index = 0
     clock = pg.time.Clock()
     dt = 0
 
@@ -31,7 +31,7 @@ class Game:
     # def __init__(self):
     #     self.gamemap = HouseNormal(self.screen)
     #     self.player = PlayerView.init(self.screen, self.gamemap, 1000)
-    #     self.gamepart = startpart.Start(self.screen, self.gamemap)
+    #     self.gamepart = sp.Start(self.screen, self.gamemap)
     #
     #     self.setup_manager()
 
@@ -52,7 +52,7 @@ class Game:
     def test(self):
         """test element"""
         self.gamemap.change_sect("OutDoor")
-        self.gamepart.next = 0
+        self.gamepart.set_progess_index(0)
 
         self.setup_manager()
 

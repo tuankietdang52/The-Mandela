@@ -8,11 +8,12 @@ class LilyView(pg.sprite.Sprite):
     def __init__(self,
                  screen: pg.surface.Surface,
                  gamemap: mp.Map,
+                 gamesect: type[mp.Sect],
                  start_pos: pg.math.Vector2):
         pg.sprite.Sprite.__init__(self)
 
         self.screen = screen
-        self.presenter = lilypr.LilyPresenter(self.screen, self, gamemap, type(gamemap.sect), start_pos)
+        self.presenter = lilypr.LilyPresenter(self.screen, self, gamemap, gamesect, start_pos)
 
         self.image = self.presenter.get_image()
         self.rect = self.presenter.get_rect()
@@ -26,7 +27,7 @@ class LilyView(pg.sprite.Sprite):
             return True
 
     def update(self, *args, **kwargs):
-        self.presenter.chase_player()
+        self.presenter.update()
 
         self.image = self.presenter.get_image()
         self.rect = self.presenter.get_rect()

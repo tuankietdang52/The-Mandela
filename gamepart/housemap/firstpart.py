@@ -13,6 +13,10 @@ class FirstPart(gp.Part):
         self.gamemap = gamemap
         self.player = pv.PlayerView.get_instance()
 
+        self.offset = self.gamemap.sect.CAM_OFFSETX, self.gamemap.sect.CAM_OFFSETY
+
+        self.can_press_key = True
+
     def begin(self):
         pg.mixer.music.load(f"Assets/Music/Lily.mp3")
         pg.mixer.music.play(True)
@@ -47,37 +51,36 @@ class FirstPart(gp.Part):
         self.manage_progess()
 
     def manage_progess(self):
-        if self.next == 0:
+        progess = self.get_progess_index()
+
+        if progess == 0:
             self.begin()
             self.__tutorial()
-            self.next = 1
+            self.next()
 
-        elif self.next == 1:
+        elif progess == 1:
             if type(self.gamemap.sect) is not mphouse.Kitchen:
                 return
 
-            self.create_board_text("Let check the refrigerator")
-            self.next = 2
+            voice = self.player.get_voice("voice2")
+            self.create_board_text("Let check the refrigerator", voice)
+            self.next()
 
-        elif self.next == 2:
+        elif progess == 2:
             if not self.__checking_fridge():
                 return
 
             self.create_board_text('"Out of food"')
             self.create_board_text("...")
-            self.next = 3
+            self.next()
 
-        elif self.next == 3:
-            offset = self.gamemap.sect.CAM_OFFSETX, self.gamemap.sect.CAM_OFFSETY
-            start_pos = pg.math.Vector2(370 - offset[0], 550 - offset[1])
-            lily = lilyv.LilyView(self.screen, self.gamemap, start_pos)
-            self.add_enemy(lily)
-
-            self.next = 4
+        elif progess == 3:
+            self.__lily_at_bedroom()
 
     def __tutorial(self):
-        self.create_board_text("Press AWDS to move, F to interact, Enter to next")
-        self.create_board_text("I feel hungry. Maybe i'll go get some food")
+        self.create_board_text("Press AWDS to move|F to interact|Enter to next")
+        voice = self.player.get_voice("voice1")
+        self.create_board_text("I feel hungry. Maybe i'll go get some food", voice)
 
     def __checking_fridge(self):
         sect = self.gamemap.sect
@@ -92,3 +95,21 @@ class FirstPart(gp.Part):
             return True
 
         return False
+
+    def __lily_at_bedroom(self):
+        pg.mixer.music.stop()
+
+        voice = pg.mixer.Sound("Assets/Sound/LilyVoice/voice1.wav")
+        self.create_board_text("Viole...", voice)
+
+        voice = self.player.get_voice("voice3")
+        self.create_board_text("What!? Is that voice come from my bedroom|Is that...|Lily", voice)
+        self.__spawnlily()
+
+        self.next()
+
+    def __spawnlily(self):
+        start_pos = pg.math.Vector2(570 - self.offset[0], 550 - self.offset[1])
+
+        lily = lilyv.LilyView(self.screen, self.gamemap, mphouse.Room, start_pos)
+        self.add_enemy(lily)

@@ -8,7 +8,7 @@ from pjenum.estate import EState
 class Player:
     _instance = None
     __speed = 1.5
-    __path = "Assets/Ally/MainChar/"
+    __path = "Assets/Ally/Viole/"
     animatepth = "left1"
 
     sound_effect = None
@@ -91,6 +91,10 @@ class Player:
 
     def get_sound_effect(self) -> pg.mixer.Sound:
         return self.sound_effect
+
+    def get_voice(self, voice: str) -> pg.mixer.Sound:
+        path = f"Assets/Sound/VioleVoice/{voice}.wav"
+        return pg.mixer.Sound(path)
 
     # Movement #
     def moving(self, velocity: pg.math.Vector2):
