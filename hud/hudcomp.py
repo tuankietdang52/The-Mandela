@@ -87,8 +87,11 @@ class StoryText:
         space = self.size / 3
 
         for word in self.text:
-            if pos[0] >= end:
+            if pos[0] >= end or word == '|':
                 pos = start[0], pos[1] + space * 4
+
+                if word == '|':
+                    continue
 
             surf = font.render(word, 1, (255, 255, 255))
             rect = surf.get_rect(topleft=pos)

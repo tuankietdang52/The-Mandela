@@ -60,6 +60,9 @@ class PlayerPresenter:
     def get_sound_effect(self) -> pg.mixer.Sound:
         return self.model.get_sound_effect()
 
+    def get_voice(self, text: str) -> pg.mixer.Sound:
+        return self.model.get_voice(text)
+
     def moving_animation(self, direction):
         self.set_sound_effect("Assets/Sound/footstep.mp3")
 

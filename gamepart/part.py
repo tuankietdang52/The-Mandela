@@ -7,7 +7,7 @@ from hud import *
 
 
 class Part(abc.ABC):
-    next = 0
+    __progess = 0
     to_next = True
 
     is_changing_part = False
@@ -17,6 +17,7 @@ class Part(abc.ABC):
     gamemap = None
     player = None
     screen = None
+    nextpart = None
 
     enemies = list()
 
@@ -39,6 +40,18 @@ class Part(abc.ABC):
     @abc.abstractmethod
     def manage_progess(self):
         pass
+
+    def set_progess_index(self, progess_index: int):
+        self.__progess = progess_index
+
+    def next(self):
+        self.__progess += 1
+
+    def previous(self):
+        self.__progess -= 1
+
+    def get_progess_index(self) -> int:
+        return self.__progess
 
     def handle_change_sect(self):
         mapname = self.gamemap.sect.in_area(self.player.get_rect())
@@ -77,9 +90,12 @@ class Part(abc.ABC):
         self.player.set_position(start_pos)
         self.player.update()
 
-    def create_board_text(self, text):
+    def create_board_text(self, text: str, sound: pg.mixer.Sound = None):
         if self.is_open_board:
             return
+
+        if sound is not None:
+            sound.play()
 
         self.is_open_board = True
         pos = self.screen.get_width() / 2 + 10, self.screen.get_height() - 100
@@ -92,6 +108,9 @@ class Part(abc.ABC):
 
         while self.is_open_board:
             self.__check_closing_board()
+
+        if sound is not None:
+            sound.stop()
 
         gm.Manager.update_UI_ip()
 

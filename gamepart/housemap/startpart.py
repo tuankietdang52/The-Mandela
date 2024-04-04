@@ -131,7 +131,8 @@ class Start(gp.Part):
 
     def __check_choice(self):
         if self.choice == 1:
-            self.next = 4
+            self.can_press_key = False
+            self.next()
 
         elif self.choice == 2:
             self.__open_board()
@@ -143,35 +144,37 @@ class Start(gp.Part):
         self.manage_progess()
 
     def manage_progess(self):
-        if self.next == 0:
+        progess = self.get_progess_index()
+        if progess == 0:
             self.begin()
 
-        elif self.next == 1:
+        elif progess == 1:
             self.__to_start_menu()
 
-        elif self.next == 2:
+        elif progess == 2:
             self.__setup()
-            self.next = 3
+            self.next()
 
-        elif self.next == 3:
+        elif progess == 3:
             self.__setup_start_menu()
 
-        elif self.next == 4:
+        elif progess == 4:
             self.__fade_out(self.elements.values())
+            pg.mixer.music.fadeout(1000)
             if self.alpha <= 0:
                 self.__destroying()
 
     def begin(self):
         self.__fade_in([self.title_start])
         if self.alpha == 255:
-            self.next = 1
+            self.next()
 
     def __to_start_menu(self):
         self.screen.fill((0, 0, 0))
         self.__fade_out([self.title_start])
         if self.alpha <= 0:
             self.alpha = 0
-            self.next = 2
+            self.next()
 
     def __setup_start_menu(self):
         if not pg.mixer.music.get_busy():

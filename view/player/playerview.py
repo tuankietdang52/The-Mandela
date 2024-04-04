@@ -58,6 +58,14 @@ class PlayerView(pg.sprite.Sprite):
     def set_map(self, gamemap: mp.Map):
         self.gamemap = gamemap
 
+    def get_voice(self, voice: str) -> pg.mixer.Sound:
+        """
+        passing name of voice file (not path) into this function
+
+        wav file required
+        """
+        return self.presenter.get_voice(voice)
+
     def update(self):
         self.draw()
         # pg.draw.rect(self.screen, (0, 255, 0), self.get_rect())
