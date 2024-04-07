@@ -2,22 +2,20 @@ import abc
 
 import pygame as pg
 import view.player.playerview as pv
-import gamemanage.physic as gp
+import gamemanage.physic as gph
 import mapcontainer.map as mp
 import movingtype.movement as mv
 
 
 class Enemy(abc.ABC):
     def __init__(self,
-                 screen: pg.Surface,
                  gamemap: mp.Map,
-                 sect: type[mp.Sect],
+                 mapmapsect: type[mp.Sect],
                  image: str,
                  pos: pg.math.Vector2,
                  size: tuple[int, int]):
-        self.screen = screen
         self.gamemap = gamemap
-        self.sect = sect
+        self.mapsect = mapmapsect
 
         self.image = pg.image.load(image).convert_alpha()
         self.set_size(size)
@@ -55,9 +53,15 @@ class Enemy(abc.ABC):
     def get_rect(self) -> pg.rect.Rect:
         return self.image.get_rect(topleft=self.get_position())
 
+    def set_speed(self, speed: int):
+        self.speed = speed
+
+    def get_speed(self) -> int:
+        return self.speed
+
     def is_appear(self):
         cur = type(self.gamemap.sect)
-        if cur is not self.sect:
+        if cur is not self.mapsect:
             self.set_position(self.start_pos)
             return False
 
@@ -70,15 +74,7 @@ class Enemy(abc.ABC):
     def can_move(self, pos: pg.math.Vector2):
         rect = self.image.get_rect(topleft=pos)
 
-        if gp.Physic.is_collide_wall(rect):
+        if gph.Physic.is_collide_wall(rect):
             return False
 
         return True
-
-    def check_hit_player(self, rect: pg.rect.Rect):
-        player = pv.PlayerView.get_instance()
-
-        if gp.Physic.is_collide(player.get_rect(), rect):
-            return True
-
-        return False

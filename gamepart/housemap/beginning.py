@@ -1,14 +1,21 @@
 import sys
 import pygame as pg
+
+import entity.enemycontainer.lily
 import gamemanage.game as gm
+import gamemanage.physic as gph
 import gamepart.part as gp
 import mapcontainer.housenormal as mphouse
+import view.enemy.lilyview
 import view.player.playerview as pv
 import view.enemy.lilyview as lilyv
+import movingtype.normalmoving as normv
+
+from tilemap import Area
 
 
-class FirstPart(gp.Part):
-    def __init__(self, screen, gamemap):
+class BeginStory(gp.Part):
+    def __init__(self, screen: pg.surface.Surface, gamemap: mphouse.HouseNormal):
         self.screen = screen
         self.gamemap = gamemap
         self.player = pv.PlayerView.get_instance()
@@ -16,10 +23,10 @@ class FirstPart(gp.Part):
         self.offset = self.gamemap.sect.CAM_OFFSETX, self.gamemap.sect.CAM_OFFSETY
 
         self.can_press_key = True
+        self.begin()
 
     def begin(self):
-        pg.mixer.music.load(f"Assets/Music/Lily.mp3")
-        pg.mixer.music.play(True)
+        gm.Manager.play_theme("Assets/Music/Lily.mp3")
 
     def event_action(self):
         for event in pg.event.get():
@@ -54,7 +61,6 @@ class FirstPart(gp.Part):
         progess = self.get_progess_index()
 
         if progess == 0:
-            self.begin()
             self.__tutorial()
             self.next()
 
@@ -75,7 +81,14 @@ class FirstPart(gp.Part):
             self.next()
 
         elif progess == 3:
-            self.__lily_at_bedroom()
+            self.__finding_lily()
+
+        elif progess == 4:
+            self.__to_dream()
+
+        elif progess == 5:
+            self.destroying()
+
 
     def __tutorial(self):
         self.create_board_text("Press AWDS to move|F to interact|Enter to next")
@@ -96,8 +109,8 @@ class FirstPart(gp.Part):
 
         return False
 
-    def __lily_at_bedroom(self):
-        pg.mixer.music.stop()
+    def __finding_lily(self):
+        gm.Manager.play_theme("Assets/Sound/rain.mp3")
 
         voice = pg.mixer.Sound("Assets/Sound/LilyVoice/voice1.wav")
         self.create_board_text("Viole...", voice)
@@ -113,3 +126,43 @@ class FirstPart(gp.Part):
 
         lily = lilyv.LilyView(self.screen, self.gamemap, mphouse.Room, start_pos)
         self.add_enemy(lily)
+        self.add_special_enemy("lily", lily)
+
+    def __to_dream(self):
+        if type(self.gamemap.sect) is not mphouse.Room:
+            return
+
+        if not self.is_occur_start_event:
+            voice = self.player.get_voice("voice4")
+            self.create_board_text("Lily ?", voice)
+            self.is_occur_start_event = True
+
+        self.__lily_chasing()
+
+    def __lily_chasing(self):
+        lily = self.get_special_enemy("lily")
+        lily_position = lily.get_position()
+
+        player_rect = self.player.get_rect()
+        width, height = 36, 80
+        active_area = Area("active",lily_position, width, height)
+
+        if not active_area.is_overlap(player_rect):
+            return
+
+        lily.set_position(pg.math.Vector2(lily_position.x, lily_position.y + 185))
+        lily.presenter.set_movement(normv.NormalMovement(lily.presenter.model))
+        lily.presenter.set_speed(3)
+
+        self.next()
+
+    def destroying(self):
+        lily = self.get_special_enemy("lily")
+        player_rect = pv.PlayerView.get_instance().get_rect()
+
+        if not gph.Physic.is_collide(player_rect, lily.get_rect()):
+            return
+
+        gm.Manager.unload_map()
+        # self.is_changing_part = True
+        self.next()

@@ -1,6 +1,6 @@
 import os
 import pygame as pg
-import gamemanage.physic as gp
+import gamemanage.physic as gph
 
 from pjenum.estate import EState
 
@@ -105,7 +105,7 @@ class Player:
 
         rect = self.__image.get_rect(topleft=next_pos)
 
-        if gp.Physic.is_collide_wall(rect):
+        if gph.Physic.is_collide_wall(rect):
             return False
 
         return True

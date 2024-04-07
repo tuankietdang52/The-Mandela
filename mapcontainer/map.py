@@ -100,8 +100,8 @@ class Sect:
 
     def __init_areas(self, layer):
         for area in layer:
-            pos = (area.x / 16 * self.size - self.CAM_OFFSETX,
-                   area.y / 16 * self.size - self.CAM_OFFSETY)
+            pos = pg.math.Vector2(area.x / 16 * self.size - self.CAM_OFFSETX,
+                                  area.y / 16 * self.size - self.CAM_OFFSETY)
 
             width = area.width / 16 * self.size
             height = area.height / 16 * self.size

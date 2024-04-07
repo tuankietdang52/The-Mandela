@@ -3,12 +3,12 @@ import gamemanage
 from hud import Pointer
 
 
-class StartMenu:
+class StartMenuHUD:
     fontpath = "Assets/Font/Crang.ttf"
 
     __element = dict()
 
-    def __init__(self, screen):
+    def __init__(self, screen: pg.surface.Surface):
         self.screen = screen
 
         self.pointer = Pointer(self.screen)
@@ -31,15 +31,15 @@ class StartMenu:
 
     def __write_text(self, text: str, size: int) -> pg.Surface:
         font = pg.font.Font(self.fontpath, size)
-        text = gamemanage.effect.Effect.create_text_outline(font,
-                                                            text,
-                                                            (255, 255, 255),
-                                                            3,
-                                                            (255, 0, 0))
+        text_surf = gamemanage.effect.Effect.create_text_outline(font,
+                                                                 text,
+                                                                 (255, 255, 255),
+                                                                 3,
+                                                                 (255, 0, 0))
 
-        return text
+        return text_surf
 
-    def init_txt_element(self, name: str, text: str, size: int, pos):
+    def init_txt_element(self, name: str, text: str, size: int, pos: tuple[float, float]):
         elementname = name
 
         title = self.__write_text(text, size)
@@ -58,11 +58,11 @@ class StartMenu:
         self.init_txt_element("QuitChoice", "Quit", 30, (width / 2, height - 150))
 
     def add_element(self, name: str, value: tuple[pg.Surface, pg.Rect]):
-        mp = {
+        dct = {
             name: value
         }
 
-        self.__element.update(mp)
+        self.__element.update(dct)
 
     def get_elements(self) -> dict[str, tuple[pg.Surface, pg.Rect]]:
         return self.__element

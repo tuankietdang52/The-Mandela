@@ -5,14 +5,14 @@ class Pointer:
     """Position by topleft"""
     size = (20, 30)
 
-    def __init__(self, screen):
+    def __init__(self, screen: pg.surface.Surface):
         self.image = pg.image.load("Assets/HUD/pointer.png")
 
         self.image = pg.transform.scale(self.image, self.size)
         self.screen = screen
         self.is_set = False
 
-    def set_position(self, pos):
+    def set_position(self, pos: tuple[float, float]):
         self.play_select_sound()
         rect = self.image.get_rect(topleft=pos)
 
@@ -30,7 +30,7 @@ class Pointer:
 
 class Board:
     """Position by center"""
-    def __init__(self, screen: pg.Surface, pos: tuple[float, float], size: tuple[float, float]):
+    def __init__(self, screen: pg.surface.Surface, pos: tuple[float, float], size: tuple[float, float]):
         self.screen = screen
 
         self.surf = pg.Surface(size)
@@ -52,7 +52,7 @@ class Board:
 
         pg.draw.lines(self.screen, (0, 0, 0), True, points, 7)
 
-    def insert_content(self, content: pg.Surface, rect):
+    def insert_content(self, content: pg.surface.Surface, rect: pg.rect.Rect):
         inside_rect = rect.clamp(self.rect)
         rect = inside_rect.move(inside_rect.x, 20)
 
@@ -63,7 +63,7 @@ class StoryText:
     """Position by topleft"""
     fontpath = "Assets/Font/Crang.ttf"
 
-    def __init__(self, screen: pg.Surface, text: str, size: int, board: Board):
+    def __init__(self, screen: pg.surface.Surface, text: str, size: int, board: Board):
         """Write text to board"""
         self.screen = screen
 
@@ -100,7 +100,7 @@ class StoryText:
 
             pos = self.__spacing(word, pos, space)
 
-    def __spacing(self, word, pos, space):
+    def __spacing(self, word: str, pos: tuple[float, float], space: float) -> tuple[float, float]:
         word_extra_space = {'n'}
         word_extra_space_x2 = {'M', 'm', 'N'}
         word_decrease_space = {'I', 'i'}
@@ -122,7 +122,7 @@ class StoryText:
 
 class BoardText:
     def __init__(self,
-                 screen: pg.Surface,
+                 screen: pg.surface.Surface,
                  text: str,
                  fontsize: int,
                  pos: tuple[float, float],
