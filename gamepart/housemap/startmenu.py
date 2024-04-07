@@ -1,9 +1,9 @@
 import sys
 
-import hud.startmenu as hud_sm
+import hud.startmenuhud as hud_sm
 import gamemanage.effect as ge
 import gamemanage.game as gm
-import gamepart.housemap.firstpart as fp
+import gamepart.housemap.beginning as fp
 import gamepart.part as gp
 
 from pjenum import EState
@@ -11,16 +11,14 @@ from view.player.playerview import *
 from hud import *
 
 
-class Start(gp.Part):
+class StartMenu(gp.Part):
     def __init__(self, screen, gamemap):
         self.screen = screen
         self.gamemap = gamemap
 
         self.player = PlayerView.get_instance()
 
-        pg.mixer.music.load("Assets/Sound/rain.mp3")
-
-        self.startmenu = hud_sm.StartMenu(screen)
+        self.startmenu = hud_sm.StartMenuHUD(screen)
         self.title_start = self.startmenu.get_start_title()
         self.elements = self.startmenu.get_elements()
 
@@ -178,7 +176,7 @@ class Start(gp.Part):
 
     def __setup_start_menu(self):
         if not pg.mixer.music.get_busy():
-            pg.mixer.music.play(True)
+            gm.Manager.play_theme("Assets/Sound/rain.mp3")
         self.__fade_in(self.elements.values())
 
         if self.alpha == 255 and not self.startmenu.pointer.is_set:

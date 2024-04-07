@@ -4,6 +4,8 @@ import entity.enemycontainer.enemy as em
 import numpy as np
 import view.player.playerview as pv
 import movingtype.movement as mv
+import gamemanage.game as gm
+import gamemanage.physic as gp
 
 
 class Cell:
@@ -31,12 +33,13 @@ class NormalMovement(mv.Movement):
 
     def moving(self):
         rect = self.owner.get_rect()
+        player_rect = pv.PlayerView.get_instance().get_rect()
 
-        if self.owner.check_hit_player(rect):
+        if gp.Physic.is_collide(player_rect, rect):
             return
 
         position = self.owner.get_position()
-        player_position = pv.PlayerView.get_instance().get_position()
+        player_position = pg.math.Vector2(player_rect.x, player_rect.y)
 
         distance = (player_position - position).magnitude()
 
@@ -47,7 +50,7 @@ class NormalMovement(mv.Movement):
             direction = pg.math.Vector2()
 
         direction = pg.math.Vector2(round(direction.x), round(direction.y))
-        velocity = direction * self.owner.speed
+        velocity = direction * self.owner.get_speed()
 
         if self.owner.can_move(self.owner.get_position() + velocity):
             self.__chase(velocity)
@@ -71,7 +74,15 @@ class NormalMovement(mv.Movement):
         if len(self.__ways) == 0:
             self.__ways = self.__find_way(src, dest)
 
-        position = self.__ways.pop(0)
+        speed = self.owner.get_speed()
+        position = 0
+
+        for step in range(speed):
+            if len(self.__ways) == 0:
+                break
+
+            position = self.__ways.pop(0)
+
         self.owner.set_position(position)
 
     def __find_way(self, src: pg.math.Vector2, dest: pg.math.Vector2) -> list:
@@ -98,8 +109,10 @@ class NormalMovement(mv.Movement):
         return path
 
     def __a_star_search(self, src: mv.IntVector2, dest: mv.IntVector2):
-        col = self.owner.screen.get_width() * 2
-        row = self.owner.screen.get_height() * 2
+        screen = gm.Manager.get_screen()
+
+        col = screen.get_width() * 2
+        row = screen.get_height() * 2
 
         detail = np.ndarray((row, col), dtype=np.object_)
         closed_list = set()

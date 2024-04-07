@@ -2,7 +2,7 @@ import pygame as pg
 
 import entity.enemycontainer.enemy as enenemy
 import mapcontainer.map as mp
-import movingtype.normalmoving as normv
+import movingtype.movement as mv
 
 
 class Lily(enenemy.Enemy):
@@ -10,14 +10,18 @@ class Lily(enenemy.Enemy):
     __img_path = "Assets/Enemy/Lily/"
 
     def __init__(self,
-                 screen: pg.Surface,
                  gamemap: mp.Map,
-                 sect: type[mp.Sect],
+                 mapsect: type[mp.Sect],
                  pos: pg.math.Vector2):
 
-        super().__init__(screen, gamemap, sect, f"{self.__img_path}lilystand.png", pos, (36, 80))
+        super().__init__(gamemap,
+                         mapsect,
+                         f"{self.__img_path}lilystand.png",
+                         pos,
+                         (36, 80))
 
-    __ways = list()
+    def set_movement(self, movement: mv.Movement):
+        self.movement = movement
 
     def moving(self):
         self.movement.moving()

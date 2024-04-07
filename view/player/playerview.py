@@ -1,9 +1,10 @@
 import pygame as pg
 import mapcontainer.map as mp
 import presenter.player.playerpresenter as playerpr
+import view.baseview as vw
 
 
-class PlayerView(pg.sprite.Sprite):
+class PlayerView(vw.BaseView):
     """Position by topleft"""
     _instance = None
     screen = None
@@ -51,6 +52,12 @@ class PlayerView(pg.sprite.Sprite):
 
     def get_position(self) -> pg.math.Vector2:
         return self.presenter.get_position()
+
+    def set_speed(self, speed: int):
+        self.presenter.set_speed(speed)
+
+    def get_speed(self) -> int:
+        return self.get_speed()
 
     def get_rect(self) -> pg.rect.Rect:
         return self.presenter.get_rect()

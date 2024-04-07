@@ -1,3 +1,4 @@
+import gamemanage.game
 import mapcontainer.map as mp
 import pygame as pg
 
@@ -27,13 +28,8 @@ class Physic:
 
     @staticmethod
     def is_collide(rect1: pg.rect.Rect, rect2: pg.rect.Rect) -> bool:
-        top = rect1.midbottom[0], rect1.midbottom[1] - 10
-        botlf = rect1.bottomleft
-        botrg = rect1.bottomright
-
-        if (rect2.collidepoint(top)
-                or rect2.collidepoint(botlf)
-                or rect2.collidepoint(botrg)):
+        top = rect1.center
+        if rect2.collidepoint(top):
             return True
 
         return False

@@ -42,7 +42,12 @@ class Effect:
         return points
 
     @classmethod
-    def create_text_outline(cls, font, text, color, outline_size, outline_color):
+    def create_text_outline(cls,
+                            font: pg.font.Font,
+                            text: str,
+                            color: tuple[int, int, int],
+                            outline_size: int,
+                            outline_color: tuple[int, int, int]) -> pg.surface.Surface:
         _circle_cache = {}
 
         textsurface = font.render(text, True, color).convert_alpha()
@@ -55,24 +60,6 @@ class Effect:
         surf = osurf.copy()
 
         osurf.blit(font.render(text, True, outline_color).convert_alpha(), (0, 0))
-
-        r = int(round(outline_size))
-        if r in _circle_cache:
-            return _circle_cache[r]
-        x, y, e = r, 0, 1 - r
-        _circle_cache[r] = points = []
-        while x >= y:
-            points.append((x, y))
-            y += 1
-            if e < 0:
-                e += 2 * y - 1
-            else:
-                x -= 1
-                e += 2 * (y - x) - 1
-        points += [(y, x) for x, y in points if x > y]
-        points += [(-x, y) for x, y in points if x]
-        points += [(x, -y) for x, y in points if y]
-        points.sort()
 
         for dx, dy in cls._circlepoints(outline_size):
             surf.blit(osurf, (dx + outline_size, dy + outline_size))

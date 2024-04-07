@@ -2,6 +2,7 @@ import abc
 import sys
 import pygame as pg
 import gamemanage.game as gm
+import view.baseview as vw
 
 from hud import *
 
@@ -13,6 +14,7 @@ class Part(abc.ABC):
     is_changing_part = False
     is_open_board = False
     can_press_key = False
+    is_occur_start_event = False
 
     gamemap = None
     player = None
@@ -20,6 +22,7 @@ class Part(abc.ABC):
     nextpart = None
 
     enemies = list()
+    special_enemies = set()
 
     @abc.abstractmethod
     def begin(self):
@@ -43,9 +46,11 @@ class Part(abc.ABC):
 
     def set_progess_index(self, progess_index: int):
         self.__progess = progess_index
+        self.is_occur_start_event = False
 
     def next(self):
         self.__progess += 1
+        self.is_occur_start_event = False
 
     def previous(self):
         self.__progess -= 1
@@ -69,13 +74,33 @@ class Part(abc.ABC):
 
         gm.Manager.update_UI_ip()
 
-    def add_enemy(self, enemy: pg.sprite.Sprite):
+    def add_enemy(self, enemy: vw.BaseView):
         self.enemies.append(enemy)
         self.update_list_entities()
 
-    def remove_enemy(self, enemy: pg.sprite.Sprite):
+    def remove_enemy(self, enemy: vw.BaseView):
         self.enemies.remove(enemy)
         self.update_list_entities()
+
+    def add_special_enemy(self, name: str, enemy: vw.BaseView):
+        self.special_enemies.add((name, enemy))
+
+    def get_special_enemy(self, name: str) -> vw.BaseView | None:
+        for enemy in self.special_enemies:
+            if enemy[0] == name:
+                return enemy[1]
+
+        return None
+
+    def remove_special_enemy(self, name: str | vw.BaseView):
+        if type(name) is vw.BaseView:
+            self.special_enemies.remove(name)
+            return
+
+        for enemy in self.special_enemies:
+            if enemy.name == name:
+                self.special_enemies.remove(enemy)
+                break
 
     def update_list_entities(self):
         gm.Manager.appear_entities.empty()
