@@ -3,12 +3,20 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "Tile/city.tsx",
+    "activeFile": "MapSect/Home.tmx",
     "expandedProjectPaths": [
-        "Tile",
+        "MapSect",
         "."
     ],
     "fileStates": {
+        "MapSect/Home.tmx": {
+            "scale": 2.942361111111111,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 144.2718904885532,
+                "y": 143.7620958225159
+            }
+        },
         "Tile/city.tsx": {
             "scaleInDock": 2,
             "scaleInEditor": 1
@@ -25,13 +33,15 @@
     "map.tileWidth": 16,
     "map.width": 18,
     "openFiles": [
+        "Tile/city.tsx",
         "Tile/town.tsx",
-        "Tile/city.tsx"
+        "MapSect/Home.tmx"
     ],
     "project": "town.tiled-project",
     "recentFiles": [
+        "Tile/city.tsx",
         "Tile/town.tsx",
-        "Tile/city.tsx"
+        "MapSect/Home.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
