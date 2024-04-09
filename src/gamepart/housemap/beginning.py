@@ -50,11 +50,10 @@ class BeginStory(gp.Part):
         self.player.moving(keys)
 
     def update(self):
-        self.handle_change_sect()
-
         if self.is_open_board:
             return
 
+        self.handle_change_sect()
         self.manage_progess()
 
     def manage_progess(self):
@@ -88,7 +87,6 @@ class BeginStory(gp.Part):
 
         elif progess == 5:
             self.destroying()
-
 
     def __tutorial(self):
         self.create_board_text("Press AWDS to move|F to interact|Enter to next")
