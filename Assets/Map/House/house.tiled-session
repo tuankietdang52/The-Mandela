@@ -3,12 +3,12 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Kitchen.tmx",
+    "activeFile": "MapSect/Corridor.tmx",
     "expandedProjectPaths": [
         "World",
-        "MapSect",
+        ".",
         "Tile",
-        "."
+        "MapSect"
     ],
     "fileStates": {
         "MapSect/Corridor.tmx": {
@@ -18,8 +18,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 213.25,
-                "y": -3
+                "x": 212.75,
+                "y": -4.5
             }
         },
         "MapSect/Kitchen.tmx": {
@@ -29,8 +29,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 52.75,
-                "y": 355.5
+                "x": 52.25,
+                "y": 246.5
             }
         },
         "MapSect/OutDoor.tmx": {
@@ -40,8 +40,8 @@
             "scale": 5.5,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 67.90909090909092,
-                "y": -21.454545454545453
+                "x": 117.00000000000001,
+                "y": 123.27272727272727
             }
         },
         "MapSect/Room.tmx": {
@@ -51,8 +51,8 @@
             "scale": 5.5,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 135.9090909090909,
-                "y": 136
+                "x": 141,
+                "y": 131.45454545454547
             }
         },
         "MapSect/Toilet.tmx": {
@@ -62,8 +62,8 @@
             "scale": 3,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 112.16666666666664,
-                "y": 128
+                "x": 121.83333333333333,
+                "y": 119.66666666666664
             }
         },
         "Tile/blackblock.tsx": {
@@ -108,11 +108,11 @@
     "recentFiles": [
         "MapSect/OutDoor.tmx",
         "MapSect/Room.tmx",
-        "MapSect/Corridor.tmx",
-        "MapSect/Toilet.tmx",
         "MapSect/Kitchen.tmx",
-        "Tile/blackblock.tsx",
+        "MapSect/Toilet.tmx",
+        "MapSect/Corridor.tmx",
         "Tile/housetile.tsx",
+        "Tile/blackblock.tsx",
         "housemap.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
