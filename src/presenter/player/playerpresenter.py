@@ -45,10 +45,10 @@ class PlayerPresenter:
     def get_position(self) -> pg.math.Vector2:
         return self.model.get_position()
 
-    def set_size(self, size: tuple[float, float]):
+    def set_size(self, size: tuple[int, int]):
         self.model.set_size(size)
 
-    def get_size(self) -> tuple[float, float]:
+    def get_size(self) -> tuple[int, int]:
         return self.model.get_size()
 
     def get_rect(self):
@@ -64,7 +64,7 @@ class PlayerPresenter:
         return self.model.get_voice(text)
 
     def moving_animation(self, direction):
-        self.set_sound_effect("../Assets/Sound/footstep.mp3")
+        self.set_sound_effect("../Assets/Sound/Other/footstep.mp3")
 
         if self.frame < 20:
             index = 1

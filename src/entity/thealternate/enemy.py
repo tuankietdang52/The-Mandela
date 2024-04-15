@@ -4,6 +4,7 @@ import pygame as pg
 import src.gamemanage.physic as gph
 import src.movingtype.movement as mv
 import src.mapcontainer.map as mp
+import src.view.player.playerview as pv
 
 
 class Enemy(abc.ABC):
@@ -74,3 +75,12 @@ class Enemy(abc.ABC):
             return False
 
         return True
+
+    def is_hit_player(self) -> bool:
+        rect = self.rect
+        player_rect = pv.PlayerView.get_instance().get_rect()
+
+        if gph.Physic.is_collide(player_rect, rect):
+            return True
+
+        return False

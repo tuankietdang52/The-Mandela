@@ -49,13 +49,6 @@ class BeginStory(gp.Part):
 
         self.player.moving(keys)
 
-    def update(self):
-        if self.is_open_board:
-            return
-
-        self.handle_change_sect()
-        self.manage_progess()
-
     def manage_progess(self):
         progess = self.get_progess_index()
 
@@ -89,7 +82,7 @@ class BeginStory(gp.Part):
             self.destroying()
 
     def __tutorial(self):
-        self.create_board_text("Press AWDS to move|F to interact|Enter to next")
+        self.create_board_text("Press AWDS to move |F to interact |Enter to next")
         voice = self.player.get_voice("voice1")
         self.create_board_text("I feel hungry. Maybe i'll go get some food", voice)
 
@@ -108,19 +101,19 @@ class BeginStory(gp.Part):
         return False
 
     def __finding_lily(self):
-        gm.Manager.play_theme("../Assets/Sound/rain.mp3")
+        gm.Manager.play_theme("../Assets/Sound/Other/rain.mp3")
 
         voice = pg.mixer.Sound("../Assets/Sound/LilyVoice/voice1.wav")
         self.create_board_text("Viole...", voice)
 
         voice = self.player.get_voice("voice3")
-        self.create_board_text("What!? Is that voice come from my bedroom|Is that...|Lily", voice)
+        self.create_board_text("What!? Is that voice come from my bedroom |Is that... |Lily", voice)
         self.__spawnlily()
 
         self.next()
 
     def __spawnlily(self):
-        start_pos = pg.math.Vector2(570 - self.offset[0], 550 - self.offset[1])
+        start_pos = pg.math.Vector2(424 - self.offset[0], 448 - self.offset[1])
 
         lily = lilyv.LilyView(self.screen, gm.Manager.gamemap, hsmp.Room, start_pos)
         self.add_enemy(lily)
@@ -148,7 +141,7 @@ class BeginStory(gp.Part):
         if not active_area.is_overlap(player_rect):
             return
 
-        pg.mixer.Sound("../Assets/Sound/suprise.mp3").play()
+        pg.mixer.Sound("../Assets/Sound/Other/suprise.mp3").play()
 
         self.__lily_to_demon(lily)
 

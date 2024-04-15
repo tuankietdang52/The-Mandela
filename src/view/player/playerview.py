@@ -28,7 +28,7 @@ class PlayerView(vw.BaseView):
         return cls._instance
 
     @classmethod
-    def init(cls, screen: pg.Surface, gamemap: mp.Map, health: float):
+    def init(cls, screen: pg.Surface, health: float):
         """
         Init instance for Player
         """
@@ -41,7 +41,6 @@ class PlayerView(vw.BaseView):
         pg.sprite.Sprite.__init__(cls.get_instance())
 
         cls.screen = screen
-        cls.gamemap = gamemap
 
         cls.presenter = playerpr.PlayerPresenter(cls, screen, health)
 
@@ -52,6 +51,12 @@ class PlayerView(vw.BaseView):
 
     def get_position(self) -> pg.math.Vector2:
         return self.presenter.get_position()
+
+    def set_size(self, size: tuple[int, int]):
+        self.presenter.set_size(size)
+
+    def get_size(self) -> tuple[int, int]:
+        return self.presenter.get_size()
 
     def set_speed(self, speed: int):
         self.presenter.set_speed(speed)

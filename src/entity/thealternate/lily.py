@@ -1,6 +1,6 @@
 import pygame as pg
 
-import src.entity.enemycontainer.enemy as enenemy
+import src.entity.thealternate.enemy as enenemy
 import src.movingtype.movement as mv
 import src.mapcontainer.map as mp
 

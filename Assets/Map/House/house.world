@@ -2,38 +2,38 @@
     "maps": [
         {
             "fileName": "MapSect/Room.tmx",
-            "height": 272,
-            "width": 272,
-            "x": -48,
-            "y": -32
+            "height": 208,
+            "width": 208,
+            "x": -16,
+            "y": 0
         },
         {
             "fileName": "MapSect/Corridor.tmx",
-            "height": 272,
-            "width": 288,
-            "x": -48,
-            "y": 112
+            "height": 112,
+            "width": 224,
+            "x": -16,
+            "y": 192
         },
         {
             "fileName": "MapSect/OutDoor.tmx",
-            "height": 256,
+            "height": 160,
             "width": 224,
             "x": 176,
-            "y": 128
+            "y": 176
         },
         {
             "fileName": "MapSect/Kitchen.tmx",
-            "height": 256,
-            "width": 288,
-            "x": 112,
-            "y": -32
+            "height": 208,
+            "width": 160,
+            "x": 176,
+            "y": 0
         },
         {
             "fileName": "MapSect/Toilet.tmx",
-            "height": 256,
-            "width": 224,
-            "x": 256,
-            "y": -32
+            "height": 192,
+            "width": 80,
+            "x": 320,
+            "y": 0
         }
     ],
     "onlyShowAdjacentMaps": false,

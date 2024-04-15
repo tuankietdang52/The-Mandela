@@ -5,7 +5,7 @@ from src.hud import Pointer
 
 
 class StartMenuHUD:
-    fontpath = "Assets/Font/Crang.ttf"
+    fontpath = "../Assets/Font/Crang.ttf"
 
     __element = dict()
 
@@ -30,7 +30,7 @@ class StartMenuHUD:
 
         return title, title_rect
 
-    def __write_text(self, text: str, size: int) -> pg.Surface:
+    def __write_text(self, text: str, size: int) -> pg.surface.Surface:
         font = pg.font.Font(self.fontpath, size)
         text_surf = ge.Effect.create_text_outline(font,
                                                   text,
@@ -58,7 +58,7 @@ class StartMenuHUD:
         self.init_txt_element("LoadChoice", "Load", 30, (width / 2, height - 200))
         self.init_txt_element("QuitChoice", "Quit", 30, (width / 2, height - 150))
 
-    def add_element(self, name: str, value: tuple[pg.Surface, pg.Rect]):
+    def add_element(self, name: str, value: tuple[pg.surface.Surface, pg.rect.Rect]):
         dct = {
             name: value
         }
@@ -83,3 +83,5 @@ class StartMenuHUD:
 
         elif choice == 3:
             self.pointer.set_position((width / 2 - 100, height - 170))
+
+        self.pointer.draw()
