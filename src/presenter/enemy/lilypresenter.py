@@ -1,5 +1,5 @@
 import pygame as pg
-import src.entity.enemycontainer.lily as enlily
+import src.entity.thealternate.lily as enlily
 import src.mapcontainer.map as mp
 import src.movingtype.movement as mv
 

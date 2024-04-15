@@ -73,11 +73,11 @@ class Player:
     def get_speed(self) -> int:
         return self.__speed
 
-    def set_size(self, size: tuple[float, float]):
+    def set_size(self, size: tuple[int, int]):
         self.width, self.height = size
         self.__image = pg.transform.scale(self.__image, size)
 
-    def get_size(self) -> tuple[float, float]:
+    def get_size(self) -> tuple[int, int]:
         return self.width, self.height
 
     def get_rect(self) -> pg.rect.Rect:

@@ -25,17 +25,15 @@ class StartMenu(gp.Part):
         gamemap = gm.Manager.gamemap
         player = self.player
 
+        gamemap.change_sect("Room")
         gamemap.sect.create()
 
-        try:
-            start_point = gamemap.sect.get_spawn_point()
-        except AttributeError:
-            start_point = gamemap.sect.get_start_point()
+        start_point = gamemap.sect.get_start_point()
 
         player.set_position(start_point)
 
         player.presenter.set_state(EState.BUSY)
-        player.presenter.set_img("sitleft")
+        player.presenter.set_image("sitleft")
 
         player.update()
 
@@ -69,9 +67,11 @@ class StartMenu(gp.Part):
             if self.is_open_board:
                 self.__closing_load_board()
 
-    def __open_board(self):
+    def __open_load_board(self):
         self.is_open_board = True
-        load_board = Board(self.screen, (400, 400), (700, 600))
+
+        pos = gm.Manager.screen.get_width() / 2, gm.Manager.screen.get_height() / 2
+        load_board = Board(self.screen, pos, (700, 600))
         load_board.draw()
 
     def __closing_load_board(self):
@@ -123,7 +123,7 @@ class StartMenu(gp.Part):
             self.next()
 
         elif self.choice == 2:
-            self.__open_board()
+            self.__open_load_board()
 
         elif self.choice == 3:
             sys.exit()
@@ -160,15 +160,17 @@ class StartMenu(gp.Part):
     def __to_start_menu(self):
         self.screen.fill((0, 0, 0))
         self.__fade_out([self.title_start])
-        if self.alpha <= 0:
-            self.alpha = 0
-            self.next()
+        if self.alpha > 0:
+            return
+
+        self.alpha = 0
+        self.next()
 
     def __setup_start_menu(self):
         if not pg.mixer.music.get_busy():
-            gm.Manager.play_theme("../Assets/Sound/rain.mp3")
-        self.__fade_in(self.elements.values())
+            gm.Manager.play_theme("../Assets/Sound/Other/rain.mp3")
 
+        self.__fade_in(self.elements.values())
         if self.alpha == 255 and not self.startmenu.pointer.is_set:
             self.startmenu.change_choice(1)
             self.can_press_key = True
@@ -177,7 +179,7 @@ class StartMenu(gp.Part):
         x, y = self.player.get_position()
 
         self.player.set_position((x - 50, y))
-        self.player.presenter.set_img("left1")
+        self.player.presenter.set_image("left1")
 
         gm.Manager.update_UI_ip()
         self.player.presenter.set_state(EState.FREE)

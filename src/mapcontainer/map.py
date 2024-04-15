@@ -7,18 +7,12 @@ import pytmx
 from src.tilemap import Area, Tile
 
 
-class Map(abc.ABC):
-    path = ""
-    screen = None
-    sect = None
-
-    def change_sect(self, name: str):
-        pass
-
-
 class Sect:
     __wall_tile = list()
     walls = set()
+
+    ori_block_size = 0
+    size = 0
 
     CAM_OFFSETX = 0
     """Higher = Left, Lower = Right"""
@@ -26,21 +20,32 @@ class Sect:
     CAM_OFFSETY = 0
     """Higher = Up, Lower = Down"""
 
-    size = 64
-
-    def __init__(self, screen, prev_sect=None):
+    def __init__(self,
+                 screen: pg.surface.Surface,
+                 to_point: str = "",
+                 back_point: str = ""):
+        """
+        :param to_point: name of point where player will appear when go to another sect
+        :param back_point: name of point where player will appear when comeback from another sect
+        """
         self.screen = screen
 
         self.map = None
         self.areas = []
-        self.back_point = {}
         self.tilegroup = pg.sprite.Group()
+        self.olptiles = pg.sprite.Group()
         self.is_created = False
 
-        self.ori_block_size = 16
+        self.back_point = back_point
+        self.to_point = to_point
 
-        if prev_sect is not None:
-            self.prev_sect = prev_sect
+    def set_block_size(self, size: int, ori_block_size: int):
+        """
+        :param size: size to transform
+        :param ori_block_size: origin block size (in Tiled)
+        """
+        self.size = size
+        self.ori_block_size = ori_block_size
 
     def init_OFFSET(self, offset, offsetfullscr):
         if self.screen.get_size() == (800, 800):
@@ -53,20 +58,25 @@ class Sect:
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare\\src":
             self.map = pytmx.load_pygame(path)
 
-    def set_pre_sect(self, prev_sect: str):
-        self.prev_sect = prev_sect
-
     def get_start_point(self) -> tuple[float, float] | None:
-        if self.prev_sect != "" and self.prev_sect is not None:
-            start_area = self.prev_sect
+        if self.back_point is None:
+            start_area = ""
         else:
-            start_area = "Start"
+            start_area = self.back_point
+
+        has_point = False
+        point = 0, 0
+        backup_point = 0, 0
 
         for area in self.areas:
             if area.name == start_area:
-                return area.x, area.y
+                point = area.x, area.y
+                has_point = True
 
-        return None
+            if area.name == "Start":
+                backup_point = area.x, area.y
+
+        return point if has_point else backup_point
 
     def create(self):
         self.__wall_tile.clear()
@@ -93,20 +103,24 @@ class Sect:
 
             surf = pg.transform.scale(surf, tilesize)
 
-            tile = Tile(surf, pos, layer.name, layer.id, self.screen, layer.data[y][x], self.tilegroup)
+            group = self.olptiles if layer.name == "OverlapPlayer" else self.tilegroup
 
-            if "Wall" in layer.name or layer.name == "Object":
+            tile = Tile(surf, pos, layer.name, layer.id, self.screen, layer.data[y][x], group)
+
+            if "Wall" in layer.name or "Object" in layer.name:
                 self.__wall_tile.append(tile)
 
             self.screen.blit(tile.image, tile.rect)
 
     def __init_areas(self, layer):
         for area in layer:
-            pos = pg.math.Vector2(area.x / self.ori_block_size * self.size - self.CAM_OFFSETX,
-                                  area.y / self.ori_block_size * self.size - self.CAM_OFFSETY)
+            offset = self.size / self.ori_block_size
 
-            width = area.width / self.ori_block_size * self.size
-            height = area.height / self.ori_block_size * self.size
+            pos = pg.math.Vector2(area.x * offset - self.CAM_OFFSETX,
+                                  area.y * offset - self.CAM_OFFSETY)
+
+            width = area.width * offset
+            height = area.height * offset
 
             Area(area.name, pos, width, height, self.areas)
 
@@ -155,7 +169,49 @@ class Sect:
         group.draw(self.screen)
         # group.update()
 
+    def redraw_overlap_tile(self):
+        self.olptiles.draw(self.screen)
+
     def set_opacity(self, alpha: int):
         group = self.tilegroup
         for tile in group:
             tile.image.set_alpha(alpha)
+
+
+class Map(abc.ABC):
+    ori_block_size = 0
+    size = 0
+
+    def __init__(self, screen: pg.surface.Surface, path: str):
+        self.screen = screen
+        self.path = path
+
+        self.sect = None
+        self.sections: list[tuple[str, Sect]] = list()
+        self.link_map: list[tuple[str, Map, str]] = list()
+
+        self.setup_sections()
+
+    @abc.abstractmethod
+    def setup_sections(self):
+        pass
+
+    @abc.abstractmethod
+    def get_next_map(self, area_name):
+        pass
+
+    def change_sect(self, name: str):
+        is_set = False
+        to_point = self.sect.to_point if self.sect is not None else ""
+
+        for section in self.sections:
+            if section[0] == name:
+                self.sect = section[1]
+                is_set = True
+                break
+
+        if not is_set:
+            return
+
+        self.sect.back_point = to_point
+        self.sect.set_block_size(self.size, self.ori_block_size)

@@ -7,7 +7,9 @@ class Area:
     """Position by topleft"""
     def __init__(self, name: str, pos: pg.math.Vector2, width: float, height: float, groups: list):
         self.name = name
+
         self.x, self.y = pos
+
         self.width = width
         self.height = height
 

@@ -1,104 +1,91 @@
+import pygame as pg
 import src.mapcontainer.map as mp
+import src.mapcontainer.town as mptown
 
 
 class HouseNormal(mp.Map):
-    def __init__(self, screen):
-        self.screen = screen
-        self.path = "../Assets/Map/House/MapSect/"
-        self.sect = Room(screen, self.path)
+    ori_block_size = 16
+    size = 64
 
-    def change_sect(self, name: str):
-        try:
-            prev_sect = self.sect.back_point[name]
-        except KeyError:
-            prev_sect = ""
+    def __init__(self, screen: pg.surface.Surface):
+        super().__init__(screen, "../Assets/Map/House/MapSect/")
 
-        if name == "Room":
-            self.sect = Room(self.screen, self.path, prev_sect)
+        self.change_sect("OutDoor")
 
-        elif name == "Corridor":
-            self.sect = Corridor(self.screen, self.path,  prev_sect)
-
-        elif name == "OutDoor":
-            self.sect = OutDoor(self.screen, self.path, prev_sect)
-
-        elif name == "Kitchen":
-            self.sect = Kitchen(self.screen, self.path, prev_sect)
-
-        elif name == "Toilet":
-            self.sect = Toilet(self.screen, self.path, prev_sect)
-
-        else:
-            return
-
-
-class Room(mp.Sect):
-    def __init__(self, screen, path, prev_sect=None):
-        super().__init__(screen, prev_sect)
-        self.sectpath = path + "Room.tmx"
-
-        self.load(self.sectpath)
-        self.init_OFFSET((160, 170), (0, 160))
-
-    def get_spawn_point(self) -> tuple[float, float] | None:
-        for area in self.areas:
-            if area.name == "Spawn":
-                return area.x, area.y
+    def get_next_map(self, area_name: mp.Map) -> tuple[mp.Map, str] | None:
+        if area_name == "Town":
+            next_map = mptown.Town(self.screen)
+            next_map.change_sect("Home")
+            return next_map, "Going Outside"
 
         return None
 
+    def setup_sections(self):
+        self.sections.clear()
+        self.sections.extend([
+            ("Room", Room(self.screen, self.path)),
+            ("Corridor", Corridor(self.screen, self.path)),
+            ("OutDoor", OutDoor(self.screen, self.path)),
+            ("Kitchen", Kitchen(self.screen, self.path)),
+            ("Toilet", Toilet(self.screen, self.path)),
+        ])
+
+
+class Room(mp.Sect):
+    def __init__(self,
+                 screen: pg.surface.Surface,
+                 path: str,
+                 back_point: str = ""):
+        super().__init__(screen, "RoomBk", back_point)
+
+        self.sectpath = path + "Room.tmx"
+        self.load(self.sectpath)
+        self.init_OFFSET((30, 40), (-160, 30))
+
 
 class Corridor(mp.Sect):
-    def __init__(self, screen, path, prev_sect=None):
-        super().__init__(screen, prev_sect)
+    def __init__(self,
+                 screen: pg.surface.Surface,
+                 path: str,
+                 back_point: str = ""):
+        super().__init__(screen, "CorridorBk", back_point)
 
         self.sectpath = path + "Corridor.tmx"
-
-        self.back_point = {
-            "Room": "RoomBk",
-        }
-
         self.load(self.sectpath)
-        self.init_OFFSET((150, 150), (0, 100))
+        self.init_OFFSET((40, -150), (-110, -200))
 
 
 class OutDoor(mp.Sect):
-    def __init__(self, screen, path, prev_sect=None):
-        super().__init__(screen, prev_sect)
+    def __init__(self,
+                 screen: pg.surface.Surface,
+                 path: str,
+                 back_point: str = ""):
+        super().__init__(screen, "OutDoorBk", back_point)
 
         self.sectpath = path + "OutDoor.tmx"
-
-        self.back_point = {
-            "Corridor": "CorridorBk"
-        }
-
         self.load(self.sectpath)
-        self.init_OFFSET((50, 100), (-170, 40))
+        self.init_OFFSET((50, -70), (-170, -130))
 
 
 class Kitchen(mp.Sect):
-    def __init__(self, screen, path, prev_sect=None):
-        super().__init__(screen, prev_sect)
+    def __init__(self,
+                 screen: pg.surface.Surface,
+                 path: str,
+                 back_point: str = ""):
+        super().__init__(screen, "KitchenBk", back_point)
 
         self.sectpath = path + "Kitchen.tmx"
-
-        self.back_point = {
-            "OutDoor": "OutDoorBk1"
-        }
-
         self.load(self.sectpath)
-        self.init_OFFSET((170, 120), (-5, 100))
+        self.init_OFFSET((-80, 0), (-255, -20))
 
 
 class Toilet(mp.Sect):
-    def __init__(self, screen, path, prev_sect=None):
-        super().__init__(screen, prev_sect)
+    def __init__(self,
+                 screen: pg.surface.Surface,
+                 path: str,
+                 back_point: str = ""):
+        super().__init__(screen, "ToiletBk", back_point)
 
         self.sectpath = path + "Toilet.tmx"
-
-        self.back_point = {
-            "OutDoor": "OutDoorBk2"
-        }
-
         self.load(self.sectpath)
-        self.init_OFFSET((0, 120), (-170, 120))
+        self.init_OFFSET((-260, 20), (-430, 20))

@@ -3,67 +3,68 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Corridor.tmx",
+    "activeFile": "MapSect/Room.tmx",
     "expandedProjectPaths": [
-        "World",
-        ".",
+        "MapSect",
         "Tile",
-        "MapSect"
+        "World",
+        "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "MapSect/Corridor.tmx": {
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 212.75,
-                "y": -4.5
+                "x": 119.25,
+                "y": 49.75
             }
         },
         "MapSect/Kitchen.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 2,
-            "selectedLayer": 0,
+            "scale": 4,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 52.25,
-                "y": 246.5
+                "x": 87.25,
+                "y": 97.75
             }
         },
         "MapSect/OutDoor.tmx": {
             "expandedObjectLayers": [
                 6
             ],
-            "scale": 5.5,
-            "selectedLayer": 5,
+            "scale": 4,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 117.00000000000001,
-                "y": 123.27272727272727
+                "x": 119.25,
+                "y": 73.75
             }
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
                 8
             ],
-            "scale": 5.5,
-            "selectedLayer": 5,
+            "scale": 4,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 141,
-                "y": 131.45454545454547
+                "x": 114.25,
+                "y": 170.5
             }
         },
         "MapSect/Toilet.tmx": {
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 3,
+            "scale": 4,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 121.83333333333333,
-                "y": 119.66666666666664
+                "x": 47.25,
+                "y": 89.75
             }
         },
         "Tile/blackblock.tsx": {
@@ -72,6 +73,10 @@
         },
         "Tile/housetile.tsx": {
             "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "Tile/tv.tsx": {
+            "scaleInDock": 1,
             "scaleInEditor": 1
         },
         "housemap.tmx": {
@@ -86,10 +91,11 @@
             }
         }
     },
-    "last.imagePath": "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/House/Package",
+    "last.imagePath": "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/Map",
     "last.worldFilePath": "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/Map/House",
     "loadedWorlds": [
-        "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/Map/House/house.world"
+        "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/Map/House/house.world",
+        "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/Map/Town/town.world"
     ],
     "map.height": 10,
     "map.lastUsedFormat": "tmx",
@@ -99,20 +105,23 @@
     "mapScene.enableWorlds": true,
     "openFiles": [
         "MapSect/OutDoor.tmx",
-        "MapSect/Room.tmx",
         "MapSect/Kitchen.tmx",
         "MapSect/Toilet.tmx",
-        "MapSect/Corridor.tmx"
+        "MapSect/Corridor.tmx",
+        "Tile/tv.tsx",
+        "Tile/blackblock.tsx",
+        "MapSect/Room.tmx"
     ],
     "project": "house.tiled-project",
     "recentFiles": [
         "MapSect/OutDoor.tmx",
-        "MapSect/Room.tmx",
         "MapSect/Kitchen.tmx",
         "MapSect/Toilet.tmx",
         "MapSect/Corridor.tmx",
-        "Tile/housetile.tsx",
+        "Tile/tv.tsx",
         "Tile/blackblock.tsx",
+        "MapSect/Room.tmx",
+        "Tile/housetile.tsx",
         "housemap.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",

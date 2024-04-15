@@ -1,7 +1,7 @@
 import heapq
 import pygame as pg
 import numpy as np
-import src.entity.enemycontainer.enemy as em
+import src.entity.thealternate.enemy as em
 import src.view.player.playerview as pv
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
