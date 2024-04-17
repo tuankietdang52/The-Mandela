@@ -5,44 +5,54 @@ import src.view.player.playerview as pv
 
 class Effect:
     @staticmethod
+    def to_black_screen():
+        manager = gm.Manager.get_instance()
+        mp = manager.gamemap.sect
+        player = manager.player
+
+        mp.set_opacity(0)
+        player.get_image().set_alpha(0)
+        manager.set_appear_entity_opacity(0)
+
+        manager.screen.fill((0, 0, 0))
+
+        pg.display.update()
+
+    @staticmethod
     def fade_in_screen():
         """fade in entire screen"""
-        mp = gm.Manager.gamemap.sect
-        player = pv.PlayerView.get_instance()
-        entities = gm.Manager.appear_entities
+        manager = gm.Manager.get_instance()
+        mp = manager.gamemap.sect
+        player = manager.player
 
         max_alpha = 255
 
         for alpha in range(max_alpha):
-            gm.Manager.get_screen().fill((0, 0, 0))
+            manager.screen.fill((0, 0, 0))
 
             mp.set_opacity(alpha)
-            Effect.__set_entities_opacity(entities, alpha)
+            manager.set_appear_entity_opacity(alpha)
             player.get_image().set_alpha(alpha)
 
-            gm.Manager.update_UI_ip()
+            manager.update_UI_ip()
 
     @staticmethod
     def fade_out_screen():
         """fade out entire screen"""
-        mp = gm.Manager.gamemap.sect
-        player = pv.PlayerView.get_instance()
-        entities = gm.Manager.appear_entities
+        manager = gm.Manager.get_instance()
+        mp = manager.gamemap.sect
+        player = manager.player
 
         max_alpha = 255
 
         for alpha in reversed(range(max_alpha)):
-            gm.Manager.get_screen().fill((0, 0, 0))
+            manager.screen.fill((0, 0, 0))
 
             mp.set_opacity(alpha)
-            Effect.__set_entities_opacity(entities, alpha)
+            manager.set_appear_entity_opacity(alpha)
             player.get_image().set_alpha(alpha)
-            gm.Manager.update_UI_ip()
 
-    @staticmethod
-    def __set_entities_opacity(entities, alpha: int):
-        for enemy in entities:
-            enemy.image.set_alpha(alpha)
+            manager.update_UI_ip()
 
     @staticmethod
     def set_list_opacity(screen: pg.surface.Surface,

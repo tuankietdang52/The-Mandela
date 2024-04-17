@@ -16,7 +16,7 @@ class HouseNormal(mp.Map):
         if area_name == "Town":
             next_map = mptown.Town(self.screen)
             next_map.change_sect("Home")
-            return next_map, "Going Outside"
+            return next_map, "Go Outside ?"
 
         return None
 

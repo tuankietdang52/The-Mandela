@@ -22,8 +22,8 @@ class StartMenu(gp.Part):
         self.choice = 1
 
     def setup(self):
-        gamemap = gm.Manager.gamemap
-        player = self.player
+        gamemap = self.manager.gamemap
+        player = self.manager.player
 
         gamemap.change_sect("Room")
         gamemap.sect.create()
@@ -48,11 +48,14 @@ class StartMenu(gp.Part):
         ge.Effect.set_list_opacity(self.screen, ls, self.alpha)
 
     def __fade_out(self, ls):
+        manager = self.manager.get_instance()
+        sect = manager.gamemap.sect
+
         if self.alpha <= 0:
             return
 
-        if gm.Manager.gamemap.sect.is_created:
-            gm.Manager.update_UI()
+        if sect.is_created:
+            manager.update_UI()
 
         self.alpha -= 1
         ge.Effect.set_list_opacity(self.screen, ls, self.alpha)
@@ -70,7 +73,7 @@ class StartMenu(gp.Part):
     def __open_load_board(self):
         self.is_open_board = True
 
-        pos = gm.Manager.screen.get_width() / 2, gm.Manager.screen.get_height() / 2
+        pos = self.manager.screen.get_width() / 2, self.manager.screen.get_height() / 2
         load_board = Board(self.screen, pos, (700, 600))
         load_board.draw()
 
@@ -113,7 +116,7 @@ class StartMenu(gp.Part):
         else:
             return
 
-        gm.Manager.update_UI()
+        self.manager.update_UI()
         self.startmenu.draw_elements()
         self.startmenu.change_choice(self.choice)
 
@@ -176,12 +179,14 @@ class StartMenu(gp.Part):
             self.can_press_key = True
 
     def __destroying(self):
-        x, y = self.player.get_position()
+        player = self.manager.player
 
-        self.player.set_position((x - 50, y))
-        self.player.presenter.set_image("left1")
+        x, y = player.get_position()
 
-        gm.Manager.update_UI_ip()
-        self.player.presenter.set_state(EState.FREE)
+        player.set_position((x - 50, y))
+        player.presenter.set_image("left1")
 
-        gm.Manager.set_part(bg.BeginStory(self.screen))
+        self.manager.update_UI_ip()
+        player.presenter.set_state(EState.FREE)
+
+        self.manager.set_part(bg.BeginStory(self.screen))

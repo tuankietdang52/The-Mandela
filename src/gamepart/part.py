@@ -23,11 +23,10 @@ class Part(abc.ABC):
 
     def __init__(self, screen: pg.surface.Surface):
         self.screen = screen
-        self.player = pv.PlayerView.get_instance()
         self.enemies = list()
         self.special_enemies = set()
-
-        self.update_list_entities()
+        
+        self.manager = gm.Manager.get_instance()
 
     @abc.abstractmethod
     def setup(self):
@@ -71,15 +70,16 @@ class Part(abc.ABC):
         if not self.can_change_map:
             return
 
-        sect = gm.Manager.gamemap.sect
+        sect = self.manager.gamemap.sect
+        player = self.manager.player
 
-        area = sect.in_area(self.player.get_rect())
+        area = sect.in_area(player.get_rect())
         keys = pg.key.get_pressed()
 
         if not keys[pg.K_f]:
             return
 
-        map_comp = gm.Manager.gamemap.get_next_map(area)
+        map_comp = self.manager.gamemap.get_next_map(area)
         if map_comp is None:
             return
 
@@ -92,25 +92,30 @@ class Part(abc.ABC):
             self.changing_map(next_map)
 
     def changing_map(self, next_map: mp.Map):
-        gm.Manager.set_map(next_map)
+        player = self.manager.player
+
+        self.manager.set_map(next_map)
+        sect = self.manager.gamemap.sect
+
         ge.Effect.fade_out_screen()
 
-        gm.Manager.gamemap.sect.create()
-        gm.Manager.gamemap.sect.set_opacity(0)
+        sect.create()
+        sect.set_opacity(0)
 
-        pos = gm.Manager.gamemap.sect.get_start_point()
-        self.player.set_position(pos)
+        pos = sect.get_start_point()
+        player.set_position(pos)
 
-        gm.Manager.wait(1)
+        self.manager.wait(1)
         ge.Effect.fade_in_screen()
 
     def handle_change_sect(self):
-        gamemap = gm.Manager.gamemap
+        gamemap = self.manager.gamemap
+        player = self.manager.player
 
         if gamemap is None:
             return
 
-        sect_name = gamemap.sect.in_area(self.player.get_rect())
+        sect_name = gamemap.sect.in_area(player.get_rect())
 
         current = gamemap.sect
 
@@ -123,7 +128,7 @@ class Part(abc.ABC):
         gamemap.sect.create()
         self.repos_player()
 
-        gm.Manager.update_UI_ip()
+        self.manager.update_UI_ip()
 
     def add_enemy(self, enemy: vw.BaseView):
         self.enemies.append(enemy)
@@ -154,22 +159,23 @@ class Part(abc.ABC):
                 break
 
     def update_list_entities(self):
-        gm.Manager.appear_entities.empty()
+        self.manager.clear_entities()
 
         if len(self.enemies) == 0:
-            gm.Manager.clear_entities()
             return
 
         for enemy in self.enemies:
             if enemy.is_appear():
-                gm.Manager.appear_entities.add(enemy)
+                self.manager.appear_entities.add(enemy)
 
     def repos_player(self):
         """Place player in map section start point"""
-        start_pos = gm.Manager.gamemap.sect.get_start_point()
+        player = self.manager.player
+        sect = self.manager.gamemap.sect
+        start_pos = sect.get_start_point()
 
-        self.player.set_position(start_pos)
-        self.player.update()
+        player.set_position(start_pos)
+        player.update()
 
     def create_board_text(self, text: str, sound: pg.mixer.Sound = None):
         """
@@ -184,9 +190,9 @@ class Part(abc.ABC):
             sound.play()
 
         self.is_open_board = True
-        pos = self.screen.get_width() / 2 + 10, self.screen.get_height() - 100
+        pos = self.screen.get_width() / 2, self.screen.get_height() - 100
 
-        size = self.screen.get_width() - 20, self.screen.get_height() - 500
+        size = self.screen.get_width(), self.screen.get_height() - 500
 
         board = BoardText(self.screen, text, 20, pos, size)
         board.draw()
@@ -200,14 +206,14 @@ class Part(abc.ABC):
             sound.stop()
 
         self.screen.fill((0, 0, 0))
-        gm.Manager.update_UI_ip()
+        self.manager.update_UI_ip()
 
     def create_accept_board(self) -> AcceptBoard:
         self.is_open_board = True
 
-        pos = self.screen.get_width() / 2 + 10, self.screen.get_height() - 100
+        pos = self.screen.get_width() / 2, self.screen.get_height() - 100
 
-        size = self.screen.get_width() - 20, self.screen.get_height() - 500
+        size = self.screen.get_width(), self.screen.get_height() - 500
 
         board = AcceptBoard(self.screen, pos, size)
         board.draw()
@@ -222,12 +228,12 @@ class Part(abc.ABC):
                 board.pointer.play_choose_sound()
 
         self.screen.fill((0, 0, 0))
-        gm.Manager.update_UI_ip()
+        self.manager.update_UI_ip()
         return board
 
     def closing_board(self):
         self.is_open_board = False
-        gm.Manager.update_UI_ip()
+        self.manager.update_UI_ip()
 
     def __check_closing_board(self):
         for event in pg.event.get():

@@ -1,50 +1,12 @@
 import pygame as pg
-import src.mapcontainer.map as mp
 import src.presenter.player.playerpresenter as playerpr
 import src.view.baseview as vw
 
 
 class PlayerView(vw.BaseView):
     """Position by topleft"""
-    _instance = None
-    screen = None
-    gamemap = None
-
-    def __init__(self):
-        """
-        Call init() instead.
-        :exception RuntimeError: when calling
-        """
-        pg.sprite.Sprite.__init__(self)
-        raise RuntimeError("Please call init() when init instance")
-
-    # Singleton init #
-
-    @classmethod
-    def get_instance(cls):
-        if cls._instance is None:
-            raise TypeError("Must init instance first")
-
-        return cls._instance
-
-    @classmethod
-    def init(cls, screen: pg.Surface, health: float):
-        """
-        Init instance for Player
-        """
-
-        if cls._instance is not None:
-            print("Player is created before")
-            return cls._instance
-
-        cls._instance = cls.__new__(cls)
-        pg.sprite.Sprite.__init__(cls.get_instance())
-
-        cls.screen = screen
-
-        cls.presenter = playerpr.PlayerPresenter(cls, screen, health)
-
-        return cls._instance
+    def __init__(self, screen, health):
+        super().__init__(screen, playerpr.PlayerPresenter(self, screen, health))
 
     def set_position(self, pos: tuple[int, int] | pg.math.Vector2):
         self.presenter.set_position(pos)
@@ -91,5 +53,5 @@ class PlayerView(vw.BaseView):
 
         self.screen.blit(image, rect)
 
-    def moving(self, keys):
+    def moving(self, keys: pg.key.ScancodeWrapper):
         self.presenter.handle_moving(keys)

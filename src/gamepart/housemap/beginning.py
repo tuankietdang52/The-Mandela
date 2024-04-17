@@ -4,8 +4,9 @@ import pygame as pg
 
 import src.gamemanage.game as gm
 import src.gamemanage.physic as gph
+import src.gamemanage.effect as ge
 import src.gamepart.part as gp
-import src.mapcontainer.housenormal as hsmp
+import src.mapcontainer.housenormal as mphouse
 import src.movingtype.normalmoving as normv
 import src.view.enemy.lilyview as lilyv
 import src.view.player.playerview as pv
@@ -18,12 +19,11 @@ class BeginStory(gp.Part):
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
 
-        self.offset = gm.Manager.gamemap.sect.CAM_OFFSETX, gm.Manager.gamemap.sect.CAM_OFFSETY
-
         self.can_press_key = True
         self.setup()
 
     def setup(self):
+        self.update_list_entities()
         gm.Manager.play_theme("../Assets/Music/Lily.mp3")
 
     def event_action(self):
@@ -39,6 +39,8 @@ class BeginStory(gp.Part):
                     self.closing_board()
 
     def pressing_key(self):
+        player = gm.Manager.get_instance().player
+
         if self.is_open_board:
             return
 
@@ -47,9 +49,11 @@ class BeginStory(gp.Part):
 
         keys = pg.key.get_pressed()
 
-        self.player.moving(keys)
+        player.moving(keys)
 
     def manage_progess(self):
+        sect = gm.Manager.get_instance().gamemap.sect
+        player = gm .Manager.get_instance().player
         progess = self.get_progess_index()
 
         if progess == 0:
@@ -57,10 +61,10 @@ class BeginStory(gp.Part):
             self.next()
 
         elif progess == 1:
-            if type(gm.Manager.gamemap.sect) is not hsmp.Kitchen:
+            if type(sect) is not mphouse.Kitchen:
                 return
 
-            voice = self.player.get_voice("voice2")
+            voice = player.get_voice("voice2")
             self.create_board_text("Let check the refrigerator", voice)
             self.next()
 
@@ -76,67 +80,89 @@ class BeginStory(gp.Part):
             self.__finding_lily()
 
         elif progess == 4:
-            self.__to_dream()
+            self.__spawnlily()
 
         elif progess == 5:
+            self.__to_dream()
+
+        elif progess == 6:
             self.destroying()
 
     def __tutorial(self):
+        player = gm.Manager.get_instance().player
+
         self.create_board_text("Press AWDS to move |F to interact |Enter to next")
-        voice = self.player.get_voice("voice1")
+        voice = player.get_voice("voice1")
         self.create_board_text("I feel hungry. Maybe i'll go get some food", voice)
 
     def __checking_fridge(self):
-        sect = gm.Manager.gamemap.sect
-        if type(sect) is not hsmp.Kitchen:
+        sect = gm.Manager.get_instance().gamemap.sect
+        player = gm.Manager.get_instance().player
+
+        if type(sect) is not mphouse.Kitchen:
             return False
 
         area = sect.get_area("Fridge")
 
         keys = pg.key.get_pressed()
 
-        if area.is_overlap(self.player.get_rect()) and keys[pg.K_f]:
+        if area.is_overlap(player.get_rect()) and keys[pg.K_f]:
             return True
 
         return False
 
     def __finding_lily(self):
+        player = gm.Manager.get_instance().player
+
         gm.Manager.play_theme("../Assets/Sound/Other/rain.mp3")
 
         voice = pg.mixer.Sound("../Assets/Sound/LilyVoice/voice1.wav")
         self.create_board_text("Viole...", voice)
 
-        voice = self.player.get_voice("voice3")
+        voice = player.get_voice("voice3")
         self.create_board_text("What!? Is that voice come from my bedroom |Is that... |Lily", voice)
-        self.__spawnlily()
 
         self.next()
 
     def __spawnlily(self):
-        start_pos = pg.math.Vector2(424 - self.offset[0], 448 - self.offset[1])
+        sect = self.manager.gamemap.sect
+        offset = sect.CAM_OFFSETX, sect.CAM_OFFSETY
 
-        lily = lilyv.LilyView(self.screen, gm.Manager.gamemap, hsmp.Room, start_pos)
+        if type(sect) is not mphouse.Room:
+            return
+
+        start_pos = pg.math.Vector2(424 - offset[0], 418 - offset[1])
+        gamemap = gm.Manager.get_instance().gamemap
+
+        lily = lilyv.LilyView(self.screen, gamemap, mphouse.Room, start_pos)
         self.add_enemy(lily)
         self.add_special_enemy("lily", lily)
+        self.next()
 
     def __to_dream(self):
-        if type(gm.Manager.gamemap.sect) is not hsmp.Room:
+        sect = gm.Manager.get_instance().gamemap.sect
+        player = gm.Manager.get_instance().player
+
+        if type(sect) is not mphouse.Room:
             return
 
         if not self.is_occur_start_event:
-            voice = self.player.get_voice("voice4")
+            voice = player.get_voice("voice4")
             self.create_board_text("Lily ?", voice)
             self.is_occur_start_event = True
 
         self.__lily_chasing()
 
     def __lily_chasing(self):
+        player = gm.Manager.get_instance().player
+        areas = gm.Manager.get_instance().gamemap.sect.areas
+
         lily = self.get_special_enemy("lily")
         lily_position = lily.get_position()
 
-        player_rect = self.player.get_rect()
+        player_rect = player.get_rect()
         width, height = 36, 80
-        active_area = Area("active", lily_position, width, height, gm.Manager.gamemap.sect.areas)
+        active_area = Area("active", lily_position, width, height, areas)
 
         if not active_area.is_overlap(player_rect):
             return
@@ -163,16 +189,18 @@ class BeginStory(gp.Part):
         lily.presenter.set_speed(4)
 
     def destroying(self):
+        manager = gm.Manager.get_instance()
+        player = manager.player
+
         lily = self.get_special_enemy("lily")
-        player_rect = pv.PlayerView.get_instance().get_rect()
+        player_rect = player.get_rect()
 
         if not gph.Physic.is_collide(player_rect, lily.get_rect()):
             return
 
         self.next()
         self.can_press_key = False
-        gm.Manager.unload_map()
+        ge.Effect.to_black_screen()
 
-        gm.Manager.wait(5)
-
-        gm.Manager.set_part(mandela.TheMandela(self.screen))
+        manager.wait(5)
+        manager.set_part(mandela.TheMandela(self.screen))

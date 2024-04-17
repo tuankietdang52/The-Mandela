@@ -105,7 +105,7 @@ class Sect:
 
             group = self.olptiles if layer.name == "OverlapPlayer" else self.tilegroup
 
-            tile = Tile(surf, pos, layer.name, layer.id, self.screen, layer.data[y][x], group)
+            tile = Tile(self.screen, surf, pos, layer.name, layer.id, layer.data[y][x], group)
 
             if "Wall" in layer.name or "Object" in layer.name:
                 self.__wall_tile.append(tile)
@@ -188,7 +188,6 @@ class Map(abc.ABC):
 
         self.sect = None
         self.sections: list[tuple[str, Sect]] = list()
-        self.link_map: list[tuple[str, Map, str]] = list()
 
         self.setup_sections()
 

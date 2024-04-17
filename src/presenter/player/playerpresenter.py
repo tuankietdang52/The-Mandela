@@ -79,7 +79,7 @@ class PlayerPresenter:
 
         self.model.set_image(direction + str(index))
 
-    def handle_moving(self, keys):
+    def handle_moving(self, keys: pg.key.ScancodeWrapper):
         if self.model.get_state() != EState.FREE:
             return
 
@@ -106,7 +106,9 @@ class PlayerPresenter:
         else:
             return
 
+        manager = gm.Manager.get_instance()
+
         if self.model.can_move(velocity):
             self.model.moving(velocity)
             self.moving_animation(direction)
-            gm.Manager.update_UI_ip()
+            manager.update_UI_ip()
