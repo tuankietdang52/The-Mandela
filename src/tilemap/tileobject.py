@@ -1,6 +1,6 @@
 import pygame as pg
 
-import src.gamemanage.game
+import src.gamemanage.game as gm
 
 
 class Area:
@@ -37,5 +37,5 @@ class Area:
             rect.bottomleft
         ]
 
-        pg.draw.lines(src.gamemanage.game.Manager.get_screen(), (0, 0, 0), True, points, 7)
+        pg.draw.lines(gm.Manager.screen, (0, 0, 0), True, points, 7)
         pg.display.update()

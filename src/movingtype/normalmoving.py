@@ -2,7 +2,6 @@ import heapq
 import pygame as pg
 import numpy as np
 import src.entity.thealternate.enemy as em
-import src.view.player.playerview as pv
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
 import src.gamemanage.physic as gp
@@ -30,10 +29,12 @@ class Cell:
 class NormalMovement(mv.Movement):
     def __init__(self, enemy: em.Enemy):
         self.owner = enemy
+        self.manager = gm.Manager.get_instance()
+        self.player = self.manager.player
 
     def moving(self):
         rect = self.owner.get_rect()
-        player_rect = pv.PlayerView.get_instance().get_rect()
+        player_rect = self.player.get_rect()
 
         if gp.Physic.is_collide(player_rect, rect):
             return
@@ -58,7 +59,7 @@ class NormalMovement(mv.Movement):
         else:
             self.__bypass_to_player()
 
-        gm.Manager.update_UI_ip()
+        self.manager.update_UI_ip()
 
     __ways = list()
 
@@ -69,7 +70,7 @@ class NormalMovement(mv.Movement):
         self.owner.set_position(position)
 
     def __bypass_to_player(self):
-        player_position = pv.PlayerView.get_instance().get_position()
+        player_position = self.player.get_position()
         src = self.owner.position
         dest = player_position
 
@@ -111,7 +112,7 @@ class NormalMovement(mv.Movement):
         return path
 
     def __a_star_search(self, src: mv.IntVector2, dest: mv.IntVector2):
-        screen = gm.Manager.get_screen()
+        screen = self.manager.screen
 
         col = screen.get_width() * 2
         row = screen.get_height() * 2

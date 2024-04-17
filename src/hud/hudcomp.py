@@ -66,7 +66,7 @@ class Board:
     def __draw_content(self):
         for item in self.content:
             inside_rect = item[1].clamp(self.rect)
-            rect = inside_rect.move(inside_rect.x, 20)
+            rect = inside_rect.move(inside_rect.x + 10, 20)
 
             self.screen.blit(item[0], rect)
 
@@ -214,7 +214,7 @@ class AcceptBoard:
         pointer_pos = self.pointer.rect.x, self.pointer.rect.y
         self.pointer.set_position((pointer_pos[0], pointer_pos[1] + y))
 
-        gm.Manager.update_UI()
+        gm.Manager.get_instance().update_UI()
         self.board.draw()
         self.pointer.draw()
         pg.display.flip()

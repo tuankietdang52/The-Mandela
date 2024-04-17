@@ -11,16 +11,16 @@ class Physic:
         """
         :param rect: Next rect
         """
+        manager = gm.Manager.get_instance()
 
-        if gm.Manager.gamemap is None:
+        if manager.gamemap is None:
             return False
 
         bottom_left = rect.bottomleft
         bottom_right = rect.bottomright
         top = rect.midbottom[0], rect.midbottom[1] - 10
 
-        walls = gm.Manager.gamemap.sect.walls
-
+        walls = manager.gamemap.sect.walls
         if (top in walls
                 or bottom_right in walls
                 or bottom_left in walls):
