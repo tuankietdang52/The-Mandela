@@ -3,12 +3,15 @@ from __future__ import annotations
 import pygame as pg
 
 import src.gamepart.part as gp
-import src.view.player.playerview as pv
+import src.entity.playercontainer.player as pl
 import src.mapcontainer.map as mp
 import src.mapcontainer.housenormal as mphouse
+
+from src.eventhandle import *
+
 import src.mapcontainer.town as mptown
-import src.gamepart.townmap.themandela as tm
 import src.gamepart.housemap.beginning as bg
+import src.gamepart.townmap.themandela as tm
 import src.gamepart.housemap.startmenu as sm
 
 
@@ -19,8 +22,10 @@ class Manager:
     screen = None
     gamepart: gp.Part | None = None
     gamemap: mp.Map | None = None
-    player: pv.PlayerView = None
-    appear_entities = pg.sprite.Group()
+    player: pl.Player = None
+
+    entities = pg.sprite.Group()
+    appear_enemy = pg.sprite.Group()
 
     def __init__(self):
         """Call init() instead"""
@@ -42,16 +47,9 @@ class Manager:
         cls.__instance = cls.__new__(cls)
 
         cls.screen = screen
+        cls.on_destroy = EventHandle()
 
         return cls.__instance
-
-    def setup(self,
-              gamemap: mp.Map,
-              player: pv.PlayerView,
-              gamepart: gp.Part):
-        self.gamemap = gamemap
-        self.player = player
-        self.gamepart = gamepart
 
     def unload_map(self):
         self.gamemap = None
@@ -59,7 +57,7 @@ class Manager:
         pg.display.update()
 
     def clear_entities(self):
-        self.appear_entities.empty()
+        self.on_destroy.invoke()
 
     def update_UI(self):
         self.screen.fill((0, 0, 0))
@@ -67,8 +65,7 @@ class Manager:
             return
 
         self.gamemap.sect.redraw()
-        self.appear_entities.draw(self.screen)
-        self.player.update()
+        self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
 
     def update_UI_ip(self):
@@ -77,17 +74,16 @@ class Manager:
             return
 
         self.gamemap.sect.redraw()
-        self.appear_entities.draw(self.screen)
-        self.player.update()
+        self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
 
         pg.display.update()
 
     def update_enemy(self):
-        if len(Manager.appear_entities) == 0:
+        if len(Manager.appear_enemy) == 0:
             return
 
-        self.appear_entities.update()
+        self.appear_enemy.update()
 
     @staticmethod
     def play_theme(path: str, volume: float = None):
@@ -131,7 +127,7 @@ class Manager:
         self.gamepart.can_press_key = True
 
     def set_appear_entity_opacity(self, alpha: int):
-        for em in self.appear_entities:
+        for em in self.appear_enemy:
             em.image.set_alpha(alpha)
 
 
@@ -143,10 +139,9 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    IS_TEST = False
-    IS_FULLSCREEN = True
+    IS_TEST = True
+    IS_FULLSCREEN = False
 
-    game_part_index = 0
     clock = pg.time.Clock()
     dt = 0
 
@@ -178,22 +173,17 @@ class Game:
         pg.display.set_caption("Nightmare")
 
     def setup_manager(self):
-        gamemap = mphouse.HouseNormal(self.screen)
-        player = pv.PlayerView(self.screen, 1000)
-        gamepart = sm.StartMenu(self.screen)
-
-        self.manager.setup(gamemap, player, gamepart)
-
+        self.manager.gamemap = mphouse.HouseNormal(self.screen)
+        self.manager.player = pl.Player(self.screen, 1000, self.manager.entities)
+        self.manager.gamepart = sm.StartMenu(self.screen)
 
     def test(self):
         """test element"""
-        gamemap = mphouse.HouseNormal(self.screen)
-        player = pv.PlayerView(self.screen, 1000)
-        gamepart = bg.BeginStory(self.screen)
+        self.manager.gamemap = mphouse.HouseNormal(self.screen)
+        self.manager.player = pl.Player(self.screen, 1000, self.manager.entities)
+        self.manager.gamepart = tm.TheMandela(self.screen)
 
-        self.manager.setup(gamemap, player, gamepart)
-
-        self.manager.gamemap.change_sect("Corridor")
+        self.manager.gamemap.change_sect("Outdoor")
         self.manager.gamepart.set_progess_index(3)
 
         self.setup_test()

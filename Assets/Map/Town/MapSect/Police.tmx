@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="19" height="22" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="6">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="19" height="22" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="10">
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
@@ -139,5 +139,8 @@
   <object id="3" name="Crossroad" x="-12.0463" y="108.832" width="17.8617" height="210.186"/>
   <object id="4" name="CrossroadBk" x="27.0002" y="196.894" width="22.0156" height="22.431"/>
   <object id="5" name="Start" x="126.693" y="191.909" width="40.2927" height="31.9849"/>
+ </objectgroup>
+ <objectgroup id="8" name="SpawnAreaLayer">
+  <object id="9" name="SpawnArea0" x="83.9998" y="150.833" width="115.334" height="132.333"/>
  </objectgroup>
 </map>

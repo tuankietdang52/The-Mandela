@@ -1,6 +1,6 @@
 import abc
 import pygame as pg
-
+import src.gamemanage.game as gm
 
 class IntVector2:
     """Vector2 but x,y is int type"""
@@ -17,5 +17,6 @@ class IntVector2:
 
 
 class Movement(abc.ABC):
+    @abc.abstractmethod
     def moving(self):
         pass

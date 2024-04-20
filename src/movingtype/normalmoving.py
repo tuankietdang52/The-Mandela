@@ -1,7 +1,7 @@
 import heapq
 import pygame as pg
 import numpy as np
-import src.entity.thealternate.enemy as em
+import src.entity.thealternate.enemy as enenemy
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
 import src.gamemanage.physic as gp
@@ -27,7 +27,7 @@ class Cell:
 
 
 class NormalMovement(mv.Movement):
-    def __init__(self, enemy: em.Enemy):
+    def __init__(self, enemy: enenemy.Enemy):
         self.owner = enemy
         self.manager = gm.Manager.get_instance()
         self.player = self.manager.player
@@ -35,22 +35,12 @@ class NormalMovement(mv.Movement):
     def moving(self):
         rect = self.owner.get_rect()
         player_rect = self.player.get_rect()
+        player_position = self.player.get_position()
 
         if gp.Physic.is_collide(player_rect, rect):
             return
 
-        position = self.owner.get_position()
-        player_position = pg.math.Vector2(player_rect.x, player_rect.y)
-
-        distance = (player_position - position).magnitude()
-
-        if distance > 0:
-            direction = (player_position - position).normalize()
-
-        else:
-            direction = pg.math.Vector2()
-
-        direction = pg.math.Vector2(round(direction.x), round(direction.y))
+        direction = self.owner.calculate_direction(player_position)
         velocity = direction * self.owner.get_speed()
 
         if self.owner.can_move(self.owner.get_position() + velocity):
@@ -80,24 +70,25 @@ class NormalMovement(mv.Movement):
         speed = self.owner.get_speed()
         position = 0
 
-        for step in range(speed):
+        for step in range(int(speed)):
             if len(self.__ways) == 0:
                 break
 
             position = self.__ways.pop(0)
+            self.owner.calculate_direction(position)
 
         self.owner.set_position(position)
 
     def __find_way(self, src: pg.math.Vector2, dest: pg.math.Vector2) -> list:
-        src = mv.IntVector2(src)
-        dest = mv.IntVector2(dest)
+        src_int = mv.IntVector2(src)
+        dest_int = mv.IntVector2(dest)
 
-        detail = self.__a_star_search(src, dest)
+        detail = self.__a_star_search(src_int, dest_int)
 
         if detail is None:
             return [src]
 
-        return self.__trace_path(detail, dest)
+        return self.__trace_path(detail, dest_int)
 
     def __trace_path(self, detail: list, dest: mv.IntVector2) -> list:
         path = list()
@@ -121,7 +112,7 @@ class NormalMovement(mv.Movement):
         closed_list = set()
 
         start = Cell(0, 0, 0, src, src)
-        x, y = int(src.x), int(src.y)
+        x, y = src.x, src.y
         detail[y][x] = start
 
         open_list = [start]

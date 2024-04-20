@@ -1,6 +1,5 @@
 import pygame as pg
 import src.gamemanage.game as gm
-import src.view.player.playerview as pv
 
 
 class Effect:

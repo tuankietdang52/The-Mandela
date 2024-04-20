@@ -1,11 +1,14 @@
 import abc
 import sys
+import random
 
-import src.gamemanage.game as gm
 import src.gamemanage.effect as ge
-import src.view.baseview as vw
 import src.mapcontainer.map as mp
-import src.view.player.playerview as pv
+import src.gamemanage.physic as gph
+import src.hud.hudcomp as hud
+import src.entity.thealternate.enemy as em
+import src.entity.thealternate.themurrayresidence as murray
+import src.entity.thealternate.doppelganger as dp
 
 from src.hud import *
 
@@ -14,18 +17,20 @@ class Part(abc.ABC):
     __progess = 0
     to_next = True
 
-    is_open_board = False
-    can_press_key = False
     is_occur_start_event = False
+    is_spawn_enemy = False
+    can_press_key = False
     can_change_map = False
 
     nextpart = None
 
     def __init__(self, screen: pg.surface.Surface):
         self.screen = screen
-        self.enemies = list()
-        self.special_enemies = set()
-        
+        self.enemies: list[em.Enemy] = list()
+        self.special_enemies: set[tuple[str, em.Enemy, type[mp.Sect]]] = set()
+
+        self.spawn_chance = 0
+
         self.manager = gm.Manager.get_instance()
 
     @abc.abstractmethod
@@ -33,9 +38,6 @@ class Part(abc.ABC):
         pass
 
     def update(self):
-        if self.is_open_board:
-            return
-
         self.handle_change_map()
         self.handle_change_sect()
         self.manage_progess()
@@ -85,15 +87,15 @@ class Part(abc.ABC):
 
         next_map, text = map_comp
 
-        self.create_board_text(text)
-        choice = self.create_accept_board().yes_choice
+        hud.HUDComp.create_board_text(text)
+        choice = hud.HUDComp.create_accept_board().yes_choice
 
         if choice:
             self.changing_map(next_map)
+            self.is_spawn_enemy = False
+            self.enemies.clear()
 
     def changing_map(self, next_map: mp.Map):
-        player = self.manager.player
-
         self.manager.set_map(next_map)
         sect = self.manager.gamemap.sect
 
@@ -102,10 +104,10 @@ class Part(abc.ABC):
         sect.create()
         sect.set_opacity(0)
 
-        pos = sect.get_start_point()
-        player.set_position(pos)
+        self.reposition_player()
 
         self.manager.wait(1)
+        pg.mixer.stop()
         ge.Effect.fade_in_screen()
 
     def handle_change_sect(self):
@@ -124,123 +126,111 @@ class Part(abc.ABC):
         if gamemap.sect == current:
             return
 
+        self.is_spawn_enemy = False
+        self.enemies.clear()
+
         self.update_list_entities()
         gamemap.sect.create()
-        self.repos_player()
+        self.reposition_player()
+        pg.mixer.stop()
 
         self.manager.update_UI_ip()
 
-    def add_enemy(self, enemy: vw.BaseView):
-        self.enemies.append(enemy)
-        self.update_list_entities()
-
-    def remove_enemy(self, enemy: vw.BaseView):
-        self.enemies.remove(enemy)
-        self.update_list_entities()
-
-    def add_special_enemy(self, name: str, enemy: vw.BaseView):
-        self.special_enemies.add((name, enemy))
-
-    def get_special_enemy(self, name: str) -> vw.BaseView | None:
-        for enemy in self.special_enemies:
-            if enemy[0] == name:
-                return enemy[1]
-
-        return None
-
-    def remove_special_enemy(self, name: str | vw.BaseView):
-        if type(name) is vw.BaseView:
-            self.special_enemies.remove(name)
-            return
-
-        for enemy in self.special_enemies:
-            if enemy.name == name:
-                self.special_enemies.remove(enemy)
-                break
-
-    def update_list_entities(self):
-        self.manager.clear_entities()
-
-        if len(self.enemies) == 0:
-            return
-
-        for enemy in self.enemies:
-            if enemy.is_appear():
-                self.manager.appear_entities.add(enemy)
-
-    def repos_player(self):
+    def reposition_player(self):
         """Place player in map section start point"""
         player = self.manager.player
         sect = self.manager.gamemap.sect
         start_pos = sect.get_start_point()
 
         player.set_position(start_pos)
-        player.update()
 
-    def create_board_text(self, text: str, sound: pg.mixer.Sound = None):
-        """
-        Create a board contain text inside
-        If you want to go to new line in the text, using ' |sometext' to do it
-        """
+    def __is_spawn_alternate(self) -> bool:
+        if random.randint(0, 100) < self.spawn_chance:
+            return True
 
-        if self.is_open_board:
+        return False
+
+    def __get_spawn_area(self) -> pg.math.Vector2 | None:
+        sect = self.manager.gamemap.sect
+
+        index = random.randint(0, sect.spawn_area_count)
+        area = sect.get_area(f"SpawnArea{index}")
+
+        if area is None:
+            return None
+
+        x_limit = round(area.x + area.width)
+        y_limit = round(area.y + area.height)
+
+        x = random.randint(round(area.x), x_limit)
+        y = random.randint(round(area.y), y_limit)
+
+        return pg.math.Vector2(x, y)
+
+    def spawn_alternate(self):
+        self.is_spawn_enemy = True
+        if not self.__is_spawn_alternate():
             return
 
-        if sound is not None:
-            sound.play()
+        position = self.__get_spawn_area()
 
-        self.is_open_board = True
-        pos = self.screen.get_width() / 2, self.screen.get_height() - 100
+        if position is None:
+            return
 
-        size = self.screen.get_width(), self.screen.get_height() - 500
+        enemy = murray.TheMurrayResidence(position, self.manager.entities)
 
-        board = BoardText(self.screen, text, 20, pos, size)
-        board.draw()
+        if gph.Physic.is_collide_wall(enemy.get_rect()):
+            self.manager.entities.remove(enemy)
+            return
 
-        pg.display.update(board.rect)
+        self.add_enemy(enemy)
 
-        while self.is_open_board:
-            self.__check_closing_board()
+    def add_enemy(self, enemy: em.Enemy):
+        self.enemies.append(enemy)
+        self.update_list_entities()
 
-        if sound is not None:
-            sound.stop()
+    def remove_enemy(self, enemy: em.Enemy):
+        self.enemies.remove(enemy)
+        self.update_list_entities()
 
-        self.screen.fill((0, 0, 0))
+    def add_special_enemy(self, name: str, enemy: em.Enemy, section: type[mp.Sect]):
+        self.special_enemies.add((name, enemy, section))
+        self.update_list_entities()
+
+    def get_special_enemy(self, name: str) -> em.Enemy | None:
+        for enemy in self.special_enemies:
+            if enemy[0] == name:
+                return enemy[1]
+
+        return None
+
+    def remove_special_enemy(self, name: str):
+        for item in self.special_enemies:
+            if item[0] == name:
+                self.special_enemies.remove(item)
+                break
+
+    def update_list_entities(self):
+        self.manager.clear_entities()
+
+        if len(self.enemies) == 0 and len(self.special_enemies) == 0:
+            return
+
+        for enemy in self.enemies:
+            self.manager.appear_enemy.add(enemy)
+            self.manager.entities.add(enemy)
+
+        for enemy in self.special_enemies:
+            if self.__check_appear(enemy[2]):
+                self.manager.appear_enemy.add(enemy[1])
+                self.manager.entities.add(enemy[1])
+
         self.manager.update_UI_ip()
 
-    def create_accept_board(self) -> AcceptBoard:
-        self.is_open_board = True
+    def __check_appear(self, enemy_sect: type[mp.Sect]):
+        cur = self.manager.gamemap.sect
 
-        pos = self.screen.get_width() / 2, self.screen.get_height() - 100
+        if enemy_sect == type(cur):
+            return True
 
-        size = self.screen.get_width(), self.screen.get_height() - 500
-
-        board = AcceptBoard(self.screen, pos, size)
-        board.draw()
-
-        pg.display.update(board.rect)
-
-        while self.is_open_board:
-            board.changing_choice()
-            self.__check_closing_board()
-
-            if not self.is_open_board:
-                board.pointer.play_choose_sound()
-
-        self.screen.fill((0, 0, 0))
-        self.manager.update_UI_ip()
-        return board
-
-    def closing_board(self):
-        self.is_open_board = False
-        self.manager.update_UI_ip()
-
-    def __check_closing_board(self):
-        for event in pg.event.get():
-            """Prevent game to freezing itself"""
-            if event.type == pg.QUIT:
-                sys.exit()
-
-            if event.type == pg.KEYDOWN:
-                if self.is_open_board and event.key == pg.K_RETURN:
-                    self.is_open_board = False
+        return False

@@ -1,3 +1,4 @@
+import sys
 import pygame as pg
 import src.gamemanage.game as gm
 
@@ -237,3 +238,74 @@ class AcceptBoard:
 
             self.yes_choice = False
             self.__move_cur(new_y)
+
+
+class HUDComp:
+    @staticmethod
+    def create_board_text(text: str, sound: pg.mixer.Sound = None):
+        """
+        Create a board contain text inside
+        If you want to go to new line in the text, using ' |sometext' to do it
+        """
+
+        manager = gm.Manager.get_instance()
+        screen = manager.screen
+
+        if sound is not None:
+            sound.play()
+
+        pos = screen.get_width() / 2, screen.get_height() - 100
+
+        size = screen.get_width(), screen.get_height() - 500
+
+        board = BoardText(screen, text, 20, pos, size)
+        board.draw()
+
+        pg.display.update(board.rect)
+
+        while True:
+            if HUDComp.__check_closing_board():
+                break
+
+        if sound is not None:
+            sound.stop()
+
+        screen.fill((0, 0, 0))
+        manager.update_UI_ip()
+
+    @staticmethod
+    def create_accept_board() -> AcceptBoard:
+        manager = gm.Manager.get_instance()
+        screen = manager.screen
+
+        pos = screen.get_width() / 2, screen.get_height() - 100
+
+        size = screen.get_width(), screen.get_height() - 500
+
+        board = AcceptBoard(screen, pos, size)
+        board.draw()
+
+        pg.display.update(board.rect)
+
+        while True:
+            board.changing_choice()
+            if HUDComp.__check_closing_board():
+                board.pointer.play_choose_sound()
+                break
+
+        screen.fill((0, 0, 0))
+        manager.update_UI_ip()
+        return board
+
+    @staticmethod
+    def __check_closing_board() -> bool:
+        for event in pg.event.get():
+            """Prevent game to freezing itself"""
+            if event.type == pg.QUIT:
+                sys.exit()
+
+            if event.type == pg.KEYDOWN:
+                if event.key == pg.K_RETURN:
+                    return True
+
+        return False

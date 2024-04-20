@@ -14,10 +14,10 @@ class Sect:
     ori_block_size = 0
     size = 0
 
-    CAM_OFFSETX = 0
+    MAP_OFFSETX = 0
     """Higher = Left, Lower = Right"""
 
-    CAM_OFFSETY = 0
+    MAP_OFFSETY = 0
     """Higher = Up, Lower = Down"""
 
     def __init__(self,
@@ -31,10 +31,14 @@ class Sect:
         self.screen = screen
 
         self.map = None
+
         self.areas = []
         self.tilegroup = pg.sprite.Group()
         self.olptiles = pg.sprite.Group()
+
         self.is_created = False
+
+        self.spawn_area_count = 0
 
         self.back_point = back_point
         self.to_point = to_point
@@ -49,10 +53,13 @@ class Sect:
 
     def init_OFFSET(self, offset, offsetfullscr):
         if self.screen.get_size() == (800, 800):
-            self.CAM_OFFSETX, self.CAM_OFFSETY = offset
+            self.MAP_OFFSETX, self.MAP_OFFSETY = offset
 
         else:
-            self.CAM_OFFSETX, self.CAM_OFFSETY = offsetfullscr
+            self.MAP_OFFSETX, self.MAP_OFFSETY = offsetfullscr
+
+    def get_map_OFFSET(self) -> tuple[int, int]:
+        return self.MAP_OFFSETX, self.MAP_OFFSETY
 
     def load(self, path):
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare\\src":
@@ -97,7 +104,7 @@ class Sect:
 
     def __draw_tile(self, layer):
         for x, y, surf in layer.tiles():
-            pos = x * self.size - self.CAM_OFFSETX, y * self.size - self.CAM_OFFSETY
+            pos = x * self.size - self.MAP_OFFSETX, y * self.size - self.MAP_OFFSETY
 
             tilesize = self.size, self.size
 
@@ -113,16 +120,20 @@ class Sect:
             self.screen.blit(tile.image, tile.rect)
 
     def __init_areas(self, layer):
+        self.spawn_area_count = 0
         for area in layer:
             offset = self.size / self.ori_block_size
 
-            pos = pg.math.Vector2(area.x * offset - self.CAM_OFFSETX,
-                                  area.y * offset - self.CAM_OFFSETY)
+            pos = pg.math.Vector2(area.x * offset - self.MAP_OFFSETX,
+                                  area.y * offset - self.MAP_OFFSETY)
 
             width = area.width * offset
             height = area.height * offset
 
             Area(area.name, pos, width, height, self.areas)
+
+            if "SpawnArea" in area.name:
+                self.spawn_area_count += 1
 
     def __init_walls(self):
         for wall in self.__wall_tile:
