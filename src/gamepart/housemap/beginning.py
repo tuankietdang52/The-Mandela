@@ -8,9 +8,9 @@ import src.gamemanage.effect as ge
 import src.gamepart.part as gp
 import src.mapcontainer.housenormal as mphouse
 import src.movingtype.normalmoving as normv
-import src.view.enemy.lilyview as lilyv
-import src.view.player.playerview as pv
 import src.gamepart.townmap.themandela as mandela
+import src.hud.hudcomp as hud
+import src.entity.thealternate.lily as ll
 
 from src.tilemap import Area
 
@@ -31,25 +31,15 @@ class BeginStory(gp.Part):
             if event.type == pg.QUIT:
                 sys.exit()
 
-            if event.type == pg.KEYDOWN:
-                if not self.can_press_key:
-                    return
-
-                if event.key == pg.K_RETURN and self.is_open_board:
-                    self.closing_board()
-
     def pressing_key(self):
-        player = gm.Manager.get_instance().player
-
-        if self.is_open_board:
-            return
+        player = self.manager.player
 
         if not self.can_press_key:
             return
 
         keys = pg.key.get_pressed()
 
-        player.moving(keys)
+        player.handle_moving(keys)
 
     def manage_progess(self):
         sect = gm.Manager.get_instance().gamemap.sect
@@ -65,15 +55,15 @@ class BeginStory(gp.Part):
                 return
 
             voice = player.get_voice("voice2")
-            self.create_board_text("Let check the refrigerator", voice)
+            hud.HUDComp.create_board_text("Let check the refrigerator", voice)
             self.next()
 
         elif progess == 2:
             if not self.__checking_fridge():
                 return
 
-            self.create_board_text('"Out of food"')
-            self.create_board_text("...")
+            hud.HUDComp.create_board_text('"Out of food"')
+            hud.HUDComp.create_board_text("...")
             self.next()
 
         elif progess == 3:
@@ -91,9 +81,9 @@ class BeginStory(gp.Part):
     def __tutorial(self):
         player = gm.Manager.get_instance().player
 
-        self.create_board_text("Press AWDS to move |F to interact |Enter to next")
+        hud.HUDComp.create_board_text("Press AWDS to move |F to interact |Enter to next")
         voice = player.get_voice("voice1")
-        self.create_board_text("I feel hungry. Maybe i'll go get some food", voice)
+        hud.HUDComp.create_board_text("I feel hungry. Maybe i'll go get some food", voice)
 
     def __checking_fridge(self):
         sect = gm.Manager.get_instance().gamemap.sect
@@ -117,26 +107,24 @@ class BeginStory(gp.Part):
         gm.Manager.play_theme("../Assets/Sound/Other/rain.mp3")
 
         voice = pg.mixer.Sound("../Assets/Sound/LilyVoice/voice1.wav")
-        self.create_board_text("Viole...", voice)
+        hud.HUDComp.create_board_text("Viole...", voice)
 
         voice = player.get_voice("voice3")
-        self.create_board_text("What!? Is that voice come from my bedroom |Is that... |Lily", voice)
+        hud.HUDComp.create_board_text("What!? Is that voice come from my bedroom |Is that... |Lily", voice)
 
         self.next()
 
     def __spawnlily(self):
         sect = self.manager.gamemap.sect
-        offset = sect.CAM_OFFSETX, sect.CAM_OFFSETY
 
         if type(sect) is not mphouse.Room:
             return
 
-        start_pos = pg.math.Vector2(424 - offset[0], 418 - offset[1])
-        gamemap = gm.Manager.get_instance().gamemap
+        size = sect.size
+        start_pos = pg.math.Vector2(6.2 * size, 6.5 * size)
 
-        lily = lilyv.LilyView(self.screen, gamemap, mphouse.Room, start_pos)
-        self.add_enemy(lily)
-        self.add_special_enemy("lily", lily)
+        lily = ll.Lily(start_pos, self.manager.entities)
+        self.add_special_enemy("lily", lily, mphouse.Room)
         self.next()
 
     def __to_dream(self):
@@ -148,7 +136,7 @@ class BeginStory(gp.Part):
 
         if not self.is_occur_start_event:
             voice = player.get_voice("voice4")
-            self.create_board_text("Lily ?", voice)
+            hud.HUDComp.create_board_text("Lily ?", voice)
             self.is_occur_start_event = True
 
         self.__lily_chasing()
@@ -185,8 +173,8 @@ class BeginStory(gp.Part):
         lily.set_size((45, 83))
 
         lily.set_position(pg.math.Vector2(lily_position.x, lily_position.y + 185))
-        lily.presenter.set_movement(normv.NormalMovement(lily.presenter.model))
-        lily.presenter.set_speed(4)
+        lily.set_movement(normv.NormalMovement(lily))
+        lily.set_speed(4)
 
     def destroying(self):
         manager = gm.Manager.get_instance()
@@ -203,4 +191,6 @@ class BeginStory(gp.Part):
         ge.Effect.to_black_screen()
 
         manager.wait(5)
+
+        self.remove_special_enemy("lily")
         manager.set_part(mandela.TheMandela(self.screen))

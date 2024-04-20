@@ -1,28 +1,22 @@
 import pygame as pg
 
 import src.entity.thealternate.enemy as enenemy
-import src.movingtype.movement as mv
-import src.mapcontainer.map as mp
+import src.gamemanage.game as gm
 
 
 class Lily(enenemy.Enemy):
     """Position by topleft"""
-    __img_path = "../Assets/Enemy/Lily/"
     size = (36, 80)
 
     def __init__(self,
-                 gamemap: mp.Map,
-                 mapsect: type[mp.Sect],
-                 pos: pg.math.Vector2):
+                 pos: pg.math.Vector2,
+                 groups: pg.sprite.Group):
 
-        super().__init__(gamemap,
-                         mapsect,
-                         f"{self.__img_path}lilystand.png",
+        self.img_path = "../Assets/Enemy/Lily/"
+        super().__init__(f"{self.img_path}lilystand.png",
                          pos,
-                         self.size)
+                         self.size,
+                         groups)
 
-    def set_movement(self, movement: mv.Movement):
-        self.movement = movement
-
-    def moving(self):
-        self.movement.moving()
+    def update(self, *args, **kwargs):
+        self.moving()

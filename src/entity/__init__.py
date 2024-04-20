@@ -1,1 +1,1 @@
-from .playercontainer import *
+from src.entity.playercontainer import *

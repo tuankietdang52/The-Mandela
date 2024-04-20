@@ -2,7 +2,6 @@ import sys
 
 import src.hud.startmenuhud as hud_sm
 import src.gamemanage.effect as ge
-import src.gamemanage.game as gm
 import src.gamepart.housemap.beginning as bg
 import src.gamepart.part as gp
 
@@ -18,6 +17,8 @@ class StartMenu(gp.Part):
         self.title_start = self.startmenu.get_start_title()
         self.elements = self.startmenu.get_elements()
 
+        self.__is_open_board = False
+
         self.alpha = 0
         self.choice = 1
 
@@ -32,12 +33,10 @@ class StartMenu(gp.Part):
 
         player.set_position(start_point)
 
-        player.presenter.set_state(EState.BUSY)
-        player.presenter.set_image("sitleft")
+        player.set_state(EState.BUSY)
+        player.set_image("sit", player.size)
 
-        player.update()
-
-        pg.display.update()
+        self.manager.update_UI_ip()
         pg.time.wait(1000)
 
     def __fade_in(self, ls):
@@ -67,18 +66,19 @@ class StartMenu(gp.Part):
         keys = pg.key.get_pressed()
 
         if keys[pg.K_ESCAPE]:
-            if self.is_open_board:
+            if self.__is_open_board:
                 self.__closing_load_board()
 
     def __open_load_board(self):
-        self.is_open_board = True
-
         pos = self.manager.screen.get_width() / 2, self.manager.screen.get_height() / 2
         load_board = Board(self.screen, pos, (700, 600))
         load_board.draw()
+        self.__is_open_board = True
 
     def __closing_load_board(self):
-        self.closing_board()
+        self.manager.update_UI_ip()
+        self.__is_open_board = False
+
         self.startmenu.draw_elements()
         self.startmenu.change_choice(2)
 
@@ -95,7 +95,7 @@ class StartMenu(gp.Part):
                 self.__move_cur(key)
 
     def __move_cur(self, key):
-        if self.is_open_board:
+        if self.__is_open_board:
             return
 
         if key == pg.K_RETURN:
@@ -184,9 +184,10 @@ class StartMenu(gp.Part):
         x, y = player.get_position()
 
         player.set_position((x - 50, y))
-        player.presenter.set_image("left1")
+        player.set_image("walk1")
+        player.flip_horizontal()
 
         self.manager.update_UI_ip()
-        player.presenter.set_state(EState.FREE)
+        player.set_state(EState.FREE)
 
         self.manager.set_part(bg.BeginStory(self.screen))

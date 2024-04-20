@@ -75,7 +75,7 @@ class CrossRoad(mp.Sect):
 
         self.sectpath = path + "Crossroad.tmx"
         self.load(self.sectpath)
-        self.init_OFFSET((-100, -100), (-270, -150))
+        self.init_OFFSET((-115, -100), (-270, -150))
 
 
 class RoadToPark(mp.Sect):
