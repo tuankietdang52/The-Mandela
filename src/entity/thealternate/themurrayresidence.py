@@ -3,18 +3,21 @@ import src.entity.thealternate.enemy as enenemy
 import src.movingtype.ghostmoving as ghmv
 import src.gamemanage.game as gm
 
+from src.pjenum import *
 
 class TheMurrayResidence(enenemy.Enemy):
     size = (90, 138)
     __frame = 0
 
     def __init__(self, pos: pg.math.Vector2, groups: pg.sprite.Group):
-        self.img_path = "../Assets/Enemy/TheMurrayResidence/"
-
-        super().__init__(f"{self.img_path}stand.png", pos, self.size, groups)
+        super().__init__("../Assets/Enemy/TheMurrayResidence/",
+                         "stand",
+                         pos,
+                         self.size,
+                         groups)
         self.movement = ghmv.GhostMoving(self)
 
-        self.set_speed(2)
+        self.set_speed(5)
         self.__is_chasing = False
 
     def __chase_animation(self):
@@ -56,11 +59,16 @@ class TheMurrayResidence(enenemy.Enemy):
 
         gm.Manager.get_instance().update_UI_ip()
 
+    def __give_player_debuff(self):
+        player = gm.Manager.get_instance().player
+        player.set_speed(0.5)
+        player.set_state(EState.PANIC)
+
     def update(self):
-        gm.Manager.get_instance().player.set_speed(0.5)
+        self.__give_player_debuff()
+
         if not self.__is_chasing:
             self.__spin_head()
-
         else:
             self.moving()
 
@@ -70,4 +78,6 @@ class TheMurrayResidence(enenemy.Enemy):
 
     def on_destroy(self):
         super().on_destroy()
+        player = gm.Manager.get_instance().player
         gm.Manager.get_instance().player.set_speed(1.5)
+        player.set_state(EState.FREE)

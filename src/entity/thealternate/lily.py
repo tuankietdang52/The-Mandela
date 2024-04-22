@@ -1,7 +1,6 @@
 import pygame as pg
 
 import src.entity.thealternate.enemy as enenemy
-import src.gamemanage.game as gm
 
 
 class Lily(enenemy.Enemy):
@@ -11,9 +10,8 @@ class Lily(enenemy.Enemy):
     def __init__(self,
                  pos: pg.math.Vector2,
                  groups: pg.sprite.Group):
-
-        self.img_path = "../Assets/Enemy/Lily/"
-        super().__init__(f"{self.img_path}lilystand.png",
+        super().__init__("../Assets/Enemy/Lily/",
+                         "lilystand",
                          pos,
                          self.size,
                          groups)

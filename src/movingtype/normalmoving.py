@@ -79,8 +79,39 @@ class NormalMovement(mv.Movement):
 
         self.owner.set_position(position)
 
+    # A STAR PATHFINDING
+
+    def __check_valid_dest(self, dest: pg.math.Vector2):
+        if self.owner.can_move(dest):
+            return True
+
+        return False
+
+    def __find__valid_dest(self, dest: pg.math.Vector2) -> pg.math.Vector2:
+        left, right = dest.x, dest.x
+        up, down = dest.y, dest.y
+
+        while True:
+            left -= 1
+            right += 1
+            up -= 1
+            down += 1
+
+            if self.owner.can_move(pg.math.Vector2(left, dest.y)):
+                return pg.math.Vector2(left, dest.y)
+            elif self.owner.can_move(pg.math.Vector2(right, dest.y)):
+                return pg.math.Vector2(right, dest.y)
+            elif self.owner.can_move(pg.math.Vector2(dest.x, up)):
+                return pg.math.Vector2(dest.x, up)
+            elif self.owner.can_move(pg.math.Vector2(dest.x, down)):
+                return pg.math.Vector2(dest.x, down)
+
     def __find_way(self, src: pg.math.Vector2, dest: pg.math.Vector2) -> list:
         src_int = mv.IntVector2(src)
+
+        if not self.__check_valid_dest(dest):
+            dest = self.__find__valid_dest(dest)
+
         dest_int = mv.IntVector2(dest)
 
         detail = self.__a_star_search(src_int, dest_int)

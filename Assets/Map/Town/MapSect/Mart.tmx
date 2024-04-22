@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="13">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="16">
  <tileset firstgid="1" source="../Tile/cyberpunk.tsx"/>
  <tileset firstgid="481" source="../Tile/town.tsx"/>
  <tileset firstgid="1081" source="../Tile/blackblock.tsx"/>
@@ -235,16 +235,24 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="10" name="Point">
+ <objectgroup id="10" name="Areas">
   <object id="2" name="ParkMart" x="-13" y="173" width="27" height="162.5"/>
-  <object id="3" name="ParkMartBk" x="34" y="226.5" width="24.5" height="27"/>
   <object id="6" name="PublicToilet" x="385" y="70" width="63.5" height="332.5"/>
   <object id="7" name="PublicToilet" x="351.5" y="336.5" width="32" height="64"/>
-  <object id="8" name="PublicToiletBk" x="311.5" y="227.5" width="30.5" height="29.5"/>
-  <object id="9" name="Start" x="124.5" y="225.5" width="59.5" height="47"/>
+ </objectgroup>
+ <objectgroup id="12" name="Points">
+  <object id="13" name="ParkMartBk" x="48.3333" y="240.667">
+   <point/>
+  </object>
+  <object id="14" name="Start" x="172" y="247">
+   <point/>
+  </object>
+  <object id="15" name="PublicToiletBk" x="327.333" y="242.667">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="11" name="SpawnAreaLayer">
-  <object id="11" name="SpawnArea0" x="107" y="221.333" width="127.333" height="58.8333"/>
+  <object id="11" name="SpawnArea0" x="111" y="217.333" width="127.333" height="58.8333"/>
   <object id="12" name="SpawnArea1" x="358.333" y="127.667" width="7" height="7.33333"/>
  </objectgroup>
 </map>

@@ -1,5 +1,117 @@
 {
     "maps": [
+        {
+            "fileName": "MapSect/Home.tmx",
+            "height": 400,
+            "width": 416,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "fileName": "MapSect/Hotel.tmx",
+            "height": 384,
+            "width": 272,
+            "x": 416,
+            "y": 32
+        },
+        {
+            "fileName": "MapSect/Crossroad.tmx",
+            "height": 288,
+            "width": 288,
+            "x": 624,
+            "y": 128
+        },
+        {
+            "fileName": "MapSect/RoadToPark.tmx",
+            "height": 384,
+            "width": 256,
+            "x": 640,
+            "y": -224
+        },
+        {
+            "fileName": "MapSect/ParkMart.tmx",
+            "height": 384,
+            "width": 400,
+            "x": 576,
+            "y": -528
+        },
+        {
+            "fileName": "MapSect/Park1.tmx",
+            "height": 400,
+            "width": 320,
+            "x": 384,
+            "y": -528
+        },
+        {
+            "fileName": "MapSect/Park2.tmx",
+            "height": 400,
+            "width": 352,
+            "x": 32,
+            "y": -528
+        },
+        {
+            "fileName": "MapSect/Mart.tmx",
+            "height": 400,
+            "width": 400,
+            "x": 896,
+            "y": -528
+        },
+        {
+            "fileName": "MapSect/PublicToilet.tmx",
+            "height": 400,
+            "width": 288,
+            "x": 1200,
+            "y": -528
+        },
+        {
+            "fileName": "MapSect/RoadToPolice.tmx",
+            "height": 400,
+            "width": 288,
+            "x": 1200,
+            "y": -208
+        },
+        {
+            "fileName": "MapSect/PoliceGraveyard.tmx",
+            "height": 320,
+            "width": 336,
+            "x": 1152,
+            "y": 144
+        },
+        {
+            "fileName": "MapSect/Police.tmx",
+            "height": 352,
+            "width": 304,
+            "x": 864,
+            "y": 64
+        },
+        {
+            "fileName": "MapSect/GraveyardEntrance.tmx",
+            "height": 320,
+            "width": 368,
+            "x": 1120,
+            "y": 464
+        },
+        {
+            "fileName": "MapSect/Graveyard.tmx",
+            "height": 400,
+            "width": 320,
+            "x": 864,
+            "y": 384
+        },
+        {
+            "fileName": "MapSect/RoadToApartment.tmx",
+            "height": 368,
+            "width": 384,
+            "x": 496,
+            "y": 416
+        },
+        {
+            "fileName": "MapSect/Apartment.tmx",
+            "height": 400,
+            "width": 400,
+            "x": 16,
+            "y": 384
+        }
     ],
     "onlyShowAdjacentMaps": false,
     "type": "world"

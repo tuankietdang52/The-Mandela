@@ -13,6 +13,7 @@ import src.hud.hudcomp as hud
 import src.entity.thealternate.lily as ll
 
 from src.tilemap import Area
+from src.pjenum import *
 
 
 class BeginStory(gp.Part):
@@ -43,7 +44,7 @@ class BeginStory(gp.Part):
 
     def manage_progess(self):
         sect = gm.Manager.get_instance().gamemap.sect
-        player = gm .Manager.get_instance().player
+        player = gm.Manager.get_instance().player
         progess = self.get_progess_index()
 
         if progess == 0:
@@ -150,7 +151,7 @@ class BeginStory(gp.Part):
 
         player_rect = player.get_rect()
         width, height = 36, 80
-        active_area = Area("active", lily_position, width, height, areas)
+        active_area = Area("active", lily_position, width, height, EPosition.TOPLEFT, areas)
 
         if not active_area.is_overlap(player_rect):
             return

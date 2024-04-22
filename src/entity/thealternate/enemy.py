@@ -7,21 +7,23 @@ import src.gamemanage.game as gm
 
 
 class Enemy(abc.ABC, pg.sprite.Sprite):
-    img_path = ""
-
     def __init__(self,
+                 image_path: str,
                  image: str,
                  pos: pg.math.Vector2,
                  size: tuple[int, int],
                  groups: pg.sprite.Group):
         super().__init__(groups)
-        
-        self.image = pg.image.load(image).convert_alpha()
-        self.set_size(size)
+
+        self.image_path = image_path
+
+        self.image = pg.surface.Surface(size)
+        self.set_image(image, size)
 
         self.start_pos = pg.math.Vector2(pos)
         self.position = pg.math.Vector2(pos)
-        self.rect = self.image.get_rect(topleft=self.position)
+
+        self.rect = self.image.get_rect(center=self.position)
 
         self.direction = pg.math.Vector2()
 
@@ -36,7 +38,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         else:
             self.position = pg.math.Vector2(pos)
 
-        self.rect = self.image.get_rect(topleft=self.position)
+        self.rect = self.image.get_rect(center=self.position)
 
     def get_position(self) -> pg.math.Vector2:
         return self.position
@@ -49,7 +51,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         size = self.get_size() if size is None else size
 
         if type(image) is str:
-            image = pg.image.load(f"{self.img_path + image}.png").convert_alpha()
+            image = pg.image.load(f"{self.image_path + image}.png").convert_alpha()
 
         self.image = image
         self.set_size(size)
@@ -64,7 +66,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         return self.image.get_size()
 
     def get_rect(self) -> pg.rect.Rect:
-        return self.image.get_rect(topleft=self.get_position())
+        return self.image.get_rect(center=self.get_position())
 
     def set_speed(self, speed: float):
         self.speed = speed
@@ -85,9 +87,9 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         player_pos = gm.Manager.get_instance().player.get_position()
 
         if position.x > player_pos.x:
-            self.__flip_horizontal()
+            self.flip_horizontal()
 
-    def __flip_horizontal(self):
+    def flip_horizontal(self):
         self.image = pg.transform.flip(self.image, True, False)
 
     def calculate_direction(self, dest: pg.math.Vector2) -> pg.math.Vector2:
@@ -110,7 +112,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
             self.movement.moving()
 
     def can_move(self, pos: pg.math.Vector2):
-        rect = self.image.get_rect(topleft=pos)
+        rect = self.image.get_rect(center=pos)
 
         if gph.Physic.is_collide_wall(rect):
             return False
