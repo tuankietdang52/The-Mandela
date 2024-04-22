@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="19">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="13" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="23">
  <tileset firstgid="1" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="2" source="../Tile/housetile.tsx"/>
  <tileset firstgid="258" source="../Tile/tv.tsx"/>
@@ -139,11 +139,17 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="8" name="Point">
-  <object id="1" name="CorridorBk" x="33.976" y="182.583" width="12.6418" height="9.9544"/>
+ <objectgroup id="8" name="Areas">
   <object id="8" name="Corridor" x="17.6667" y="201.917" width="45" height="13.6667"/>
-  <object id="10" name="Start" x="161.125" y="111.5" width="18" height="21"/>
   <object id="13" name="TV" x="98" y="96.75" width="27" height="28.75"/>
-  <object id="17" name="Bed" x="152" y="94.75" width="40.25" height="52.5"/>
+  <object id="17" name="Bed" x="151.818" y="94.2045" width="40.25" height="52.5"/>
+ </objectgroup>
+ <objectgroup id="11" name="Points">
+  <object id="21" name="Start" x="166" y="121.818">
+   <point/>
+  </object>
+  <object id="22" name="CorridorBk" x="40.3636" y="187.636">
+   <point/>
+  </object>
  </objectgroup>
 </map>

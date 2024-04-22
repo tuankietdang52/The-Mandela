@@ -27,6 +27,8 @@ class Player(pg.sprite.Sprite):
         self.set_size(self.size)
         self.rect = self.image.get_rect()
 
+        self.direction = "left"
+
     # Get Set #
     def set_image(self, image: str | pg.surface.Surface, size: tuple[float, float] = None):
         size = self.get_size() if size is None else size
@@ -65,7 +67,7 @@ class Player(pg.sprite.Sprite):
         else:
             self.position = pg.math.Vector2(pos)
 
-        self.rect = self.image.get_rect(topleft=self.position)
+        self.rect = self.image.get_rect(center=self.position)
 
     def get_position(self) -> pg.math.Vector2:
         return self.position
@@ -83,7 +85,7 @@ class Player(pg.sprite.Sprite):
         return self.image.get_size()
 
     def get_rect(self) -> pg.rect.Rect:
-        return self.get_image().get_rect(topleft=self.get_position())
+        return self.get_image().get_rect(center=self.get_position())
 
     def set_sound_effect(self, sound_effect: pg.mixer.Sound | str):
         if type(sound_effect) is str:
@@ -99,29 +101,43 @@ class Player(pg.sprite.Sprite):
         return pg.mixer.Sound(path)
 
     # Movement #
+    def __get_reverse_animate(self) -> str:
+        direction_tuple = [
+            ["down", "up"],
+            ["left", "right"]
+        ]
+
+        for di in direction_tuple:
+            if self.direction == di[0]:
+                return di[1]
+
+            elif self.direction == di[1]:
+                return di[0]
+
+        return ""
+
     def handle_moving(self, keys: pg.key.ScancodeWrapper):
-        if self.__state != EState.FREE:
+        if self.__state != EState.FREE and self.__state != EState.PANIC:
             return
 
-        velocity = pg.math.Vector2()
-
         speed = self.get_speed()
+        velocity = pg.math.Vector2()
 
         if keys[pg.K_w]:
             velocity.y = -speed
-            direction = "up"
+            self.direction = "up"
 
         elif keys[pg.K_d]:
             velocity.x = speed
-            direction = "right"
+            self.direction = "right"
 
         elif keys[pg.K_a]:
             velocity.x = -speed
-            direction = "left"
+            self.direction = "left"
 
         elif keys[pg.K_s]:
             velocity.y = speed
-            direction = "down"
+            self.direction = "down"
 
         else:
             return
@@ -131,14 +147,18 @@ class Player(pg.sprite.Sprite):
         if not self.can_move(velocity):
             return
 
+        if self.__state == EState.PANIC:
+            self.direction = self.__get_reverse_animate()
+            velocity = velocity[0] * -1, velocity[1] * -1
+
         self.moving(velocity)
-        self.moving_animation(direction)
+        self.moving_animation(self.direction)
         manager.update_UI_ip()
 
     def can_move(self, velocity: pg.math.Vector2) -> bool:
         next_pos = self.position + velocity
 
-        rect = self.image.get_rect(topleft=next_pos)
+        rect = self.image.get_rect(center=next_pos)
 
         if gph.Physic.is_collide_wall(rect):
             return False

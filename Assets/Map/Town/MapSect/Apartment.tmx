@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="5">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="25" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="7">
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
@@ -206,9 +206,15 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="9" name="Point">
+ <objectgroup id="9" name="Areas">
   <object id="1" name="RoadToApartment" x="390.371" y="320.51" width="26.4338" height="79.3014"/>
-  <object id="2" name="RoadToApartmentBk" x="338.919" y="343.167" width="24.5457" height="25.4897"/>
-  <object id="4" name="Start" x="184.565" y="338.919" width="48.6193" height="37.7626"/>
+ </objectgroup>
+ <objectgroup id="10" name="Points">
+  <object id="5" name="Start" x="208.333" y="358.667">
+   <point/>
+  </object>
+  <object id="6" name="RoadToApartmentBk" x="350.333" y="359.333">
+   <point/>
+  </object>
  </objectgroup>
 </map>

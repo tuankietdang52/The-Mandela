@@ -3,65 +3,70 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Room.tmx",
+    "activeFile": "MapSect/Corridor.tmx",
     "expandedProjectPaths": [
-        ".",
         "MapSect",
-        "World",
-        "Tile"
+        ".",
+        "Tile",
+        "World"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "MapSect/Corridor.tmx": {
             "expandedObjectLayers": [
+                9,
                 7
             ],
-            "scale": 4,
-            "selectedLayer": 6,
+            "scale": 3,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 112,
-                "y": 56
+                "x": 254.33333333333331,
+                "y": 24.66666666666667
             }
         },
         "MapSect/Kitchen.tmx": {
             "expandedObjectLayers": [
-                8
+                8,
+                9
             ],
             "scale": 4,
-            "selectedLayer": 6,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": -79.25,
-                "y": 115.25
+                "x": 80,
+                "y": 104
             }
         },
         "MapSect/OutDoor.tmx": {
             "expandedObjectLayers": [
-                6
+                6,
+                10
             ],
-            "scale": 4,
-            "selectedLayer": 6,
+            "scale": 5.5,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 112,
-                "y": 80
+                "x": 111.81818181818181,
+                "y": 79.63636363636364
             }
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
-                8
+                8,
+                11
             ],
-            "scale": 4,
-            "selectedLayer": 8,
+            "scale": 3,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 112.5,
-                "y": 115
+                "x": 103.66666666666666,
+                "y": 103.66666666666667
             }
         },
         "MapSect/Toilet.tmx": {
             "expandedObjectLayers": [
+                8,
                 7
             ],
             "scale": 4,
-            "selectedLayer": 5,
+            "selectedLayer": 6,
             "viewCenter": {
                 "x": 40,
                 "y": 96
@@ -117,10 +122,10 @@
         "MapSect/OutDoor.tmx",
         "MapSect/Kitchen.tmx",
         "MapSect/Toilet.tmx",
-        "MapSect/Corridor.tmx",
-        "Tile/tv.tsx",
-        "Tile/blackblock.tsx",
         "MapSect/Room.tmx",
+        "Tile/blackblock.tsx",
+        "Tile/tv.tsx",
+        "MapSect/Corridor.tmx",
         "Tile/housetile.tsx",
         "housemap.tmx"
     ],

@@ -7,9 +7,12 @@ import src.mapcontainer.map as mp
 import src.gamemanage.physic as gph
 import src.hud.hudcomp as hud
 import src.entity.thealternate.enemy as em
-import src.entity.thealternate.themurrayresidence as murray
-import src.entity.thealternate.doppelganger as dp
 
+from src.entity.thealternate import (themurrayresidence as mr,
+                                     doppelganger as dp,
+                                     mimic as mm,
+                                     flawedimpersonators as fi,
+                                     lily as ll)
 from src.hud import *
 
 
@@ -18,7 +21,7 @@ class Part(abc.ABC):
     to_next = True
 
     is_occur_start_event = False
-    is_spawn_enemy = False
+    is_trigger_spawn = False
     can_press_key = False
     can_change_map = False
 
@@ -92,7 +95,7 @@ class Part(abc.ABC):
 
         if choice:
             self.changing_map(next_map)
-            self.is_spawn_enemy = False
+            self.is_trigger_spawn = False
             self.enemies.clear()
 
     def changing_map(self, next_map: mp.Map):
@@ -126,7 +129,7 @@ class Part(abc.ABC):
         if gamemap.sect == current:
             return
 
-        self.is_spawn_enemy = False
+        self.is_trigger_spawn = False
         self.enemies.clear()
 
         self.update_list_entities()
@@ -159,16 +162,36 @@ class Part(abc.ABC):
         if area is None:
             return None
 
-        x_limit = round(area.x + area.width)
-        y_limit = round(area.y + area.height)
+        area_rect = area.get_rect()
+        area_tl = area_rect.topleft
+
+        x_limit = round(area_tl[0] + area.width)
+        y_limit = round(area_tl[1] + area.height)
 
         x = random.randint(round(area.x), x_limit)
         y = random.randint(round(area.y), y_limit)
 
         return pg.math.Vector2(x, y)
 
+    def __get_random_alternate(self, position: pg.math.Vector2) -> em.Enemy:
+        chance = random.randint(0, 100)
+
+        print(chance)
+
+        if chance < 5:
+            return fi.FlawedImpersonators(position, self.manager.entities)
+
+        elif chance < 15:
+            return mr.TheMurrayResidence(position, self.manager.entities)
+
+        elif chance < 50:
+            return mm.Mimic(position, self.manager.entities)
+
+        else:
+            return dp.Doppelganger(position, self.manager.entities)
+
     def spawn_alternate(self):
-        self.is_spawn_enemy = True
+        self.is_trigger_spawn = True
         if not self.__is_spawn_alternate():
             return
 
@@ -177,9 +200,9 @@ class Part(abc.ABC):
         if position is None:
             return
 
-        enemy = murray.TheMurrayResidence(position, self.manager.entities)
+        enemy = self.__get_random_alternate(position)
 
-        if gph.Physic.is_collide_wall(enemy.get_rect()):
+        if gph.Physic.is_collide_wall(enemy.get_rect()) and type(enemy) is not fi.FlawedImpersonators:
             self.manager.entities.remove(enemy)
             return
 

@@ -14,7 +14,7 @@ class MarketPart(gp.Part):
         self.can_change_map = True
         self.setup()
 
-        self.spawn_chance = 70
+        self.spawn_chance = 50
 
     def setup(self):
         self.update_list_entities()
@@ -41,7 +41,7 @@ class MarketPart(gp.Part):
     def update(self):
         super().update()
 
-        if not self.is_spawn_enemy:
+        if not self.is_trigger_spawn:
             self.spawn_alternate()
 
     def manage_progess(self):

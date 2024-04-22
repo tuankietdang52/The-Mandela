@@ -7,12 +7,17 @@ import src.gamemanage.game as gm
 class Doppelganger(enenemy.Enemy):
     size = (36, 80)
     __frame = 0
+    __sound_path = "../Assets/Sound/DoppelgangerVoice/"
 
     def __init__(self,
                  pos: pg.math.Vector2,
                  groups: pg.sprite.Group):
-        self.img_path = "../Assets/Ally/Viole/"
-        super().__init__(f"{self.img_path}walk1.png", pos, self.size, groups)
+        super().__init__("../Assets/Ally/Viole/",
+                         "walk1",
+                         pos,
+                         self.size,
+                         groups)
+
         self.set_movement(normv.NormalMovement(self))
 
     def update(self, *args, **kwargs):
@@ -34,8 +39,8 @@ class Doppelganger(enenemy.Enemy):
         animate = f"{path + str(index)}"
         self.set_image(animate)
 
-        if direction.y == 0:
-            self.set_direction_to_player()
+        if direction.x == -1:
+            self.flip_horizontal()
 
     def __play_animation_moving(self):
         if self.__frame < 20:

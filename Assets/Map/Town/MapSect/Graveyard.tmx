@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="20" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="8" nextobjectid="9">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="20" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="11">
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <layer id="2" name="Void" width="20" height="25">
@@ -118,10 +118,16 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="6" name="Point">
+ <objectgroup id="6" name="Areas">
   <object id="3" name="GraveyardEntrance" x="287.5" y="158.5" width="33.5" height="82"/>
-  <object id="5" name="GraveyardEntranceBk" x="249" y="185" width="22.5" height="26"/>
-  <object id="6" name="Start" x="194" y="107" width="16.5" height="17"/>
+ </objectgroup>
+ <objectgroup id="8" name="Points">
+  <object id="9" name="Start" x="215.167" y="139.667">
+   <point/>
+  </object>
+  <object id="10" name="GraveyardEntranceBk" x="256" y="205.5">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="7" name="SpawnAreaLayer">
   <object id="7" name="SpawnArea1" x="49.6667" y="262.667" width="68.3333" height="71.3333"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="10" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="21">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="10" height="13" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="25">
  <tileset firstgid="1" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="2" source="../Tile/housetile.tsx"/>
  <layer id="2" name="Void" width="10" height="13" visible="0">
@@ -104,10 +104,16 @@
 0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="8" name="Point">
+ <objectgroup id="8" name="Areas">
   <object id="1" name="OutDoor" x="16.1402" y="180.386" width="126" height="2.5"/>
-  <object id="4" name="OutDoorBk" x="70.682" y="159.932" width="8.25" height="7.54545"/>
   <object id="18" name="Fridge" x="116" y="95.818" width="24.3636" height="10.7273"/>
-  <object id="20" name="Start" x="62.75" y="107.75" width="14.5" height="11.25"/>
+ </objectgroup>
+ <objectgroup id="9" name="Points">
+  <object id="23" name="OutDoorBk" x="74.7273" y="164.727">
+   <point/>
+  </object>
+  <object id="24" name="Start" x="70.1818" y="114.545">
+   <point/>
+  </object>
  </objectgroup>
 </map>

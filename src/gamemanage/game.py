@@ -13,6 +13,7 @@ import src.mapcontainer.town as mptown
 import src.gamepart.housemap.beginning as bg
 import src.gamepart.townmap.themandela as tm
 import src.gamepart.housemap.startmenu as sm
+import src.gamepart.townmap.tomarketpart as mk
 
 
 class Manager:
@@ -132,15 +133,14 @@ class Manager:
 
 
 class Game:
-    music_path = "../Assets/Music/"
-    icon_path = "../Assets/HUD/icon.jpg"
+    ICON_PATH = "../Assets/HUD/icon.jpg"
 
     FPS = 120
     WIDTH = 800
     HEIGHT = 800
 
     IS_TEST = True
-    IS_FULLSCREEN = False
+    IS_FULLSCREEN = True
 
     clock = pg.time.Clock()
     dt = 0
@@ -168,7 +168,7 @@ class Game:
             self.test()
 
     def setup(self):
-        icon = pg.image.load(self.icon_path).convert()
+        icon = pg.image.load(self.ICON_PATH).convert()
         pg.display.set_icon(icon)
         pg.display.set_caption("Nightmare")
 
@@ -179,12 +179,12 @@ class Game:
 
     def test(self):
         """test element"""
-        self.manager.gamemap = mphouse.HouseNormal(self.screen)
+        self.manager.gamemap = mptown.Town(self.screen)
         self.manager.player = pl.Player(self.screen, 1000, self.manager.entities)
-        self.manager.gamepart = tm.TheMandela(self.screen)
+        self.manager.gamepart = mk.MarketPart(self.screen)
 
-        self.manager.gamemap.change_sect("Outdoor")
-        self.manager.gamepart.set_progess_index(3)
+        self.manager.gamemap.change_sect("ParkMart")
+        self.manager.gamepart.set_progess_index(-1)
 
         self.setup_test()
 

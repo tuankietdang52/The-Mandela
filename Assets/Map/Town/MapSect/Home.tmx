@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="26" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="14" nextobjectid="27">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="26" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="15" nextobjectid="29">
  <tileset firstgid="1" source="../Tile/cyberpunk.tsx"/>
  <tileset firstgid="481" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="482" source="../Tile/town.tsx"/>
@@ -148,14 +148,20 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="12" name="Point">
+ <objectgroup id="12" name="Areas">
   <object id="8" name="Hotel" x="403.5" y="177" width="12" height="189.5"/>
-  <object id="12" name="HotelBk" x="339.5" y="254.5" width="41" height="37.5"/>
-  <object id="17" name="Start" x="99.0909" y="211.227" width="24.5" height="20.5"/>
   <object id="20" name="HouseNormal" x="97.5" y="176.625" width="30.25" height="32.625"/>
  </objectgroup>
+ <objectgroup id="14" name="Points">
+  <object id="27" name="Start" x="111.333" y="224.333">
+   <point/>
+  </object>
+  <object id="28" name="HotelBk" x="360.333" y="272.667">
+   <point/>
+  </object>
+ </objectgroup>
  <objectgroup id="13" name="SpawnAreaLayer">
-  <object id="25" name="SpawnArea1" x="165.667" y="219" width="194.667" height="112"/>
-  <object id="26" name="SpawnArea0" x="16" y="267.667" width="148.667" height="64.0003"/>
+  <object id="25" name="SpawnArea1" x="165.667" y="219" width="194.667" height="100.333"/>
+  <object id="26" name="SpawnArea0" x="16" y="267.667" width="148.667" height="52.3336"/>
  </objectgroup>
 </map>

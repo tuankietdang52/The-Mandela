@@ -1,10 +1,10 @@
 import abc
 import os
-
-import pygame as pg
 import pytmx
+import pygame as pg
 
-from src.tilemap import Area, Tile
+from src.tilemap import *
+from src.pjenum import *
 
 
 class Sect:
@@ -33,6 +33,7 @@ class Sect:
         self.map = None
 
         self.areas = []
+        self.points = []
         self.tilegroup = pg.sprite.Group()
         self.olptiles = pg.sprite.Group()
 
@@ -52,7 +53,7 @@ class Sect:
         self.ori_block_size = ori_block_size
 
     def init_OFFSET(self, offset, offsetfullscr):
-        if self.screen.get_size() == (800, 800):
+        if not gm.Game.IS_FULLSCREEN:
             self.MAP_OFFSETX, self.MAP_OFFSETY = offset
 
         else:
@@ -65,25 +66,22 @@ class Sect:
         if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare\\src":
             self.map = pytmx.load_pygame(path)
 
-    def get_start_point(self) -> tuple[float, float] | None:
+    def get_start_point(self) -> pg.math.Vector2 | None:
         if self.back_point is None:
             start_area = ""
         else:
             start_area = self.back_point
 
-        has_point = False
-        point = 0, 0
         backup_point = 0, 0
 
-        for area in self.areas:
-            if area.name == start_area:
-                point = area.x, area.y
-                has_point = True
+        for point in self.points:
+            if point.name == start_area:
+                return pg.math.Vector2(point.x, point.y)
 
-            if area.name == "Start":
-                backup_point = area.x, area.y
+            elif point.name == "Start":
+                backup_point = pg.math.Vector2(point.x, point.y)
 
-        return point if has_point else backup_point
+        return backup_point
 
     def create(self):
         self.__wall_tile.clear()
@@ -98,7 +96,10 @@ class Sect:
                 self.__draw_tile(layer)
 
             if isinstance(layer, pytmx.TiledObjectGroup):
-                self.__init_areas(layer)
+                if "Area" in layer.name:
+                    self.__init_areas(layer)
+                elif layer.name == "Points":
+                    self.__init_points(layer)
 
         self.__init_walls()
 
@@ -112,12 +113,12 @@ class Sect:
 
             group = self.olptiles if layer.name == "OverlapPlayer" else self.tilegroup
 
-            tile = Tile(self.screen, surf, pos, layer.name, layer.id, layer.data[y][x], group)
+            tilemp = Tile(self.screen, surf, pos, layer.name, layer.id, layer.data[y][x], group)
 
             if "Wall" in layer.name or "Object" in layer.name:
-                self.__wall_tile.append(tile)
+                self.__wall_tile.append(tilemp)
 
-            self.screen.blit(tile.image, tile.rect)
+            self.screen.blit(tilemp.image, tilemp.rect)
 
     def __init_areas(self, layer):
         self.spawn_area_count = 0
@@ -130,10 +131,21 @@ class Sect:
             width = area.width * offset
             height = area.height * offset
 
-            Area(area.name, pos, width, height, self.areas)
+            Area(area.name, pos, width, height, EPosition.TOPLEFT, self.areas)
 
             if "SpawnArea" in area.name:
                 self.spawn_area_count += 1
+
+    def __init_points(self, layer):
+        for item in layer:
+            offset = self.size / self.ori_block_size
+
+            x = item.x * offset - self.MAP_OFFSETX
+            y = item.y * offset - self.MAP_OFFSETY
+
+            point = Point(item.name, x, y)
+
+            self.points.append(point)
 
     def __init_walls(self):
         for wall in self.__wall_tile:
@@ -164,15 +176,12 @@ class Sect:
 
         return None
 
-    def get_list_area(self, name: str) -> list[Area]:
-        """Return list of area have "name" in their name"""
-        ls = list()
+    def get_point(self, name):
+        for point in self.points:
+            if point.name == name:
+                return point
 
-        for area in self.areas:
-            if name in area.name:
-                ls.append(area)
-
-        return ls
+        return None
 
     def redraw(self):
         group = self.tilegroup

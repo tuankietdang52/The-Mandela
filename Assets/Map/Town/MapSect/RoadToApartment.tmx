@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="16" nextobjectid="9">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="24" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="17" nextobjectid="14">
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
@@ -165,12 +165,20 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="7" name="Point">
+ <objectgroup id="7" name="Areas">
   <object id="1" name="Crossroad" x="191.5" y="-11.5" width="177.5" height="30"/>
-  <object id="2" name="CrossroadBk" x="249" y="112" width="44" height="26.5"/>
-  <object id="3" name="Start" x="243.5" y="221.5" width="43.5" height="34"/>
   <object id="5" name="Apartment" x="-2" y="284" width="33.5" height="85.5"/>
-  <object id="6" name="ApartmentBk" x="53" y="311" width="25" height="24.5"/>
+ </objectgroup>
+ <objectgroup id="16" name="Points">
+  <object id="10" name="CrossroadBk" x="270.667" y="128.333">
+   <point/>
+  </object>
+  <object id="11" name="Start" x="123.833" y="277.25">
+   <point/>
+  </object>
+  <object id="13" name="ApartmentBk" x="67.3333" y="325.333">
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="15" name="SpawnAreaLayer">
   <object id="7" name="SpawnArea0" x="83" y="149" width="122.333" height="110"/>
