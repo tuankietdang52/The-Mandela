@@ -71,7 +71,7 @@ class FlawedImpersonators(em.Enemy):
     def moving(self):
         if not self.__check_player_look() or self.__is_rage:
             self.__heart_beat_sound.unpause()
-            super().moving()
+            self.movement.moving()
             return
 
         self.__heart_beat_sound.pause()
@@ -80,4 +80,5 @@ class FlawedImpersonators(em.Enemy):
         self.set_position(position)
 
     def update(self, *args, **kwargs):
+        super().update()
         self.moving()

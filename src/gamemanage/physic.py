@@ -30,8 +30,8 @@ class Physic:
 
     @staticmethod
     def is_collide(rect1: pg.rect.Rect, rect2: pg.rect.Rect) -> bool:
-        top = rect1.center
-        if rect2.collidepoint(top):
+        point = rect2.center
+        if rect1.collidepoint(point):
             return True
 
         return False

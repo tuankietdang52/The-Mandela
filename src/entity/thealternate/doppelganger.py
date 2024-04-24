@@ -21,6 +21,7 @@ class Doppelganger(enenemy.Enemy):
         self.set_movement(normv.NormalMovement(self))
 
     def update(self, *args, **kwargs):
+        super().update()
         self.moving()
 
     def __set_animation_moving(self, index: int):
@@ -56,5 +57,5 @@ class Doppelganger(enenemy.Enemy):
         self.__set_animation_moving(index)
 
     def moving(self):
-        super().moving()
+        self.movement.moving()
         self.__play_animation_moving()

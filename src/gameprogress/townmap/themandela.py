@@ -1,10 +1,10 @@
 import sys
 import pygame as pg
-import src.gamepart.part as gp
+import src.gameprogress.part as gp
 import src.gamemanage.game as gm
 import src.gamemanage.effect as ge
 import src.mapcontainer.housenormal as mphouse
-import src.gamepart.townmap.tomarketpart as mk
+import src.gameprogress.townmap.tomarketpart as mk
 import src.hud.hudcomp as hud
 
 
@@ -34,21 +34,21 @@ class TheMandela(gp.Part):
 
         player.handle_moving(keys)
 
-    def manage_progess(self):
-        progess = self.get_progess_index()
+    def manage_progress(self):
+        progress = self.get_progress_index()
 
-        if progess == 0:
+        if progress == 0:
             self.__waking_up()
             self.next()
 
-        elif progess == 1:
+        elif progress == 1:
             self.__get_up()
             self.next()
 
-        elif progess == 2:
+        elif progress == 2:
             self.__check_tv()
 
-        elif progess == 3:
+        elif progress == 3:
             self.__going_outside()
 
     def __waking_up(self):

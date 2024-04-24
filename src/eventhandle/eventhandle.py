@@ -1,36 +1,26 @@
 from typing import Callable
+from src.eventhandle.argument.eventargument import *
 
 
 class EventHandle:
     """
-    void function only
-
-    add or remove need tuple[name: str, function]
+    add or remove need tuple[function, args: event argument]
     """
     def __init__(self):
-        self.event_handle: list[tuple[Callable, str]] = list()
+        self.event_handle: list[tuple[Callable, EventArgs]] = list()
 
-    def __iadd__(self, callback: Callable | tuple[Callable, str]):
-        if type(callback) is not tuple:
-            callback = (callback, " ")
-
+    def __iadd__(self, callback: tuple[Callable, EventArgs]):
         self.event_handle.append(callback)
         return self
 
-    def __isub__(self, callback: Callable | tuple[Callable, str]):
-        if type(callback) is not tuple:
-            callback = (callback, " ")
-
+    def __isub__(self, callback: tuple[Callable, EventArgs]):
         self.event_handle.remove(callback)
         return self
 
     def invoke(self):
         """Call all function store in event_handle"""
         for event in self.event_handle:
-            event[0]()
+            callback = event[0]
+            args = event[1]
 
-    def invoke_specific(self, event_name: str):
-        """Call all function with name match event_name"""
-        for event in self.event_handle:
-            if event[1] == event_name:
-                event[0]()
+            callback(args)

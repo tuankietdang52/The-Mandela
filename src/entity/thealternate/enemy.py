@@ -5,6 +5,9 @@ import src.gamemanage.physic as gph
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
 
+from src.pjenum import *
+from src.eventhandle.argument.eventargument import *
+
 
 class Enemy(abc.ABC, pg.sprite.Sprite):
     def __init__(self,
@@ -30,7 +33,11 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         self.speed = 1
         self.movement = None
 
-        gm.Manager.get_instance().on_destroy += self.on_destroy
+        gm.Manager.get_instance().on_destroy += (self.on_destroy, EventArgs.empty())
+
+    def update(self, *args, **kwargs):
+        if self.is_hit_player():
+            self.__kill_player()
 
     def set_position(self, pos: tuple[float, float] | pg.math.Vector2):
         if type(pos) is pg.math.Vector2:
@@ -77,9 +84,8 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
     def set_movement(self, movement: mv.Movement):
         self.movement = movement
 
-    @abc.abstractmethod
-    def update(self, *args, **kwargs):
-        pass
+    def get_movement(self) -> mv.Movement:
+        return self.movement
 
     def set_direction_to_player(self):
         """for UI"""
@@ -107,9 +113,9 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
 
         return self.direction
 
+    @abc.abstractmethod
     def moving(self):
-        if self.movement is not None:
-            self.movement.moving()
+        pass
 
     def can_move(self, pos: pg.math.Vector2):
         rect = self.image.get_rect(center=pos)
@@ -130,7 +136,13 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
 
         return False
 
-    def on_destroy(self):
+    def __kill_player(self):
+        manager = gm.Manager.get_instance()
+        player = manager.player
+
+        player.set_state(EState.DEAD)
+
+    def on_destroy(self, args: EventArgs):
         manager = gm.Manager.get_instance()
         manager.appear_enemy.remove(self)
         manager.entities.remove(self)

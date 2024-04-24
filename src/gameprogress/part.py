@@ -7,6 +7,7 @@ import src.mapcontainer.map as mp
 import src.gamemanage.physic as gph
 import src.hud.hudcomp as hud
 import src.entity.thealternate.enemy as em
+import src.movingtype.ghostmoving as ghmv
 
 from src.entity.thealternate import (themurrayresidence as mr,
                                      doppelganger as dp,
@@ -14,10 +15,11 @@ from src.entity.thealternate import (themurrayresidence as mr,
                                      flawedimpersonators as fi,
                                      lily as ll)
 from src.hud import *
+from src.pjenum import *
 
 
 class Part(abc.ABC):
-    __progess = 0
+    __progress = 0
     to_next = True
 
     is_occur_start_event = False
@@ -41,9 +43,12 @@ class Part(abc.ABC):
         pass
 
     def update(self):
+        self.event_action()
+        self.pressing_key()
+
         self.handle_change_map()
         self.handle_change_sect()
-        self.manage_progess()
+        self.manage_progress()
 
     @abc.abstractmethod
     def event_action(self):
@@ -54,22 +59,22 @@ class Part(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def manage_progess(self):
+    def manage_progress(self):
         pass
 
-    def set_progess_index(self, progess_index: int):
-        self.__progess = progess_index
+    def set_progress_index(self, progress_index: int):
+        self.__progress = progress_index
         self.is_occur_start_event = False
 
     def next(self):
-        self.__progess += 1
+        self.__progress += 1
         self.is_occur_start_event = False
 
     def previous(self):
-        self.__progess -= 1
+        self.__progress -= 1
 
-    def get_progess_index(self) -> int:
-        return self.__progess
+    def get_progress_index(self) -> int:
+        return self.__progress
 
     def handle_change_map(self):
         if not self.can_change_map:
@@ -117,7 +122,7 @@ class Part(abc.ABC):
         gamemap = self.manager.gamemap
         player = self.manager.player
 
-        if gamemap is None:
+        if gamemap is None or player.get_state() == EState.DEAD:
             return
 
         sect_name = gamemap.sect.in_area(player.get_rect())
@@ -131,6 +136,8 @@ class Part(abc.ABC):
 
         self.is_trigger_spawn = False
         self.enemies.clear()
+
+        print("change")
 
         self.update_list_entities()
         gamemap.sect.create()
@@ -176,8 +183,6 @@ class Part(abc.ABC):
     def __get_random_alternate(self, position: pg.math.Vector2) -> em.Enemy:
         chance = random.randint(0, 100)
 
-        print(chance)
-
         if chance < 5:
             return fi.FlawedImpersonators(position, self.manager.entities)
 
@@ -202,7 +207,8 @@ class Part(abc.ABC):
 
         enemy = self.__get_random_alternate(position)
 
-        if gph.Physic.is_collide_wall(enemy.get_rect()) and type(enemy) is not fi.FlawedImpersonators:
+        if (gph.Physic.is_collide_wall(enemy.get_rect()) and
+                type(enemy.get_movement()) != ghmv.GhostMoving):
             self.manager.entities.remove(enemy)
             return
 

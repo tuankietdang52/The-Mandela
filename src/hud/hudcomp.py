@@ -22,6 +22,9 @@ class Pointer:
 
         self.is_set = True
 
+    def get_position(self) -> tuple[float, float]:
+        return self.rect.topleft
+
     def draw(self):
         self.screen.blit(self.image, self.rect)
 

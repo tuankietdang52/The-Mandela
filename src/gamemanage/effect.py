@@ -18,7 +18,7 @@ class Effect:
         pg.display.update()
 
     @staticmethod
-    def fade_in_screen():
+    def fade_in_screen(fade_in_entities: bool = True):
         """fade in entire screen"""
         manager = gm.Manager.get_instance()
         mp = manager.gamemap.sect
@@ -30,13 +30,15 @@ class Effect:
             manager.screen.fill((0, 0, 0))
 
             mp.set_opacity(alpha)
-            manager.set_appear_entity_opacity(alpha)
-            player.get_image().set_alpha(alpha)
+
+            if fade_in_entities:
+                manager.set_appear_entity_opacity(alpha)
+                player.get_image().set_alpha(alpha)
 
             manager.update_UI_ip()
 
     @staticmethod
-    def fade_out_screen():
+    def fade_out_screen(fade_out_entities: bool = True):
         """fade out entire screen"""
         manager = gm.Manager.get_instance()
         mp = manager.gamemap.sect
@@ -48,25 +50,55 @@ class Effect:
             manager.screen.fill((0, 0, 0))
 
             mp.set_opacity(alpha)
-            manager.set_appear_entity_opacity(alpha)
-            player.get_image().set_alpha(alpha)
+
+            if fade_out_entities:
+                manager.set_appear_entity_opacity(alpha)
+                player.get_image().set_alpha(alpha)
 
             manager.update_UI_ip()
 
     @staticmethod
-    def set_list_opacity(screen: pg.surface.Surface,
-                         lssurf: list[tuple[pg.surface.Surface, pg.rect.Rect]],
-                         alpha: int):
-        """
-        Set opacity for list of surface
+    def fade_in_list(screen: pg.surface.Surface, ls: list[tuple[pg.surface.Surface, pg.rect.Rect]]):
+        manager = gm.Manager.get_instance()
+        max_alpha = 255
+        alpha = 0
+        delay = float(0)
 
-        Must redraw map if opacity is lower than before
-        """
+        while alpha <= max_alpha:
+            delay += 0.01
+            if delay < 100:
+                continue
 
-        for surf in lssurf:
-            surf[0].set_alpha(alpha)
-            screen.blit(surf[0], surf[1])
-            pg.display.update(surf[1])
+            delay = 0
+            manager.update_UI()
+
+            for item in ls:
+                item[0].set_alpha(alpha)
+                screen.blit(item[0], item[1])
+
+            pg.display.update()
+            alpha += 1
+
+    @staticmethod
+    def fade_out_list(screen: pg.surface.Surface, ls: list[tuple[pg.surface.Surface, pg.rect.Rect]]):
+        manager = gm.Manager.get_instance()
+        alpha = 255
+        delay = float(0)
+
+        while alpha >= 0:
+            delay += 0.01
+            if delay < 100:
+                continue
+
+            delay = 0
+            manager.update_UI()
+
+            for item in ls:
+                item[0].set_alpha(alpha)
+                screen.blit(item[0], item[1])
+
+            pg.display.update()
+            alpha -= 1
 
     """
         Outline text

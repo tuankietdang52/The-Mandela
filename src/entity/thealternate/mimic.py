@@ -20,7 +20,7 @@ class Mimic(em.Enemy):
                          self.mimic_size,
                          groups)
 
-        self.active_area = Area("active", pos, self.mimic_size[0] + 100, self.mimic_size[1] + 100)
+        self.active_area = Area("active", pos, self.mimic_size[0] + 200, self.mimic_size[1] + 200)
         self.__is_chasing = False
         self.speed = 1
 
@@ -81,6 +81,10 @@ class Mimic(em.Enemy):
             self.__faking()
 
         else:
+            super().update()
             self.set_speed(self.get_speed() + 0.001)
             self.moving()
-            self.__moving_animate()
+            
+    def moving(self):
+        self.movement.moving()
+        self.__moving_animate()

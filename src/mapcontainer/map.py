@@ -193,9 +193,11 @@ class Sect:
         self.olptiles.draw(self.screen)
 
     def set_opacity(self, alpha: int):
-        group = self.tilegroup
-        for tile in group:
-            tile.image.set_alpha(alpha)
+        for tilemp in self.tilegroup:
+            tilemp.image.set_alpha(alpha)
+
+        for olptile in self.olptiles:
+            olptile.image.set_alpha(alpha)
 
 
 class Map(abc.ABC):
