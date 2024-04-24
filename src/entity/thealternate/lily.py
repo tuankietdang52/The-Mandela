@@ -18,3 +18,7 @@ class Lily(enenemy.Enemy):
 
     def update(self, *args, **kwargs):
         self.moving()
+        
+    def moving(self):
+        if self.movement is not None:
+            self.movement.moving()

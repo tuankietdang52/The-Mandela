@@ -2,18 +2,18 @@ from __future__ import annotations
 
 import pygame as pg
 
-import src.gamepart.part as gp
+import src.gameprogress.part as gp
 import src.entity.playercontainer.player as pl
 import src.mapcontainer.map as mp
 import src.mapcontainer.housenormal as mphouse
+import src.gameprogress.other.deadmenu as dm
 
 from src.eventhandle import *
+from src.pjenum import *
 
 import src.mapcontainer.town as mptown
-import src.gamepart.housemap.beginning as bg
-import src.gamepart.townmap.themandela as tm
-import src.gamepart.housemap.startmenu as sm
-import src.gamepart.townmap.tomarketpart as mk
+import src.gameprogress.other.startmenu as sm
+import src.gameprogress.townmap.tomarketpart as mk
 
 
 class Manager:
@@ -108,9 +108,10 @@ class Manager:
         self.clear_entities()
         self.gamemap = gamemap
 
-    def wait(self, time_wait: int):
+    def wait(self, time_wait: float, is_enable_input: bool = True):
         """
         :param time_wait: second
+        :param is_enable_input: is enable input back for user
         """
 
         time = float(0)
@@ -119,13 +120,14 @@ class Manager:
         Game.ticking_time()
         Game.ticking_time()
 
-        while time < float(time_wait):
+        while time < time_wait:
             self.gamepart.event_action()
             time += Game.get_time()
 
             Game.ticking_time()
 
-        self.gamepart.can_press_key = True
+        if is_enable_input:
+            self.gamepart.can_press_key = True
 
     def set_appear_entity_opacity(self, alpha: int):
         for em in self.appear_enemy:
@@ -139,8 +141,8 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    IS_TEST = True
-    IS_FULLSCREEN = True
+    IS_TEST = False
+    IS_FULLSCREEN = False
 
     clock = pg.time.Clock()
     dt = 0
@@ -174,17 +176,17 @@ class Game:
 
     def setup_manager(self):
         self.manager.gamemap = mphouse.HouseNormal(self.screen)
-        self.manager.player = pl.Player(self.screen, 1000, self.manager.entities)
+        self.manager.player = pl.Player(self.screen, self.manager.entities)
         self.manager.gamepart = sm.StartMenu(self.screen)
 
     def test(self):
         """test element"""
         self.manager.gamemap = mptown.Town(self.screen)
-        self.manager.player = pl.Player(self.screen, 1000, self.manager.entities)
+        self.manager.player = pl.Player(self.screen, self.manager.entities)
         self.manager.gamepart = mk.MarketPart(self.screen)
 
         self.manager.gamemap.change_sect("ParkMart")
-        self.manager.gamepart.set_progess_index(-1)
+        self.manager.gamepart.set_progress_index(-1)
 
         self.setup_test()
 
@@ -210,24 +212,24 @@ class Game:
         return Game.dt
 
     def running_game(self):
-        pg.time.wait(1000)
+        self.manager.wait(1)
 
-        gameover = False
+        player = self.manager.player
+        game_running = True
 
-        while not gameover:
-            self.manager.gamepart.event_action()
-            self.manager.gamepart.pressing_key()
+        game_over = False
 
-            if not self.IS_TEST:
-                self.manager.gamepart.update()
-                self.manager.gamepart.handle_change_sect()
+        while game_running:
+            if player.get_state() == EState.DEAD and not game_over:
+                self.__to_dead_menu()
+                game_over = True
 
-            else:
-                self.manager.gamepart.update()
-                self.manager.gamepart.handle_change_sect()
-
+            self.manager.gamepart.update()
             self.manager.update_enemy()
 
             pg.display.flip()
-
             Game.ticking_time()
+
+    def __to_dead_menu(self):
+        current_part = self.manager.gamepart
+        self.manager.set_part(dm.DeadMenu(self.screen, current_part))

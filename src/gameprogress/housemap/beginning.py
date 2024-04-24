@@ -5,10 +5,10 @@ import pygame as pg
 import src.gamemanage.game as gm
 import src.gamemanage.physic as gph
 import src.gamemanage.effect as ge
-import src.gamepart.part as gp
+import src.gameprogress.part as gp
 import src.mapcontainer.housenormal as mphouse
 import src.movingtype.normalmoving as normv
-import src.gamepart.townmap.themandela as mandela
+import src.gameprogress.townmap.themandela as mandela
 import src.hud.hudcomp as hud
 import src.entity.thealternate.lily as ll
 
@@ -42,16 +42,16 @@ class BeginStory(gp.Part):
 
         player.handle_moving(keys)
 
-    def manage_progess(self):
+    def manage_progress(self):
         sect = gm.Manager.get_instance().gamemap.sect
         player = gm.Manager.get_instance().player
-        progess = self.get_progess_index()
+        progress = self.get_progress_index()
 
-        if progess == 0:
+        if progress == 0:
             self.__tutorial()
             self.next()
 
-        elif progess == 1:
+        elif progress == 1:
             if type(sect) is not mphouse.Kitchen:
                 return
 
@@ -59,7 +59,7 @@ class BeginStory(gp.Part):
             hud.HUDComp.create_board_text("Let check the refrigerator", voice)
             self.next()
 
-        elif progess == 2:
+        elif progress == 2:
             if not self.__checking_fridge():
                 return
 
@@ -67,16 +67,16 @@ class BeginStory(gp.Part):
             hud.HUDComp.create_board_text("...")
             self.next()
 
-        elif progess == 3:
+        elif progress == 3:
             self.__finding_lily()
 
-        elif progess == 4:
+        elif progress == 4:
             self.__spawnlily()
 
-        elif progess == 5:
+        elif progress == 5:
             self.__to_dream()
 
-        elif progess == 6:
+        elif progress == 6:
             self.destroying()
 
     def __tutorial(self):

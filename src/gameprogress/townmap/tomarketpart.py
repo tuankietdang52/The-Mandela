@@ -2,7 +2,7 @@ import sys
 import random
 import pygame as pg
 import src.gamemanage.game as gm
-import src.gamepart.part as gp
+import src.gameprogress.part as gp
 
 
 class MarketPart(gp.Part):
@@ -44,8 +44,8 @@ class MarketPart(gp.Part):
         if not self.is_trigger_spawn:
             self.spawn_alternate()
 
-    def manage_progess(self):
-        progess = self.get_progess_index()
+    def manage_progress(self):
+        progress = self.get_progress_index()
 
-        if progess == 0:
+        if progress == 0:
             pass

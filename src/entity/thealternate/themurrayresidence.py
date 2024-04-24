@@ -4,6 +4,8 @@ import src.movingtype.ghostmoving as ghmv
 import src.gamemanage.game as gm
 
 from src.pjenum import *
+from src.eventhandle.argument.eventargument import *
+
 
 class TheMurrayResidence(enenemy.Enemy):
     size = (90, 138)
@@ -65,6 +67,7 @@ class TheMurrayResidence(enenemy.Enemy):
         player.set_state(EState.PANIC)
 
     def update(self):
+        super().update()
         self.__give_player_debuff()
 
         if not self.__is_chasing:
@@ -73,11 +76,11 @@ class TheMurrayResidence(enenemy.Enemy):
             self.moving()
 
     def moving(self):
-        super().moving()
+        self.movement.moving()
         self.__chase_animation()
 
-    def on_destroy(self):
-        super().on_destroy()
+    def on_destroy(self, args: EventArgs):
+        super().on_destroy(args)
         player = gm.Manager.get_instance().player
         gm.Manager.get_instance().player.set_speed(1.5)
         player.set_state(EState.FREE)

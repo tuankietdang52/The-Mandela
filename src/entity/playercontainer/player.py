@@ -1,6 +1,7 @@
 import pygame as pg
 import src.gamemanage.physic as gph
 import src.gamemanage.game as gm
+import src.gameprogress.other.deadmenu as dm
 
 from src.pjenum.estate import EState
 
@@ -15,10 +16,9 @@ class Player(pg.sprite.Sprite):
 
     sound_effect = None
 
-    def __init__(self, screen: pg.surface.Surface, health: float, groups: pg.sprite.Group):
+    def __init__(self, screen: pg.surface.Surface, groups: pg.sprite.Group):
         super().__init__(groups)
         self.screen = screen
-        self.__health = health
         self.__state = EState.FREE
 
         self.position = pg.math.Vector2()
@@ -46,20 +46,13 @@ class Player(pg.sprite.Sprite):
     def flip_horizontal(self):
         self.image = pg.transform.flip(self.image, True, False)
 
-    def set_health(self, health: float):
-        self.__health = health
-
-    def get_health(self) -> float:
-        return self.__health
-
-    def decrease_health(self, damage: float):
-        self.__health -= damage
-
     def get_state(self) -> EState:
         return self.__state
 
     def set_state(self, state: EState):
         self.__state = state
+        if self.__state == EState.DEAD:
+            self.dying()
 
     def set_position(self, pos: tuple[float, float] | pg.math.Vector2):
         if type(pos) is pg.math.Vector2:
@@ -191,3 +184,15 @@ class Player(pg.sprite.Sprite):
         self.set_image(name_animate + str(index))
         if direction == "left":
             self.flip_horizontal()
+
+    def dying(self):
+        pos = self.get_position()
+        self.set_image("dead", (203, 51))
+        self.set_position(pos)
+
+        self.__to_dead_menu()
+
+    def __to_dead_menu(self):
+        manager = gm.Manager.get_instance()
+        current_part = manager.gamepart
+        manager.set_part(dm.DeadMenu(self.screen, current_part))
