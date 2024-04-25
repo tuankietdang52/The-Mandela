@@ -125,6 +125,7 @@ class BeginStory(gp.Part):
         start_pos = pg.math.Vector2(6.2 * size, 6.5 * size)
 
         lily = ll.Lily(start_pos, self.manager.entities)
+        lily.is_harmless = True
         self.add_special_enemy("lily", lily, mphouse.Room)
         self.next()
 

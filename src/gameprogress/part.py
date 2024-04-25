@@ -19,20 +19,20 @@ from src.pjenum import *
 
 
 class Part(abc.ABC):
-    __progress = 0
-    to_next = True
-
-    is_occur_start_event = False
-    is_trigger_spawn = False
-    can_press_key = False
-    can_change_map = False
-
-    nextpart = None
-
     def __init__(self, screen: pg.surface.Surface):
         self.screen = screen
         self.enemies: list[em.Enemy] = list()
         self.special_enemies: set[tuple[str, em.Enemy, type[mp.Sect]]] = set()
+
+        self.is_occur_start_event = False
+        self.is_trigger_spawn = False
+        self.can_press_key = False
+        self.can_change_map = False
+
+        self.__progress = 0
+
+        self.nextpart = None
+        self.to_next = True
 
         self.spawn_chance = 0
 
@@ -126,7 +126,6 @@ class Part(abc.ABC):
             return
 
         sect_name = gamemap.sect.in_area(player.get_rect())
-
         current = gamemap.sect
 
         gamemap.change_sect(sect_name)
@@ -137,13 +136,11 @@ class Part(abc.ABC):
         self.is_trigger_spawn = False
         self.enemies.clear()
 
-        print("change")
-
         self.update_list_entities()
         gamemap.sect.create()
         self.reposition_player()
-        pg.mixer.stop()
 
+        pg.mixer.stop()
         self.manager.update_UI_ip()
 
     def reposition_player(self):

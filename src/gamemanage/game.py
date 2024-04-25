@@ -141,7 +141,7 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    IS_TEST = False
+    IS_TEST = True
     IS_FULLSCREEN = False
 
     clock = pg.time.Clock()
@@ -175,7 +175,7 @@ class Game:
         pg.display.set_caption("Nightmare")
 
     def setup_manager(self):
-        self.manager.gamemap = mphouse.HouseNormal(self.screen)
+        # self.manager.gamemap = mphouse.HouseNormal(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
         self.manager.gamepart = sm.StartMenu(self.screen)
 
@@ -214,15 +214,17 @@ class Game:
     def running_game(self):
         self.manager.wait(1)
 
-        player = self.manager.player
         game_running = True
-
         game_over = False
+
+        player = self.manager.player
 
         while game_running:
             if player.get_state() == EState.DEAD and not game_over:
                 self.__to_dead_menu()
                 game_over = True
+            elif player.get_state() != EState.DEAD:
+                game_over = False
 
             self.manager.gamepart.update()
             self.manager.update_enemy()

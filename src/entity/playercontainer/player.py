@@ -8,11 +8,9 @@ from src.pjenum.estate import EState
 
 class Player(pg.sprite.Sprite):
     _instance = None
-    __speed = 1.5
     __path = "../Assets/Ally/Viole/"
-    animatepth = "walk1"
+    animatepth = "walk0"
     __frame = 0
-    size = 36, 80
 
     sound_effect = None
 
@@ -21,6 +19,8 @@ class Player(pg.sprite.Sprite):
         self.screen = screen
         self.__state = EState.FREE
 
+        self.size = 36, 80
+        self.__speed = 1.5
         self.position = pg.math.Vector2()
 
         self.image = pg.image.load(f"{self.__path + self.animatepth}.png").convert_alpha()
@@ -190,9 +190,8 @@ class Player(pg.sprite.Sprite):
         self.set_image("dead", (203, 51))
         self.set_position(pos)
 
-        self.__to_dead_menu()
-
-    def __to_dead_menu(self):
-        manager = gm.Manager.get_instance()
-        current_part = manager.gamepart
-        manager.set_part(dm.DeadMenu(self.screen, current_part))
+    def reset(self):
+        self.set_image("walk0", (36, 80))
+        self.set_state(EState.FREE)
+        self.direction = "left"
+        self.set_speed(1.5)

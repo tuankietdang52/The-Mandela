@@ -11,9 +11,6 @@ class Sect:
     __wall_tile = list()
     walls = set()
 
-    ori_block_size = 0
-    size = 0
-
     MAP_OFFSETX = 0
     """Higher = Left, Lower = Right"""
 
@@ -38,8 +35,10 @@ class Sect:
         self.olptiles = pg.sprite.Group()
 
         self.is_created = False
-
         self.spawn_area_count = 0
+
+        self.ori_block_size = 16
+        self.size = 64
 
         self.back_point = back_point
         self.to_point = to_point
@@ -87,6 +86,7 @@ class Sect:
         self.__wall_tile.clear()
         self.walls.clear()
         self.areas.clear()
+        self.points.clear()
         self.tilegroup.empty()
 
         self.is_created = True
@@ -201,15 +201,15 @@ class Sect:
 
 
 class Map(abc.ABC):
-    ori_block_size = 0
-    size = 0
-
     def __init__(self, screen: pg.surface.Surface, path: str):
         self.screen = screen
         self.path = path
 
         self.sect = None
         self.sections: list[tuple[str, Sect]] = list()
+
+        self.ori_block_size = 16
+        self.size = 64
 
         self.setup_sections()
 

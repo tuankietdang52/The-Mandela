@@ -63,6 +63,10 @@ class TheMurrayResidence(enenemy.Enemy):
 
     def __give_player_debuff(self):
         player = gm.Manager.get_instance().player
+
+        if player.get_state() == EState.DEAD:
+            return
+
         player.set_speed(0.5)
         player.set_state(EState.PANIC)
 
@@ -82,5 +86,9 @@ class TheMurrayResidence(enenemy.Enemy):
     def on_destroy(self, args: EventArgs):
         super().on_destroy(args)
         player = gm.Manager.get_instance().player
+
+        if player.get_state() == EState.DEAD:
+            return
+
         gm.Manager.get_instance().player.set_speed(1.5)
         player.set_state(EState.FREE)
