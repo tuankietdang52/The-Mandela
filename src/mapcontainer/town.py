@@ -4,11 +4,11 @@ import src.mapcontainer.housenormal as mphouse
 
 
 class Town(mp.Map):
-    ori_block_size = 16
-    size = 32
-
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen, "../Assets/Map/Town/MapSect/")
+
+        self.ori_block_size = 16
+        self.size = 32
 
         self.change_sect("Home")
 

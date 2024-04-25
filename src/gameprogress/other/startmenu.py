@@ -2,6 +2,7 @@ import src.hud.menu.view.startmenuhud as hud_sm
 import src.gamemanage.effect as ge
 import src.gameprogress.housemap.beginning as bg
 import src.gameprogress.part as gp
+import src.mapcontainer.housenormal as mphouse
 
 from src.pjenum import EState
 from src.hud import *
@@ -32,15 +33,21 @@ class StartMenu(gp.Part):
         ge.Effect.fade_in_list(self.screen, elements)
         self.startmenu.init_pointer()
 
+    def __setup_map(self):
+        self.manager.set_map(mphouse.HouseNormal(self.screen))
+        gamemap = self.manager.gamemap
+        gamemap.change_sect("Room")
+        gamemap.sect.create()
+
     def __setup_player(self):
         player = self.manager.player
         gamemap = self.manager.gamemap
 
         start_point = gamemap.sect.get_start_point()
 
+        player.set_image("sit", (36, 80))
         player.set_position(start_point)
         player.set_state(EState.BUSY)
-        player.set_image("sit", player.size)
 
     def __show_sponsor(self):
         for item in self.startmenu.get_sponsor_list():
@@ -49,11 +56,6 @@ class StartMenu(gp.Part):
 
             ge.Effect.fade_out_list(self.screen, [item])
             gm.Manager.get_instance().wait(2)
-
-    def __setup_map(self):
-        gamemap = self.manager.gamemap
-        gamemap.change_sect("Room")
-        gamemap.sect.create()
 
     def pressing_key(self):
         if not self.can_press_key:

@@ -31,9 +31,6 @@ class BaseMenuView(MenuContract.IView):
         title = self.__write_text(text, size)
 
         title_rect = title.get_rect(center=pos)
-
-        self.screen.blit(title, title_rect)
-
         return title, title_rect
 
     def setup(self):

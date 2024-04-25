@@ -45,7 +45,7 @@ class DeadMenuHUD(vw.BaseMenuView):
 
         self.elements.extend([
             self.create_txt_element("You Died", 70, (width / 2, 200)),
-            self.create_txt_element("Respawn", 30, (width / 2, height - 250)),
+            self.create_txt_element("Replay", 30, (width / 2, height - 250)),
             self.create_txt_element("Exit To Menu", 30, (width / 2, height - 200)),
         ])
 

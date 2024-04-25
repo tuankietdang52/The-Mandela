@@ -32,6 +32,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
 
         self.speed = 1
         self.movement = None
+        self.is_harmless = False
 
         gm.Manager.get_instance().on_destroy += (self.on_destroy, EventArgs.empty())
 
@@ -137,6 +138,9 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         return False
 
     def __kill_player(self):
+        if self.is_harmless:
+            return
+
         manager = gm.Manager.get_instance()
         player = manager.player
 

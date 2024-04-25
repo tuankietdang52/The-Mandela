@@ -4,9 +4,6 @@ import src.mapcontainer.town as mptown
 
 
 class HouseNormal(mp.Map):
-    ori_block_size = 16
-    size = 64
-
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen, "../Assets/Map/House/MapSect/")
 

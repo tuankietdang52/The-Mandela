@@ -3,7 +3,9 @@ import pygame as pg
 import src.gameprogress.part as gp
 import src.gamemanage.effect as ge
 import src.hud.menu.view.deadmenuhud as dm
+import src.gameprogress.other.startmenu as sm
 import src.gamemanage.game as gm
+import src.mapcontainer.housenormal as mphouse
 
 
 class DeadMenu(gp.Part):
@@ -72,7 +74,30 @@ class DeadMenu(gp.Part):
         choice = self.dead_menu.get_choice()
 
         if choice == 1:
-            pass
+            self.__replay()
 
         elif choice == 2:
-            pass
+            self.__to_main_menu()
+
+    def reset_map(self):
+        self.manager.set_map(mphouse.HouseNormal(self.screen))
+        gamemap = self.manager.gamemap
+        player = self.manager.player
+
+        gamemap.sect.create()
+        gamemap.change_sect("OutDoor")
+
+        point = gamemap.sect.get_start_point()
+        player.set_position(point)
+
+    def __replay(self):
+        self.manager.player.reset()
+        self.reset_map()
+        self.manager.set_part(self.current_part)
+        ge.Effect.fade_in_screen()
+        pg.mixer.stop()
+
+    def __to_main_menu(self):
+        ge.Effect.fade_out_screen()
+        self.manager.set_part(sm.StartMenu(self.screen))
+        self.manager.gamepart.set_progress_index(1)
