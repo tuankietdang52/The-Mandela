@@ -1,4 +1,4 @@
-import src.gamemanage.effect as ge
+import src.utils.effect as ge
 import src.hud.menu.presenter.menupresenter as smpr
 import src.hud.menu.model.menumodel as smm
 

@@ -5,11 +5,10 @@ import pygame as pg
 
 from src.tilemap import *
 from src.pjenum import *
+from pathlib import Path
 
 
 class Sect:
-    __wall_tile = list()
-    walls = set()
 
     MAP_OFFSETX = 0
     """Higher = Left, Lower = Right"""
@@ -33,6 +32,7 @@ class Sect:
         self.points = []
         self.tilegroup = pg.sprite.Group()
         self.olptiles = pg.sprite.Group()
+        self.walls = set()
 
         self.is_created = False
         self.spawn_area_count = 0
@@ -62,8 +62,12 @@ class Sect:
         return self.MAP_OFFSETX, self.MAP_OFFSETY
 
     def load(self, path):
-        if os.getcwd() == "C:\\Users\\ADMIN\\PycharmProjects\\Nightmare\\src":
+        file_path = Path(__file__)
+        src_path = file_path.parent.parent
+        if Path(os.getcwd()) == src_path:
             self.map = pytmx.load_pygame(path)
+        else:
+            raise EnvironmentError("Script must start in src directory")
 
     def get_start_point(self) -> pg.math.Vector2 | None:
         if self.back_point is None:
@@ -83,11 +87,10 @@ class Sect:
         return backup_point
 
     def create(self):
-        self.__wall_tile.clear()
-        self.walls.clear()
         self.areas.clear()
         self.points.clear()
         self.tilegroup.empty()
+        self.walls.clear()
 
         self.is_created = True
 
@@ -100,8 +103,6 @@ class Sect:
                     self.__init_areas(layer)
                 elif layer.name == "Points":
                     self.__init_points(layer)
-
-        self.__init_walls()
 
     def __draw_tile(self, layer):
         for x, y, surf in layer.tiles():
@@ -116,7 +117,8 @@ class Sect:
             tilemp = Tile(self.screen, surf, pos, layer.name, layer.id, layer.data[y][x], group)
 
             if "Wall" in layer.name or "Object" in layer.name:
-                self.__wall_tile.append(tilemp)
+                tile_pos = (round(pos[0] / 32) + 1, round(pos[1] / 32))
+                self.walls.add(tile_pos)
 
             self.screen.blit(tilemp.image, tilemp.rect)
 
@@ -147,20 +149,6 @@ class Sect:
 
             self.points.append(point)
 
-    def __init_walls(self):
-        for wall in self.__wall_tile:
-            left_x, top_y = wall.rect.topleft
-            width = wall.rect.width
-            height = wall.rect.height
-
-            right_x = left_x + width
-            bot_y = top_y + height
-
-            for y in range(top_y, bot_y):
-                for x in range(left_x, right_x):
-                    self.walls.add((x, y))
-                    self.walls.add((x, y))
-
     def in_area(self, rect) -> str | None:
         for area in self.areas:
             if area.is_overlap(rect):
@@ -185,9 +173,7 @@ class Sect:
 
     def redraw(self):
         group = self.tilegroup
-
         group.draw(self.screen)
-        # group.update()
 
     def redraw_overlap_tile(self):
         self.olptiles.draw(self.screen)

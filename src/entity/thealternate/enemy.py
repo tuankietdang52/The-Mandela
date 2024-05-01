@@ -1,12 +1,12 @@
 import abc
 
 import pygame as pg
-import src.gamemanage.physic as gph
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
 
 from src.pjenum import *
 from src.eventhandle.argument.eventargument import *
+from src.utils import *
 
 
 class Enemy(abc.ABC, pg.sprite.Sprite):
@@ -38,7 +38,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
 
     def update(self, *args, **kwargs):
         if self.is_hit_player():
-            self.__kill_player()
+            self.kill_player()
 
     def set_position(self, pos: tuple[float, float] | pg.math.Vector2):
         if type(pos) is pg.math.Vector2:
@@ -121,7 +121,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
     def can_move(self, pos: pg.math.Vector2):
         rect = self.image.get_rect(center=pos)
 
-        if gph.Physic.is_collide_wall(rect):
+        if Physic.is_collide_wall(rect):
             return False
 
         return True
@@ -132,12 +132,12 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         rect = self.rect
         player_rect = player.get_rect()
 
-        if gph.Physic.is_collide(player_rect, rect):
+        if Physic.is_collide(player_rect, rect):
             return True
 
         return False
 
-    def __kill_player(self):
+    def kill_player(self):
         if self.is_harmless:
             return
 

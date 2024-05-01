@@ -1,4 +1,4 @@
-import src.gamemanage.effect as ge
+import src.utils.effect as ge
 import src.hud.menu.view.basemenuview as vw
 
 from src.hud.menu.contract import *
@@ -8,7 +8,7 @@ class StartMenuHUD(vw.BaseMenuView):
     fontpath = "../Assets/Font/Crang.ttf"
 
     def __init__(self, screen: pg.surface.Surface):
-        super().__init__(screen, 3)
+        super().__init__(screen, 4)
 
         self.__sponsor_list: list[tuple[pg.surface.Surface, pg.rect.Rect]] = []
 
@@ -24,7 +24,7 @@ class StartMenuHUD(vw.BaseMenuView):
 
     def init_pointer(self):
         width, height = self.screen.get_width(), self.screen.get_height()
-        self.presenter.set_pointer_position((width / 2 - 100, height - 270))
+        self.presenter.set_pointer_position((width / 2 - 120, height - 320))
 
     def set_choice(self, choice: int):
         self.choice = choice
@@ -64,8 +64,9 @@ class StartMenuHUD(vw.BaseMenuView):
 
         self.elements.extend([
             self.create_txt_element("NIGHTMARE", 80, (width / 2, 200)),
-            self.create_txt_element("Start", 30, (width / 2, height - 250)),
-            self.create_txt_element("Load", 30, (width / 2, height - 200)),
+            self.create_txt_element("Start", 30, (width / 2, height - 300)),
+            self.create_txt_element("Load", 30, (width / 2, height - 250)),
+            self.create_txt_element("Setting", 30, (width / 2, height - 200)),
             self.create_txt_element("Quit", 30, (width / 2, height - 150))
         ])
 

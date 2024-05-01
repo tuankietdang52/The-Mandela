@@ -5,15 +5,19 @@ import pygame as pg
 import src.gameprogress.part as gp
 import src.entity.playercontainer.player as pl
 import src.mapcontainer.map as mp
-import src.mapcontainer.housenormal as mphouse
 import src.gameprogress.other.deadmenu as dm
 
 from src.eventhandle import *
 from src.pjenum import *
 
+# TEST IMPORT
+
+import src.mapcontainer.housenormal as mphouse
 import src.mapcontainer.town as mptown
 import src.gameprogress.other.startmenu as sm
-import src.gameprogress.townmap.tomarketpart as mk
+import src.gameprogress.mainprogess.dayone as do
+import src.gameprogress.begin.themandela as tm
+import src.gameprogress.begin.beginning as bg
 
 
 class Manager:
@@ -27,6 +31,7 @@ class Manager:
 
     entities = pg.sprite.Group()
     appear_enemy = pg.sprite.Group()
+    hud_groups = pg.sprite.Group()
 
     def __init__(self):
         """Call init() instead"""
@@ -68,6 +73,7 @@ class Manager:
         self.gamemap.sect.redraw()
         self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
+        self.hud_groups.draw(self.screen)
 
     def update_UI_ip(self):
         self.screen.fill((0, 0, 0))
@@ -77,8 +83,17 @@ class Manager:
         self.gamemap.sect.redraw()
         self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
+        self.hud_groups.draw(self.screen)
 
         pg.display.update()
+
+    def update(self):
+        self.gamepart.update()
+        self.update_enemy()
+        self.update_hud()
+
+    def update_hud(self):
+        self.hud_groups.update()
 
     def update_enemy(self):
         if len(Manager.appear_enemy) == 0:
@@ -141,7 +156,7 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    IS_TEST = True
+    IS_TEST = False
     IS_FULLSCREEN = False
 
     clock = pg.time.Clock()
@@ -175,15 +190,16 @@ class Game:
         pg.display.set_caption("Nightmare")
 
     def setup_manager(self):
-        # self.manager.gamemap = mphouse.HouseNormal(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
+        # self.manager.player.init_hud(self.manager.hud_groups)
         self.manager.gamepart = sm.StartMenu(self.screen)
 
     def test(self):
         """test element"""
         self.manager.gamemap = mptown.Town(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        self.manager.gamepart = mk.MarketPart(self.screen)
+        # self.manager.player.init_hud(self.manager.hud_groups)
+        self.manager.gamepart = do.DayOne(self.screen)
 
         self.manager.gamemap.change_sect("ParkMart")
         self.manager.gamepart.set_progress_index(-1)
@@ -226,8 +242,7 @@ class Game:
             elif player.get_state() != EState.DEAD:
                 game_over = False
 
-            self.manager.gamepart.update()
-            self.manager.update_enemy()
+            self.manager.update()
 
             pg.display.flip()
             Game.ticking_time()

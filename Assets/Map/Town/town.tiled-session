@@ -3,11 +3,11 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Graveyard.tmx",
+    "activeFile": "MapSect/Hotel.tmx",
     "expandedProjectPaths": [
+        "MapSect",
         "Tile",
-        ".",
-        "MapSect"
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -38,78 +38,78 @@
         },
         "MapSect/Apartment.tmx": {
             "expandedObjectLayers": [
-                9,
-                10
+                10,
+                9
             ],
-            "scale": 1.5,
+            "scale": 0.75,
             "selectedLayer": 8,
             "viewCenter": {
-                "x": 199.99999999999997,
-                "y": 200
+                "x": 806.6666666666667,
+                "y": 124
             }
         },
         "MapSect/Crossroad.tmx": {
             "expandedObjectLayers": [
-                20,
-                12
+                12,
+                20
             ],
             "scale": 1.5,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 94,
-                "y": 123.33333333333334
+                "x": 144.33333333333334,
+                "y": 144
             }
         },
         "MapSect/Graveyard.tmx": {
             "expandedObjectLayers": [
+                7,
                 8,
-                6,
-                7
+                6
             ],
-            "scale": 3,
+            "scale": 0.75,
             "selectedLayer": 5,
             "viewCenter": {
-                "x": 402,
-                "y": 88.33333333333334
+                "x": 1405.3333333333333,
+                "y": 866.6666666666666
             }
         },
         "MapSect/GraveyardEntrance.tmx": {
             "expandedObjectLayers": [
-                9,
+                10,
                 7,
-                10
+                9
             ],
             "scale": 3,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 146,
-                "y": 80
+                "x": 183.83333333333334,
+                "y": 160
             }
         },
         "MapSect/Home.tmx": {
             "expandedObjectLayers": [
+                13,
                 12,
-                14,
-                13
+                14
             ],
-            "scale": 3,
+            "scale": 0.75,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 110.99999999999999,
-                "y": 15
+                "x": 827.9999999999999,
+                "y": -60
             }
         },
         "MapSect/Hotel.tmx": {
             "expandedObjectLayers": [
+                7,
                 8,
-                9,
-                7
+                9
             ],
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 456,
-                "y": -266
+                "x": 403.99999999999994,
+                "y": 186.66666666666669
             }
         },
         "MapSect/Mart.tmx": {
@@ -120,8 +120,8 @@
             "scale": 0.75,
             "selectedLayer": 10,
             "viewCenter": {
-                "x": 161.33333333333326,
-                "y": 285.33333333333337
+                "x": -72,
+                "y": 1037.3333333333333
             }
         },
         "MapSect/Park1.tmx": {
@@ -132,7 +132,7 @@
             "scale": 0.75,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 160,
+                "x": 160.66666666666674,
                 "y": 200
             }
         },
@@ -143,7 +143,7 @@
             "scale": 1.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 175.99999999999997,
+                "x": 176.3333333333333,
                 "y": 200
             }
         },
@@ -152,11 +152,11 @@
                 11,
                 10
             ],
-            "scale": 1,
-            "selectedLayer": 8,
+            "scale": 0.75,
+            "selectedLayer": 10,
             "viewCenter": {
-                "x": 155,
-                "y": 508
+                "x": 249.33333333333326,
+                "y": 465.33333333333337
             }
         },
         "MapSect/Police.tmx": {
@@ -197,49 +197,49 @@
         },
         "MapSect/RoadToApartment.tmx": {
             "expandedObjectLayers": [
-                16,
                 15,
-                7
+                7,
+                16
             ],
-            "scale": 3,
+            "scale": 0.75,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 563,
-                "y": 57
+                "x": 325.33333333333326,
+                "y": -196
             }
         },
         "MapSect/RoadToPark.tmx": {
             "expandedObjectLayers": [
-                11,
                 12,
+                11,
                 10
             ],
-            "scale": 4,
-            "selectedLayer": 8,
+            "scale": 0.75,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": -17.5,
-                "y": 913.25
+                "x": 186.66666666666663,
+                "y": 162.66666666666669
             }
         },
         "MapSect/RoadToPolice.tmx": {
             "expandedObjectLayers": [
+                7,
                 8,
-                9,
-                7
+                9
             ],
             "scale": 1.5,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": -83.33333333333337,
-                "y": -126
+                "x": 144.33333333333334,
+                "y": 200
             }
         },
         "MapSect/Town.tmx": {
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 760,
-                "y": 689
+                "x": 825.3333333333333,
+                "y": 704
             }
         },
         "MapSect/blackblock.tsx": {
@@ -314,7 +314,8 @@
         "MapSect/ParkMart.tmx",
         "MapSect/RoadToPark.tmx",
         "MapSect/RoadToPolice.tmx",
-        "MapSect/GraveyardEntrance.tmx"
+        "MapSect/GraveyardEntrance.tmx",
+        "MapSect/Mart.tmx"
     ],
     "project": "town.tiled-project",
     "property.type": "object",
@@ -323,14 +324,14 @@
         "Tile/cyberpunk.tsx",
         "MapSect/Home.tmx",
         "MapSect/Crossroad.tmx",
+        "MapSect/Graveyard.tmx",
+        "MapSect/RoadToApartment.tmx",
+        "MapSect/Mart.tmx",
         "MapSect/GraveyardEntrance.tmx",
         "MapSect/RoadToPolice.tmx",
         "MapSect/RoadToPark.tmx",
         "MapSect/ParkMart.tmx",
-        "MapSect/Park2.tmx",
-        "MapSect/Town.tmx",
-        "MapSect/Park1.tmx",
-        "MapSect/Apartment.tmx"
+        "MapSect/Park2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

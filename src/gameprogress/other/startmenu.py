@@ -1,11 +1,11 @@
 import src.hud.menu.view.startmenuhud as hud_sm
-import src.gamemanage.effect as ge
-import src.gameprogress.housemap.beginning as bg
+import src.gameprogress.begin.beginning as bg
 import src.gameprogress.part as gp
 import src.mapcontainer.housenormal as mphouse
 
 from src.pjenum import EState
 from src.hud import *
+from src.utils import *
 
 
 class StartMenu(gp.Part):
@@ -30,7 +30,7 @@ class StartMenu(gp.Part):
     def __draw_start_menu(self):
         elements = self.startmenu.get_elements()
 
-        ge.Effect.fade_in_list(self.screen, elements)
+        Effect.fade_in_list(self.screen, elements)
         self.startmenu.init_pointer()
 
     def __setup_map(self):
@@ -51,10 +51,10 @@ class StartMenu(gp.Part):
 
     def __show_sponsor(self):
         for item in self.startmenu.get_sponsor_list():
-            ge.Effect.fade_in_list(self.screen, [item])
+            Effect.fade_in_list(self.screen, [item])
             gm.Manager.get_instance().wait(2)
 
-            ge.Effect.fade_out_list(self.screen, [item])
+            Effect.fade_out_list(self.screen, [item])
             gm.Manager.get_instance().wait(2)
 
     def pressing_key(self):
@@ -80,6 +80,9 @@ class StartMenu(gp.Part):
             pass
 
         elif choice == 3:
+            pass
+
+        elif choice == 4:
             sys.exit()
 
     def update(self):
@@ -118,7 +121,7 @@ class StartMenu(gp.Part):
 
     def __destroy_start_menu(self):
         elements = self.startmenu.get_elements()
-        ge.Effect.fade_out_list(self.screen, elements)
+        Effect.fade_out_list(self.screen, elements)
 
     def __destroying(self):
         self.__destroy_start_menu()

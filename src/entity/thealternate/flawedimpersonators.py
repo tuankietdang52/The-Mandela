@@ -1,7 +1,11 @@
 import pygame as pg
 import src.entity.thealternate.enemy as em
 import src.gamemanage.game as gm
-import src.movingtype.ghostmoving as ghm
+import src.movingtype.ghostmoving as ghmv
+from src.eventhandle.argument.eventargument import EventArgs
+
+from src.utils import *
+from src.pjenum import *
 
 
 class FlawedImpersonators(em.Enemy):
@@ -17,14 +21,18 @@ class FlawedImpersonators(em.Enemy):
                          self.size,
                          groups)
 
-        self.set_movement(ghm.GhostMoving(self))
+        self.set_movement(ghmv.GhostMoving(self))
         self.speed = 2
         self.count = 0
 
         self.__is_rage = False
 
+        self.__heart_beat_sound: pg.mixer.Channel | None = None
+
         self.__set_player_position()
         self.__set_spawn()
+
+        self.__yelling_sound: pg.mixer.Channel | None = None
 
     def __set_spawn(self):
         player_pos = gm.Manager.get_instance().player.get_position()
@@ -33,10 +41,10 @@ class FlawedImpersonators(em.Enemy):
 
         self.set_position(position)
 
-        pg.mixer.Sound(f"{self.__sound_path}warning.mp3").play()
+        SoundUtils.play_sound(f"{self.__sound_path}warning.mp3")
         gm.Manager.get_instance().wait(2)
 
-        self.__heart_beat_sound = pg.mixer.Sound(f"{self.__sound_path}heartbeat.mp3").play(-1)
+        self.__heart_beat_sound = SoundUtils.play_sound(f"{self.__sound_path}heartbeat.mp3", True)
 
     def __set_player_position(self):
         sect = gm.Manager.get_instance().gamemap.sect
@@ -64,8 +72,8 @@ class FlawedImpersonators(em.Enemy):
             return
 
         self.set_speed(5)
-        pg.mixer.Sound(f"{self.__sound_path}yelling.mp3").play()
 
+        self.__yelling_sound = SoundUtils.play_sound(f"{self.__sound_path}yelling.mp3")
         self.__is_rage = True
 
     def moving(self):
@@ -82,3 +90,36 @@ class FlawedImpersonators(em.Enemy):
     def update(self, *args, **kwargs):
         super().update()
         self.moving()
+
+    def kill_player(self):
+        manager = gm.Manager.get_instance()
+
+        self.__jumpscare()
+        manager.wait(1)
+
+        super().kill_player()
+
+    def __jumpscare(self):
+        screen = gm.Manager.get_instance().screen
+
+        jumpscare = pg.image.load(f"{self.image_path}jumpscare.jpg").convert()
+        size = screen.get_size()
+
+        jumpscare = pg.transform.scale(jumpscare, size)
+        screen.blit(jumpscare, (0, 0))
+        pg.display.update()
+
+    def on_destroy(self, args: EventArgs):
+        super().on_destroy(args)
+        self.__stop_sound()
+
+    def __stop_sound(self):
+        player = gm.Manager.get_instance().player
+        if player.get_state() == EState.DEAD:
+            return
+
+        if self.__heart_beat_sound is not None:
+            self.__heart_beat_sound.stop()
+
+        if self.__yelling_sound is not None:
+            self.__yelling_sound.stop()
