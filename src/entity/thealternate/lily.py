@@ -1,9 +1,9 @@
 import pygame as pg
 
-import src.entity.thealternate.enemy as enenemy
+import src.entity.thealternate.enemy as em
 
 
-class Lily(enenemy.Enemy):
+class Lily(em.Enemy):
     """Position by topleft"""
     size = (36, 80)
 

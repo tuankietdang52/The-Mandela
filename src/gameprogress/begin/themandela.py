@@ -2,10 +2,11 @@ import sys
 import pygame as pg
 import src.gameprogress.part as gp
 import src.gamemanage.game as gm
-import src.gamemanage.effect as ge
 import src.mapcontainer.housenormal as mphouse
-import src.gameprogress.townmap.tomarketpart as mk
+import src.gameprogress.mainprogess.dayone as do
 import src.hud.hudcomp as hud
+
+from src.utils import *
 
 
 class TheMandela(gp.Part):
@@ -65,7 +66,7 @@ class TheMandela(gp.Part):
     def __get_up(self):
         viole_voice_path = "../Assets/Sound/VioleVoice/"
 
-        ge.Effect.fade_in_screen()
+        Effect.fade_in_screen()
 
         self.manager.wait(2)
 
@@ -140,8 +141,7 @@ always carry a firearm with you
         pg.mixer.music.stop()
         hud.HUDComp.create_board_text(know, k_voice)
 
-        sound = pg.mixer.Sound("../Assets/Sound/Other/tvlost.mp3")
-        sound.play()
+        sound = SoundUtils.play_sound("../Assets/Sound/Other/tvlost.mp3")
         self.manager.wait(2)
         sound.stop()
 
@@ -162,4 +162,4 @@ always carry a firearm with you
         self.__destroying()
 
     def __destroying(self):
-        self.manager.set_part(mk.MarketPart(self.screen))
+        self.manager.set_part(do.DayOne(self.screen))

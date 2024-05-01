@@ -1,13 +1,14 @@
 import pygame as pg
-import src.entity.thealternate.enemy as enenemy
-import src.movingtype.ghostmoving as ghmv
 import src.gamemanage.game as gm
+import src.entity.thealternate.enemy as em
+import src.movingtype.ghostmoving as ghmv
 
 from src.pjenum import *
 from src.eventhandle.argument.eventargument import *
+from src.utils import *
 
 
-class TheMurrayResidence(enenemy.Enemy):
+class TheMurrayResidence(em.Enemy):
     size = (90, 138)
     __frame = 0
 
@@ -21,6 +22,7 @@ class TheMurrayResidence(enenemy.Enemy):
 
         self.set_speed(5)
         self.__is_chasing = False
+        self.__sound: pg.mixer.Channel | None = None
 
     def __chase_animation(self):
         if self.__frame < 10:
@@ -42,7 +44,7 @@ class TheMurrayResidence(enenemy.Enemy):
         murray_sound_path = "../Assets/Sound/TheMurrayResidence/"
         if self.__frame == 0:
             self.set_direction_to_player()
-            pg.mixer.Sound(f"{murray_sound_path}kidvoice.mp3").play()
+            self.__sound = SoundUtils.play_sound(f"{murray_sound_path}kidvoice.mp3")
 
         self.__frame += 1
 
@@ -57,7 +59,7 @@ class TheMurrayResidence(enenemy.Enemy):
         elif self.__frame >= 350:
             self.__frame = 0
             self.__is_chasing = True
-            pg.mixer.Sound(f"{murray_sound_path}shout.mp3").play(-1)
+            self.__sound = SoundUtils.play_sound(f"{murray_sound_path}shout.mp3", True)
 
         gm.Manager.get_instance().update_UI_ip()
 
@@ -92,3 +94,6 @@ class TheMurrayResidence(enenemy.Enemy):
 
         gm.Manager.get_instance().player.set_speed(1.5)
         player.set_state(EState.FREE)
+
+        if self.__sound is not None and player.get_state() != EState.DEAD:
+            self.__sound.stop()

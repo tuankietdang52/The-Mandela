@@ -1,19 +1,15 @@
 import sys
 
-import pygame as pg
-
-import src.gamemanage.game as gm
-import src.gamemanage.physic as gph
-import src.gamemanage.effect as ge
 import src.gameprogress.part as gp
 import src.mapcontainer.housenormal as mphouse
 import src.movingtype.normalmoving as normv
-import src.gameprogress.townmap.themandela as mandela
+import src.gameprogress.begin.themandela as mandela
 import src.hud.hudcomp as hud
 import src.entity.thealternate.lily as ll
 
 from src.tilemap import Area
 from src.pjenum import *
+from src.utils import *
 
 
 class BeginStory(gp.Part):
@@ -97,21 +93,21 @@ class BeginStory(gp.Part):
 
         keys = pg.key.get_pressed()
 
-        if area.is_overlap(player.get_rect()) and keys[pg.K_f]:
-            return True
-
-        return False
-
-    def __finding_lily(self):
-        player = gm.Manager.get_instance().player
+        if not area.is_overlap(player.get_rect()) or not keys[pg.K_f]:
+            return False
 
         gm.Manager.play_theme("../Assets/Sound/Other/rain.mp3")
+        news_sound_path = "../Assets/Sound/NarratorVoice/news.mp3"
+        SoundUtils.play_sound(news_sound_path, True)
 
-        voice = pg.mixer.Sound("../Assets/Sound/LilyVoice/voice1.wav")
-        hud.HUDComp.create_board_text("Viole...", voice)
+        return True
+
+    def __finding_lily(self):
+        gm.Manager.get_instance().wait(1)
+        player = gm.Manager.get_instance().player
 
         voice = player.get_voice("voice3")
-        hud.HUDComp.create_board_text("What!? Is that voice come from my bedroom |Is that... |Lily", voice)
+        hud.HUDComp.create_board_text("What!? |I remember tv is turned off ?", voice)
 
         self.next()
 
@@ -157,7 +153,7 @@ class BeginStory(gp.Part):
         if not active_area.is_overlap(player_rect):
             return
 
-        pg.mixer.Sound("../Assets/Sound/Other/suprise.mp3").play()
+        SoundUtils.play_sound("../Assets/Sound/Other/suprise.mp3")
 
         self.__lily_to_demon(lily)
 
@@ -175,8 +171,8 @@ class BeginStory(gp.Part):
         lily.set_size((45, 83))
 
         lily.set_position(pg.math.Vector2(lily_position.x, lily_position.y + 185))
-        lily.set_movement(normv.NormalMovement(lily))
         lily.set_speed(4)
+        lily.set_movement(normv.NormalMovement(lily))
 
     def destroying(self):
         manager = gm.Manager.get_instance()
@@ -185,14 +181,18 @@ class BeginStory(gp.Part):
         lily = self.get_special_enemy("lily")
         player_rect = player.get_rect()
 
-        if not gph.Physic.is_collide(player_rect, lily.get_rect()):
+        if not Physic.is_collide(player_rect, lily.get_rect()):
             return
+
+        print("ok")
 
         self.next()
         self.can_press_key = False
-        ge.Effect.to_black_screen()
+        Effect.to_black_screen()
 
-        manager.wait(5)
+        manager.wait(3)
+        SoundUtils.clear_all_sound()
+        manager.wait(2)
 
         self.remove_special_enemy("lily")
         manager.set_part(mandela.TheMandela(self.screen))

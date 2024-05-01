@@ -1,8 +1,6 @@
-import pygame as pg
-import src.gamemanage.effect as ge
+import src.utils.effect as ge
 import src.hud.menu.view.basemenuview as vw
 
-from src.hud.hudcomp import *
 from src.hud.menu.contract import *
 
 
