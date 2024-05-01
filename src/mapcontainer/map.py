@@ -32,6 +32,8 @@ class Sect:
         self.points = []
         self.tilegroup = pg.sprite.Group()
         self.olptiles = pg.sprite.Group()
+
+        self.__walls_tile = list()
         self.walls = set()
 
         self.is_created = False
@@ -104,6 +106,8 @@ class Sect:
                 elif layer.name == "Points":
                     self.__init_points(layer)
 
+        self.__init_walls()
+
     def __draw_tile(self, layer):
         for x, y, surf in layer.tiles():
             pos = x * self.size - self.MAP_OFFSETX, y * self.size - self.MAP_OFFSETY
@@ -117,8 +121,7 @@ class Sect:
             tilemp = Tile(self.screen, surf, pos, layer.name, layer.id, layer.data[y][x], group)
 
             if "Wall" in layer.name or "Object" in layer.name:
-                tile_pos = (round(pos[0] / 32) + 1, round(pos[1] / 32))
-                self.walls.add(tile_pos)
+                self.__walls_tile.append(tilemp)
 
             self.screen.blit(tilemp.image, tilemp.rect)
 
@@ -148,6 +151,22 @@ class Sect:
             point = Point(item.name, x, y)
 
             self.points.append(point)
+
+    def __init_walls(self):
+        for wall in self.__walls_tile:
+            left_x, top_y = wall.rect.topleft
+            width = wall.rect.width
+            height = wall.rect.height
+
+            right_x = left_x + width
+            bot_y = top_y + height
+
+            for y in range(top_y, bot_y):
+                for x in range(left_x, right_x):
+                    self.walls.add((x, y))
+                    self.walls.add((x, y))
+
+        self.__walls_tile.clear()
 
     def in_area(self, rect) -> str | None:
         for area in self.areas:

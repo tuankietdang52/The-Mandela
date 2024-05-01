@@ -14,13 +14,12 @@ class Mimic(em.Enemy):
     __frame = 0
     size = (132, 168)
 
-    def __init__(self, pos: pg.math.Vector2, groups: pg.sprite.Group):
+    def __init__(self, pos: pg.math.Vector2):
         self.mimic_image, self.mimic_size = self.__random_object()
         super().__init__("../Assets/Enemy/Mimic/",
                          self.mimic_image,
                          pos,
-                         self.mimic_size,
-                         groups)
+                         self.mimic_size)
 
         self.active_area = Area("active", pos, self.mimic_size[0] + 200, self.mimic_size[1] + 200)
         self.__is_chasing = False

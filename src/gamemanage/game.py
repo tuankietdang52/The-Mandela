@@ -156,7 +156,7 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    IS_TEST = False
+    IS_TEST = True
     IS_FULLSCREEN = False
 
     clock = pg.time.Clock()
@@ -191,14 +191,14 @@ class Game:
 
     def setup_manager(self):
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        # self.manager.player.init_hud(self.manager.hud_groups)
+        self.manager.player.init_hud(self.manager.hud_groups)
         self.manager.gamepart = sm.StartMenu(self.screen)
 
     def test(self):
         """test element"""
         self.manager.gamemap = mptown.Town(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        # self.manager.player.init_hud(self.manager.hud_groups)
+        self.manager.player.init_hud(self.manager.hud_groups)
         self.manager.gamepart = do.DayOne(self.screen)
 
         self.manager.gamemap.change_sect("ParkMart")

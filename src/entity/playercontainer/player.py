@@ -28,7 +28,7 @@ class Player(pg.sprite.Sprite):
 
         self.direction = "left"
 
-        self.hungry_bar = None
+        self.hungry_bar: plhud.HungryBar | None = None
 
     def init_hud(self, hud_groups: pg.sprite.Group):
         self.hungry_bar = plhud.HungryBar(self, hud_groups)
@@ -156,6 +156,8 @@ class Player(pg.sprite.Sprite):
     def moving(self, velocity: pg.math.Vector2):
         position = self.get_position() + velocity
         self.set_position(position)
+
+        self.hungry_bar.decrease_amount(0.1)
 
     def moving_animation(self, direction):
         if self.__frame < 20:

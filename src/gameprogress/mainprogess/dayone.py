@@ -2,6 +2,7 @@ import pygame as pg
 import src.gamemanage.game as gm
 import src.gameprogress.part as gp
 
+
 from src.hud.hudcomp import *
 
 
@@ -14,7 +15,7 @@ class DayOne(gp.Part):
         self.can_change_map = True
         self.setup()
 
-        self.spawn_chance = 100
+        self.spawn_chance = 50
 
     def setup(self):
         self.update_list_entities()

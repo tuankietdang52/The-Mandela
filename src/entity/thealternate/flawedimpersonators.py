@@ -12,14 +12,11 @@ class FlawedImpersonators(em.Enemy):
     size = (52, 200)
     __sound_path = "../Assets/Sound/FlawedImpersonators/"
 
-    def __init__(self,
-                 pos: pg.math.Vector2,
-                 groups: pg.sprite.Group):
+    def __init__(self, pos: pg.math.Vector2):
         super().__init__("../Assets/Enemy/FlawedImpersonators/",
                          "stand",
                          pos,
-                         self.size,
-                         groups)
+                         self.size)
 
         self.set_movement(ghmv.GhostMoving(self))
         self.speed = 2

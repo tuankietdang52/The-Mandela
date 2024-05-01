@@ -136,6 +136,8 @@ class NormalMovement(mv.Movement):
         #     pg.draw.circle(self.manager.screen, (255, 0, 0), (i.x, i.y), 5)
         #     pg.display.update()
 
+        # self.manager.wait(0.5)
+
         return real_path
 
     def __make_real_path(self, path: list[pg.math.Vector2]) -> list[pg.math.Vector2]:

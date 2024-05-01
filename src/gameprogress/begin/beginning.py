@@ -6,6 +6,7 @@ import src.movingtype.normalmoving as normv
 import src.gameprogress.begin.themandela as mandela
 import src.hud.hudcomp as hud
 import src.entity.thealternate.lily as ll
+import src.entity.thealternate.doppelganger as dp
 
 from src.tilemap import Area
 from src.pjenum import *
@@ -120,7 +121,7 @@ class BeginStory(gp.Part):
         size = sect.size
         start_pos = pg.math.Vector2(6.2 * size, 6.5 * size)
 
-        lily = ll.Lily(start_pos, self.manager.entities)
+        lily = ll.Lily(start_pos)
         lily.is_harmless = True
         self.add_special_enemy("lily", lily, mphouse.Room)
         self.next()

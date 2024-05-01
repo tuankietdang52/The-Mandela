@@ -14,9 +14,8 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
                  image_path: str,
                  image: str,
                  pos: pg.math.Vector2,
-                 size: tuple[int, int],
-                 groups: pg.sprite.Group):
-        super().__init__(groups)
+                 size: tuple[int, int]):
+        pg.sprite.Sprite.__init__(self)
 
         self.image_path = image_path
 

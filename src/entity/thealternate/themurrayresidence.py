@@ -12,12 +12,11 @@ class TheMurrayResidence(em.Enemy):
     size = (90, 138)
     __frame = 0
 
-    def __init__(self, pos: pg.math.Vector2, groups: pg.sprite.Group):
+    def __init__(self, pos: pg.math.Vector2):
         super().__init__("../Assets/Enemy/TheMurrayResidence/",
                          "stand",
                          pos,
-                         self.size,
-                         groups)
+                         self.size)
         self.movement = ghmv.GhostMoving(self)
 
         self.set_speed(5)

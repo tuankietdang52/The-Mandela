@@ -13,18 +13,18 @@ class Physic:
         return False
 
     @staticmethod
-    def is_collide_wall(rect):
+    def is_collide_wall(rect: pg.rect.Rect):
         manager = gm.Manager.get_instance()
 
-        bottom_left = round(rect.bottomleft[0] / 32), round(rect.bottomleft[1] / 32)
-        bottom_right = round(rect.bottomright[0] / 32), round(rect.bottomright[1] / 32)
-        top = round(rect.midbottom[0] / 32), round((rect.midbottom[1] - 10) / 32)
+        bottom_left = rect.bottomleft
+        bottom_right = rect.bottomright
+        top = rect.midbottom[0], rect.midbottom[1] - 10
 
         walls = manager.gamemap.sect.walls
 
         if (top in walls
-                or bottom_right in walls
-                or bottom_left in walls):
+                or bottom_left in walls
+                or bottom_right in walls):
             return True
 
         return False

@@ -14,17 +14,14 @@ class Doppelganger(em.Enemy):
     __frame = 0
     __sound_path = "../Assets/Sound/DoppelgangerVoice/"
 
-    def __init__(self,
-                 pos: pg.math.Vector2,
-                 groups: pg.sprite.Group):
+    def __init__(self, pos: pg.math.Vector2):
         colors = ["blue", "red", "yellow", "green"]
         self.color = colors[random.randint(0, len(colors) - 1)]
 
         super().__init__("../Assets/Enemy/Doppelganger/",
                          f"{self.color}walk1",
                          pos,
-                         self.size,
-                         groups)
+                         self.size)
 
         self.set_movement(randmv.RandomMovement(self, 200))
         self.is_chasing = False

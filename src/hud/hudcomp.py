@@ -73,7 +73,7 @@ class Board:
         for item in self.content:
             # keep a rect inside another
             inside_rect = item[1].clamp(self.rect)
-            rect = inside_rect.move(inside_rect.x + 10, 20)
+            rect = inside_rect.move(inside_rect.x + 20, 20)
 
             self.screen.blit(item[0], rect)
 

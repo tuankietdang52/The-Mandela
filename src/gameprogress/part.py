@@ -184,16 +184,16 @@ class Part(abc.ABC):
         chance = random.randint(0, 100)
 
         if chance < 5:
-            return fi.FlawedImpersonators(position, self.manager.entities)
+            return fi.FlawedImpersonators(position)
 
         elif chance < 15:
-            return mr.TheMurrayResidence(position, self.manager.entities)
+            return mr.TheMurrayResidence(position)
 
         elif chance < 50:
-            return mm.Mimic(position, self.manager.entities)
+            return mm.Mimic(position)
 
         else:
-            return dp.Doppelganger(position, self.manager.entities)
+            return dp.Doppelganger(position)
 
     def spawn_alternate(self):
         self.is_trigger_spawn = True
@@ -206,7 +206,6 @@ class Part(abc.ABC):
             return
 
         enemy = self.__get_random_alternate(position)
-        # enemy = dp.Doppelganger(position, self.manager.entities)
 
         if (Physic.is_collide_wall(enemy.get_rect()) and
                 type(enemy.get_movement()) != ghmv.GhostMoving):
