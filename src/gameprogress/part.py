@@ -206,7 +206,6 @@ class Part(abc.ABC):
             return
 
         enemy = self.__get_random_alternate(position)
-        # enemy = dp.Doppelganger(position, self.manager.entities)
 
         if (Physic.is_collide_wall(enemy.get_rect()) and
                 type(enemy.get_movement()) != ghmv.GhostMoving):
