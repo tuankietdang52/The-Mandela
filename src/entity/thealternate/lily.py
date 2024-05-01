@@ -1,20 +1,17 @@
 import pygame as pg
 
-import src.entity.thealternate.enemy as enenemy
+import src.entity.thealternate.enemy as em
 
 
-class Lily(enenemy.Enemy):
+class Lily(em.Enemy):
     """Position by topleft"""
     size = (36, 80)
 
-    def __init__(self,
-                 pos: pg.math.Vector2,
-                 groups: pg.sprite.Group):
+    def __init__(self, pos: pg.math.Vector2):
         super().__init__("../Assets/Enemy/Lily/",
                          "lilystand",
                          pos,
-                         self.size,
-                         groups)
+                         self.size)
 
     def update(self, *args, **kwargs):
         self.moving()

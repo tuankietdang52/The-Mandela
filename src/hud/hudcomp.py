@@ -2,6 +2,8 @@ import sys
 import pygame as pg
 import src.gamemanage.game as gm
 
+from src.utils import *
+
 
 class Pointer:
     """Position by topleft"""
@@ -32,10 +34,10 @@ class Pointer:
         self.image = pg.transform.flip(self.image, True, False)
 
     def play_select_sound(self):
-        pg.mixer.Sound("../Assets/Sound/Other/select.mp3").play()
+        SoundUtils.play_sound("../Assets/Sound/Other/select.mp3")
 
     def play_choose_sound(self):
-        pg.mixer.Sound("../Assets/Sound/Other/choose.mp3").play()
+        SoundUtils.play_sound("../Assets/Sound/Other/choose.mp3")
 
 
 class Board:
@@ -69,8 +71,9 @@ class Board:
 
     def __draw_content(self):
         for item in self.content:
+            # keep a rect inside another
             inside_rect = item[1].clamp(self.rect)
-            rect = inside_rect.move(inside_rect.x + 10, 20)
+            rect = inside_rect.move(inside_rect.x + 20, 20)
 
             self.screen.blit(item[0], rect)
 

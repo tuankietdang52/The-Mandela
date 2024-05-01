@@ -1,10 +1,8 @@
 import abc
-import sys
 import random
 
-import src.gamemanage.effect as ge
+import src.utils.effect as ge
 import src.mapcontainer.map as mp
-import src.gamemanage.physic as gph
 import src.hud.hudcomp as hud
 import src.entity.thealternate.enemy as em
 import src.movingtype.ghostmoving as ghmv
@@ -12,15 +10,15 @@ import src.movingtype.ghostmoving as ghmv
 from src.entity.thealternate import (themurrayresidence as mr,
                                      doppelganger as dp,
                                      mimic as mm,
-                                     flawedimpersonators as fi,
-                                     lily as ll)
-from src.hud import *
+                                     flawedimpersonators as fi)
 from src.pjenum import *
+from src.utils import *
 
 
 class Part(abc.ABC):
     def __init__(self, screen: pg.surface.Surface):
         self.screen = screen
+
         self.enemies: list[em.Enemy] = list()
         self.special_enemies: set[tuple[str, em.Enemy, type[mp.Sect]]] = set()
 
@@ -109,6 +107,10 @@ class Part(abc.ABC):
 
         ge.Effect.fade_out_screen()
 
+        self.enemies.clear()
+        self.manager.clear_entities()
+        self.update_list_entities()
+
         sect.create()
         sect.set_opacity(0)
 
@@ -135,12 +137,11 @@ class Part(abc.ABC):
 
         self.is_trigger_spawn = False
         self.enemies.clear()
-
         self.update_list_entities()
+
         gamemap.sect.create()
         self.reposition_player()
 
-        pg.mixer.stop()
         self.manager.update_UI_ip()
 
     def reposition_player(self):
@@ -152,7 +153,9 @@ class Part(abc.ABC):
         player.set_position(start_pos)
 
     def __is_spawn_alternate(self) -> bool:
-        if random.randint(0, 100) < self.spawn_chance:
+        chance = random.randint(0, 100)
+        print(chance)
+        if chance <= self.spawn_chance:
             return True
 
         return False
@@ -181,16 +184,16 @@ class Part(abc.ABC):
         chance = random.randint(0, 100)
 
         if chance < 5:
-            return fi.FlawedImpersonators(position, self.manager.entities)
+            return fi.FlawedImpersonators(position)
 
         elif chance < 15:
-            return mr.TheMurrayResidence(position, self.manager.entities)
+            return mr.TheMurrayResidence(position)
 
         elif chance < 50:
-            return mm.Mimic(position, self.manager.entities)
+            return mm.Mimic(position)
 
         else:
-            return dp.Doppelganger(position, self.manager.entities)
+            return dp.Doppelganger(position)
 
     def spawn_alternate(self):
         self.is_trigger_spawn = True
@@ -203,8 +206,9 @@ class Part(abc.ABC):
             return
 
         enemy = self.__get_random_alternate(position)
+        # enemy = dp.Doppelganger(position, self.manager.entities)
 
-        if (gph.Physic.is_collide_wall(enemy.get_rect()) and
+        if (Physic.is_collide_wall(enemy.get_rect()) and
                 type(enemy.get_movement()) != ghmv.GhostMoving):
             self.manager.entities.remove(enemy)
             return
@@ -216,7 +220,7 @@ class Part(abc.ABC):
         self.update_list_entities()
 
     def remove_enemy(self, enemy: em.Enemy):
-        self.enemies.remove(enemy)
+        enemy.kill()
         self.update_list_entities()
 
     def add_special_enemy(self, name: str, enemy: em.Enemy, section: type[mp.Sect]):
@@ -233,7 +237,7 @@ class Part(abc.ABC):
     def remove_special_enemy(self, name: str):
         for item in self.special_enemies:
             if item[0] == name:
-                self.special_enemies.remove(item)
+                item[1].kill()
                 break
 
     def update_list_entities(self):

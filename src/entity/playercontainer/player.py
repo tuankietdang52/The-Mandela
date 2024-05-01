@@ -1,9 +1,10 @@
 import pygame as pg
-import src.gamemanage.physic as gph
 import src.gamemanage.game as gm
-import src.gameprogress.other.deadmenu as dm
+import src.hud.playerhud as plhud
+
 
 from src.pjenum.estate import EState
+from src.utils import *
 
 
 class Player(pg.sprite.Sprite):
@@ -11,8 +12,6 @@ class Player(pg.sprite.Sprite):
     __path = "../Assets/Ally/Viole/"
     animatepth = "walk0"
     __frame = 0
-
-    sound_effect = None
 
     def __init__(self, screen: pg.surface.Surface, groups: pg.sprite.Group):
         super().__init__(groups)
@@ -28,6 +27,11 @@ class Player(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         self.direction = "left"
+
+        self.hungry_bar: plhud.HungryBar | None = None
+
+    def init_hud(self, hud_groups: pg.sprite.Group):
+        self.hungry_bar = plhud.HungryBar(self, hud_groups)
 
     # Get Set #
     def set_image(self, image: str | pg.surface.Surface, size: tuple[float, float] = None):
@@ -79,15 +83,6 @@ class Player(pg.sprite.Sprite):
 
     def get_rect(self) -> pg.rect.Rect:
         return self.get_image().get_rect(center=self.get_position())
-
-    def set_sound_effect(self, sound_effect: pg.mixer.Sound | str):
-        if type(sound_effect) is str:
-            self.sound_effect = pg.mixer.Sound(sound_effect)
-        else:
-            self.sound_effect = sound_effect
-
-    def get_sound_effect(self) -> pg.mixer.Sound:
-        return self.sound_effect
 
     def get_voice(self, voice: str) -> pg.mixer.Sound:
         path = f"../Assets/Sound/VioleVoice/{voice}.wav"
@@ -153,7 +148,7 @@ class Player(pg.sprite.Sprite):
 
         rect = self.image.get_rect(center=next_pos)
 
-        if gph.Physic.is_collide_wall(rect):
+        if Physic.is_collide_wall(rect):
             return False
 
         return True
@@ -162,9 +157,9 @@ class Player(pg.sprite.Sprite):
         position = self.get_position() + velocity
         self.set_position(position)
 
-    def moving_animation(self, direction):
-        self.set_sound_effect("../Assets/Sound/Other/footstep.mp3")
+        self.hungry_bar.decrease_amount(0.1)
 
+    def moving_animation(self, direction):
         if self.__frame < 20:
             index = 1
 
@@ -174,8 +169,8 @@ class Player(pg.sprite.Sprite):
         self.__frame += 1
         if self.__frame > 40:
             self.__frame = 0
-            self.get_sound_effect().play()
-                
+            SoundUtils.play_sound("../Assets/Sound/Other/footstep.mp3")
+
         if direction == "left" or direction == "right":
             name_animate = "walk"
         else:
@@ -195,3 +190,4 @@ class Player(pg.sprite.Sprite):
         self.set_state(EState.FREE)
         self.direction = "left"
         self.set_speed(1.5)
+

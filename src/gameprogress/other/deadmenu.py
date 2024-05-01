@@ -1,11 +1,12 @@
 import sys
 import pygame as pg
+import src.gamemanage.game as gm
 import src.gameprogress.part as gp
-import src.gamemanage.effect as ge
 import src.hud.menu.view.deadmenuhud as dm
 import src.gameprogress.other.startmenu as sm
-import src.gamemanage.game as gm
 import src.mapcontainer.housenormal as mphouse
+
+from src.utils import *
 
 
 class DeadMenu(gp.Part):
@@ -46,6 +47,7 @@ class DeadMenu(gp.Part):
             self.next()
 
         elif progress == 1:
+            SoundUtils.clear_all_sound()
             self.__draw_dead_menu()
             self.next()
 
@@ -53,19 +55,19 @@ class DeadMenu(gp.Part):
             self.__check_choice()
 
     def __show_dead_msg(self):
-        ge.Effect.fade_out_screen(False)
+        Effect.fade_out_screen(False)
         msg = self.dead_menu.get_dead_msg()
 
         self.screen.blit(msg[0], msg[1])
         pg.display.update()
 
         gm.Manager.get_instance().wait(2)
-        ge.Effect.fade_out_list(self.screen, [msg])
+        Effect.fade_out_list(self.screen, [msg])
 
     def __draw_dead_menu(self):
         elements = self.dead_menu.get_elements()
 
-        ge.Effect.fade_in_list(self.screen, elements)
+        Effect.fade_in_list(self.screen, elements)
         self.dead_menu.init_pointer()
         self.can_press_key = True
 
@@ -94,10 +96,10 @@ class DeadMenu(gp.Part):
         self.manager.player.reset()
         self.reset_map()
         self.manager.set_part(self.current_part)
-        ge.Effect.fade_in_screen()
-        pg.mixer.stop()
+        Effect.fade_in_screen()
+        SoundUtils.clear_all_sound()
 
     def __to_main_menu(self):
-        ge.Effect.fade_out_screen()
+        Effect.fade_out_screen()
         self.manager.set_part(sm.StartMenu(self.screen))
         self.manager.gamepart.set_progress_index(1)

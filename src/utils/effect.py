@@ -18,6 +18,19 @@ class Effect:
         pg.display.update()
 
     @staticmethod
+    def set_full_opacity_screen():
+        manager = gm.Manager.get_instance()
+        mp = manager.gamemap.sect
+        player = manager.player
+
+        manager.screen.fill((0, 0, 0))
+        mp.set_opacity(254)
+        manager.set_appear_entity_opacity(254)
+        player.get_image().set_alpha(254)
+
+        manager.update_UI_ip()
+
+    @staticmethod
     def fade_in_screen(fade_in_entities: bool = True):
         """fade in entire screen"""
         manager = gm.Manager.get_instance()
