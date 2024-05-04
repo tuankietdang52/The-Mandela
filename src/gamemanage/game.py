@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pygame as pg
 
-import src.gameprogress.part as gp
+import src.gameprogress.progressmanager as gp
 import src.entity.playercontainer.player as pl
 import src.mapcontainer.map as mp
 import src.gameprogress.other.deadmenu as dm
@@ -25,12 +25,13 @@ class Manager:
 
     __instance = None
     screen = None
-    gamepart: gp.Part | None = None
+    gameprogress: gp.ProgressManager | None = None
     gamemap: mp.Map | None = None
     player: pl.Player = None
 
     entities = pg.sprite.Group()
     appear_enemy = pg.sprite.Group()
+    appear_object = pg.sprite.Group()
     hud_groups = pg.sprite.Group()
 
     def __init__(self):
@@ -53,7 +54,7 @@ class Manager:
         cls.__instance = cls.__new__(cls)
 
         cls.screen = screen
-        cls.on_destroy = EventHandle()
+        cls.on_entities_destroy = EventHandle()
 
         return cls.__instance
 
@@ -63,7 +64,7 @@ class Manager:
         pg.display.update()
 
     def clear_entities(self):
-        self.on_destroy.invoke()
+        self.on_entities_destroy.invoke()
 
     def update_UI(self):
         self.screen.fill((0, 0, 0))
@@ -71,35 +72,24 @@ class Manager:
             return
 
         self.gamemap.sect.redraw()
+        self.appear_object.draw(self.screen)
         self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
         self.hud_groups.draw(self.screen)
 
     def update_UI_ip(self):
-        self.screen.fill((0, 0, 0))
-        if self.gamemap is None:
-            return
-
-        self.gamemap.sect.redraw()
-        self.entities.draw(self.screen)
-        self.gamemap.sect.redraw_overlap_tile()
-        self.hud_groups.draw(self.screen)
-
+        self.update_UI()
         pg.display.update()
 
     def update(self):
-        self.gamepart.update()
-        self.update_enemy()
-        self.update_hud()
+        self.gameprogress.update()
+        self.update_entities()
 
-    def update_hud(self):
-        self.hud_groups.update()
+    def update_entities(self):
+        self.entities.update()
 
-    def update_enemy(self):
-        if len(Manager.appear_enemy) == 0:
-            return
-
-        self.appear_enemy.update()
+        if len(self.appear_enemy) != 0:
+            self.player.decrease_sanity_amount(0.008)
 
     @staticmethod
     def play_theme(path: str, volume: float = None):
@@ -115,8 +105,8 @@ class Manager:
 
         pg.mixer.music.play(-1)
 
-    def set_part(self, gamepart: gp.Part):
-        self.gamepart = gamepart
+    def set_part(self, gamepart: gp.ProgressManager):
+        self.gameprogress = gamepart
 
     def set_map(self, gamemap: mp.Map):
         """Warning: this function will change manager.gamemap address to parameter map"""
@@ -130,19 +120,23 @@ class Manager:
         """
 
         time = float(0)
-        self.gamepart.can_press_key = False
+        self.gameprogress.can_press_key = False
 
         Game.ticking_time()
         Game.ticking_time()
 
         while time < time_wait:
-            self.gamepart.event_action()
+            self.gameprogress.event_action()
             time += Game.get_time()
 
             Game.ticking_time()
 
         if is_enable_input:
-            self.gamepart.can_press_key = True
+            self.gameprogress.can_press_key = True
+
+    def set_hud_opacity(self, alpha):
+        for item in self.hud_groups:
+            item.image.set_alpha(alpha)
 
     def set_appear_entity_opacity(self, alpha: int):
         for em in self.appear_enemy:
@@ -192,17 +186,17 @@ class Game:
     def setup_manager(self):
         self.manager.player = pl.Player(self.screen, self.manager.entities)
         self.manager.player.init_hud(self.manager.hud_groups)
-        self.manager.gamepart = sm.StartMenu(self.screen)
+        self.manager.gameprogress = sm.StartMenu(self.screen)
 
     def test(self):
         """test element"""
         self.manager.gamemap = mptown.Town(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
         self.manager.player.init_hud(self.manager.hud_groups)
-        self.manager.gamepart = do.DayOne(self.screen)
+        self.manager.gameprogress = do.DayOne(self.screen)
 
-        self.manager.gamemap.change_sect("ParkMart")
-        self.manager.gamepart.set_progress_index(-1)
+        self.manager.gamemap.change_sect("Home")
+        self.manager.gameprogress.set_progress_index(2)
 
         self.setup_test()
 
@@ -248,5 +242,5 @@ class Game:
             Game.ticking_time()
 
     def __to_dead_menu(self):
-        current_part = self.manager.gamepart
+        current_part = self.manager.gameprogress
         self.manager.set_part(dm.DeadMenu(self.screen, current_part))

@@ -1,6 +1,7 @@
 import pygame as pg
 import src.mapcontainer.map as mp
 import src.mapcontainer.housenormal as mphouse
+import src.mapcontainer.market as mk
 
 
 class Town(mp.Map):
@@ -18,6 +19,11 @@ class Town(mp.Map):
             next_map.change_sect("OutDoor")
             return next_map, "Enter your house ?"
 
+        elif area_name == "Market":
+            next_map = mk.Market(self.screen)
+            next_map.change_sect("Market")
+            return next_map, "Enter Convenience Store ?"
+
         return None
 
     def setup_sections(self):
@@ -30,7 +36,7 @@ class Town(mp.Map):
             ("ParkMart", ParkMart(self.screen, self.path)),
             ("Park1", Park1(self.screen, self.path)),
             ("Park2", Park2(self.screen, self.path)),
-            ("Mart", Mart(self.screen, self.path)),
+            ("OutsideMarket", OutsideMarket(self.screen, self.path)),
             ("PublicToilet", PublicToilet(self.screen, self.path)),
             ("RoadToPolice", RoadToPolice(self.screen, self.path)),
             ("PoliceGraveyard", PoliceGraveyard(self.screen, self.path)),
@@ -126,14 +132,14 @@ class Park2(mp.Sect):
         self.init_OFFSET((-30, 15), (-220, -10))
 
 
-class Mart(mp.Sect):
+class OutsideMarket(mp.Sect):
     def __init__(self,
                  screen: pg.surface.Surface,
                  path: str,
                  back_point: str = ""):
-        super().__init__(screen, "MartBk", back_point)
+        super().__init__(screen, "OutsideMarketBk", back_point)
 
-        self.sectpath = path + "Mart.tmx"
+        self.sectpath = path + "OutsideMarket.tmx"
         self.load(self.sectpath)
         self.init_OFFSET((0, 0), (-170, -10))
 

@@ -3,25 +3,25 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Corridor.tmx",
+    "activeFile": "MapSect/Room.tmx",
     "expandedProjectPaths": [
-        "MapSect",
-        ".",
         "Tile",
-        "World"
+        "World",
+        "MapSect",
+        "."
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "MapSect/Corridor.tmx": {
             "expandedObjectLayers": [
-                9,
-                7
+                7,
+                9
             ],
             "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 254.33333333333331,
-                "y": 24.66666666666667
+                "x": 111.99999999999999,
+                "y": 56
             }
         },
         "MapSect/Kitchen.tmx": {
@@ -38,8 +38,8 @@
         },
         "MapSect/OutDoor.tmx": {
             "expandedObjectLayers": [
-                6,
-                10
+                10,
+                6
             ],
             "scale": 5.5,
             "selectedLayer": 7,
@@ -50,20 +50,20 @@
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
-                8,
-                11
+                11,
+                8
             ],
             "scale": 3,
-            "selectedLayer": 9,
+            "selectedLayer": 8,
             "viewCenter": {
-                "x": 103.66666666666666,
-                "y": 103.66666666666667
+                "x": 126.66666666666669,
+                "y": 143.33333333333334
             }
         },
         "MapSect/Toilet.tmx": {
             "expandedObjectLayers": [
-                8,
-                7
+                7,
+                8
             ],
             "scale": 4,
             "selectedLayer": 6,
@@ -122,10 +122,10 @@
         "MapSect/OutDoor.tmx",
         "MapSect/Kitchen.tmx",
         "MapSect/Toilet.tmx",
-        "MapSect/Room.tmx",
-        "Tile/blackblock.tsx",
-        "Tile/tv.tsx",
         "MapSect/Corridor.tmx",
+        "Tile/tv.tsx",
+        "Tile/blackblock.tsx",
+        "MapSect/Room.tmx",
         "Tile/housetile.tsx",
         "housemap.tmx"
     ],

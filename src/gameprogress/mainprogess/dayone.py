@@ -1,12 +1,13 @@
 import pygame as pg
 import src.gamemanage.game as gm
-import src.gameprogress.part as gp
-
+import src.gameprogress.progressmanager as gp
+import src.gameitem.food as fd
+import src.mapcontainer.town as mptown
 
 from src.hud.hudcomp import *
 
 
-class DayOne(gp.Part):
+class DayOne(gp.ProgressManager):
 
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
@@ -15,10 +16,7 @@ class DayOne(gp.Part):
         self.can_change_map = True
         self.setup()
 
-        self.spawn_chance = 50
-
-    def setup(self):
-        self.update_list_entities()
+        self.spawn_manager.set_enemy_spawn_chance(20)
 
     def event_action(self):
         for event in pg.event.get():
@@ -28,22 +26,6 @@ class DayOne(gp.Part):
             if event.type == pg.KEYDOWN:
                 if not self.can_press_key:
                     return
-
-    def pressing_key(self):
-        player = self.manager.player
-
-        if not self.can_press_key:
-            return
-
-        keys = pg.key.get_pressed()
-
-        player.handle_moving(keys)
-
-    def update(self):
-        super().update()
-
-        if not self.is_trigger_spawn:
-            self.spawn_alternate()
 
     def __get_title(self) -> tuple[pg.surface.Surface, pg.rect.Rect]:
         fontpath = "../Assets/Font/Crang.ttf"
@@ -73,6 +55,28 @@ class DayOne(gp.Part):
 
         self.can_press_key = True
 
+    def __show_guide(self):
+        guide = """In the upper left corner, there are 2 bars.
+        |One show how hungry you are, if the bar is down to empty. You'll die
+        |Other will show your sanity. The lower sanity you are, the more alternate spawn"""
+        width, height = self.screen.get_size()
+        board = BoardText(self.screen, guide, 20, (width / 2, height / 2), (width * 0.7, height - 20))
+
+        board.draw()
+        pg.display.update()
+
+        while not HUDComp.is_closing_board():
+            self.can_press_key = False
+
+        self.can_press_key = True
+        self.manager.update_UI_ip()
+
+    def update(self):
+        super().update()
+
+        if not self.spawn_manager.is_trigger_spawn:
+            self.spawn_manager.spawn_alternate()
+
     def manage_progress(self):
         progress = self.get_progress_index()
 
@@ -81,4 +85,11 @@ class DayOne(gp.Part):
             self.next()
 
         elif progress == 1:
-            pass
+            self.__show_guide()
+            self.next()
+
+        elif progress == 2:
+            size = self.manager.gamemap.sect.size
+            food = fd.Spam(pg.math.Vector2(10 * size, 15 * size), mptown.Home)
+            self.spawn_manager.add_food(food)
+            self.next()

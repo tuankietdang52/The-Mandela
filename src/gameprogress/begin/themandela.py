@@ -1,6 +1,6 @@
 import sys
 import pygame as pg
-import src.gameprogress.part as gp
+import src.gameprogress.progressmanager as gp
 import src.gamemanage.game as gm
 import src.mapcontainer.housenormal as mphouse
 import src.gameprogress.mainprogess.dayone as do
@@ -9,7 +9,7 @@ import src.hud.hudcomp as hud
 from src.utils import *
 
 
-class TheMandela(gp.Part):
+class TheMandela(gp.ProgressManager):
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
 
@@ -17,23 +17,13 @@ class TheMandela(gp.Part):
         self.setup()
 
     def setup(self):
-        self.update_list_entities()
+        super().setup()
         pg.mixer.music.stop()
 
     def event_action(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
-
-    def pressing_key(self):
-        if not self.can_press_key:
-            return
-
-        player = self.manager.player
-
-        keys = pg.key.get_pressed()
-
-        player.handle_moving(keys)
 
     def manage_progress(self):
         progress = self.get_progress_index()

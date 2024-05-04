@@ -221,6 +221,12 @@ class NormalMovement(mv.Movement):
 
                 new_cell = Cell(f_new, g_new, h_new, nx_pos, cur)
 
+                if (nx_pos.x >= len(detail)
+                        or nx_pos.x < 0
+                        or nx_pos.y >= len(detail)
+                        or nx_pos.y < 0):
+                    continue
+
                 if detail[nx_pos.y][nx_pos.x] is None or detail[nx_pos.y][nx_pos.x].f > f_new:
                     heapq.heappush(open_list, new_cell)
                     detail[nx_pos.y][nx_pos.x] = new_cell

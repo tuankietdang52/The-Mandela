@@ -1,6 +1,6 @@
 import sys
 
-import src.gameprogress.part as gp
+import src.gameprogress.progressmanager as gp
 import src.mapcontainer.housenormal as mphouse
 import src.movingtype.normalmoving as normv
 import src.gameprogress.begin.themandela as mandela
@@ -13,7 +13,7 @@ from src.pjenum import *
 from src.utils import *
 
 
-class BeginStory(gp.Part):
+class BeginStory(gp.ProgressManager):
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
 
@@ -21,23 +21,13 @@ class BeginStory(gp.Part):
         self.setup()
 
     def setup(self):
-        self.update_list_entities()
+        super().setup()
         gm.Manager.play_theme("../Assets/Music/Lily.mp3")
 
     def event_action(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 sys.exit()
-
-    def pressing_key(self):
-        player = self.manager.player
-
-        if not self.can_press_key:
-            return
-
-        keys = pg.key.get_pressed()
-
-        player.handle_moving(keys)
 
     def manage_progress(self):
         sect = gm.Manager.get_instance().gamemap.sect
@@ -135,7 +125,7 @@ class BeginStory(gp.Part):
 
         if not self.is_occur_start_event:
             voice = player.get_voice("voice4")
-            hud.HUDComp.create_board_text("Lily ?", voice)
+            hud.HUDComp.create_board_text("Who are you ? |How did you get in my house ?", voice)
             self.is_occur_start_event = True
 
         self.__lily_chasing()
@@ -184,8 +174,6 @@ class BeginStory(gp.Part):
 
         if not Physic.is_collide(player_rect, lily.get_rect()):
             return
-
-        print("ok")
 
         self.next()
         self.can_press_key = False

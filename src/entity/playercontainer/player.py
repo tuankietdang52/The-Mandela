@@ -5,6 +5,7 @@ import src.hud.playerhud as plhud
 
 from src.pjenum.estate import EState
 from src.utils import *
+from src.eventhandle import *
 
 
 class Player(pg.sprite.Sprite):
@@ -28,10 +29,19 @@ class Player(pg.sprite.Sprite):
 
         self.direction = "left"
 
-        self.hungry_bar: plhud.HungryBar | None = None
+        self.hungry_bar: plhud.Bar | None = None
+        self.full_time = 0
+
+        self.interact = EventHandle()
+
+        self.sanity_bar: plhud.Bar | None = None
 
     def init_hud(self, hud_groups: pg.sprite.Group):
-        self.hungry_bar = plhud.HungryBar(self, hud_groups)
+        self.hungry_bar = plhud.Bar("hungry", pg.math.Vector2(10, 0), (255, 126, 1), self, hud_groups)
+        self.sanity_bar = plhud.Bar("sanity", pg.math.Vector2(10, 50), (201, 0, 255), self, hud_groups)
+
+    def update(self, *args, **kwargs):
+        self.countdown_full_buff()
 
     # Get Set #
     def set_image(self, image: str | pg.surface.Surface, size: tuple[float, float] = None):
@@ -88,6 +98,34 @@ class Player(pg.sprite.Sprite):
         path = f"../Assets/Sound/VioleVoice/{voice}.wav"
         return pg.mixer.Sound(path)
 
+    # FOOD
+
+    def increase_hungry_amount(self, amount: float):
+        self.hungry_bar.increase_amount(amount)
+
+    def increase_sanity_amount(self, amount: float):
+        self.sanity_bar.increase_amount(amount)
+
+    def decrease_hungry_amount(self, amount: float):
+        if self.full_time > 0:
+            return
+
+        self.hungry_bar.decrease_amount(amount)
+
+    def decrease_sanity_amount(self, amount: float):
+        self.sanity_bar.decrease_amount(amount)
+
+    def set_full_time(self, time: float):
+        self.full_time += time
+
+    def countdown_full_buff(self):
+        if self.full_time > 0:
+            time = gm.Game.get_time()
+            self.full_time -= time
+
+        if self.full_time == 0:
+            self.full_time = 0
+
     # Movement #
     def __get_reverse_animate(self) -> str:
         direction_tuple = [
@@ -104,7 +142,19 @@ class Player(pg.sprite.Sprite):
 
         return ""
 
-    def handle_moving(self, keys: pg.key.ScancodeWrapper):
+    def action_key(self, keys: pg.key.ScancodeWrapper):
+        self.__handle_moving(keys)
+
+        if keys[pg.K_f]:
+            self.interact.invoke()
+
+    def __is_moving(self, keys: pg.key.ScancodeWrapper):
+        if keys[pg.K_w] or keys[pg.K_s] or keys[pg.K_a] or keys[pg.K_d]:
+            return True
+
+        return False
+
+    def __handle_moving(self, keys: pg.key.ScancodeWrapper):
         if self.__state != EState.FREE and self.__state != EState.PANIC:
             return
 
@@ -139,8 +189,8 @@ class Player(pg.sprite.Sprite):
             self.direction = self.__get_reverse_animate()
             velocity = velocity[0] * -1, velocity[1] * -1
 
-        self.moving(velocity)
-        self.moving_animation(self.direction)
+        self.__moving(velocity)
+        self.__moving_animation(self.direction)
         manager.update_UI_ip()
 
     def can_move(self, velocity: pg.math.Vector2) -> bool:
@@ -153,13 +203,13 @@ class Player(pg.sprite.Sprite):
 
         return True
 
-    def moving(self, velocity: pg.math.Vector2):
+    def __moving(self, velocity: pg.math.Vector2):
         position = self.get_position() + velocity
         self.set_position(position)
 
-        self.hungry_bar.decrease_amount(0.1)
+        self.decrease_hungry_amount(0.008)
 
-    def moving_animation(self, direction):
+    def __moving_animation(self, direction):
         if self.__frame < 20:
             index = 1
 
