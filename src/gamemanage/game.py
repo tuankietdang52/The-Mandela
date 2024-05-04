@@ -4,6 +4,7 @@ import pygame as pg
 
 import src.gameprogress.progressmanager as gp
 import src.entity.playercontainer.player as pl
+import src.hud.timehud
 import src.mapcontainer.map as mp
 import src.gameprogress.other.deadmenu as dm
 
@@ -15,7 +16,7 @@ from src.pjenum import *
 import src.mapcontainer.housenormal as mphouse
 import src.mapcontainer.town as mptown
 import src.gameprogress.other.startmenu as sm
-import src.gameprogress.mainprogess.dayone as do
+import src.gameprogress.mainprogess.nightone as do
 import src.gameprogress.begin.themandela as tm
 import src.gameprogress.begin.beginning as bg
 
@@ -31,8 +32,12 @@ class Manager:
 
     entities = pg.sprite.Group()
     appear_enemy = pg.sprite.Group()
-    appear_object = pg.sprite.Group()
+    appear_item = pg.sprite.Group()
     hud_groups = pg.sprite.Group()
+
+    game_time = [23, 0]
+    game_time_second = 0
+    game_night = 1
 
     def __init__(self):
         """Call init() instead"""
@@ -72,7 +77,7 @@ class Manager:
             return
 
         self.gamemap.sect.redraw()
-        self.appear_object.draw(self.screen)
+        self.appear_item.draw(self.screen)
         self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
         self.hud_groups.draw(self.screen)
@@ -84,12 +89,30 @@ class Manager:
     def update(self):
         self.gameprogress.update()
         self.update_entities()
+        self.update_time()
+        self.update_hud()
+        self.update_UI_ip()
+
+    def update_time(self):
+        self.game_time_second += Game.get_time()
+        self.game_time[1] = round(self.game_time_second)
+
+        if self.game_time[0] == 24:
+            self.game_time = [0, 0]
+
+        if self.game_time[1] == 60:
+            self.game_time[1] = 0
+            self.game_time_second = 0
+            self.game_time[0] += 1
 
     def update_entities(self):
         self.entities.update()
 
         if len(self.appear_enemy) != 0:
             self.player.decrease_sanity_amount(0.008)
+
+    def update_hud(self):
+        self.hud_groups.update()
 
     @staticmethod
     def play_theme(path: str, volume: float = None):
@@ -105,8 +128,9 @@ class Manager:
 
         pg.mixer.music.play(-1)
 
-    def set_part(self, gamepart: gp.ProgressManager):
-        self.gameprogress = gamepart
+    def set_game_progress(self, gameprogress: gp.ProgressManager):
+        self.gameprogress.kill_time_hud()
+        self.gameprogress = gameprogress
 
     def set_map(self, gamemap: mp.Map):
         """Warning: this function will change manager.gamemap address to parameter map"""
@@ -141,6 +165,14 @@ class Manager:
     def set_appear_entity_opacity(self, alpha: int):
         for em in self.appear_enemy:
             em.image.set_alpha(alpha)
+
+    def set_appear_item_opacity(self, alpha: int):
+        for item in self.appear_item:
+            item.image.set_alpha(alpha)
+
+    def reset_time(self):
+        self.game_time = [0, 0]
+        self.game_time_second = 0
 
 
 class Game:
@@ -185,15 +217,16 @@ class Game:
 
     def setup_manager(self):
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        self.manager.player.init_hud(self.manager.hud_groups)
         self.manager.gameprogress = sm.StartMenu(self.screen)
 
     def test(self):
         """test element"""
         self.manager.gamemap = mptown.Town(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
+        self.manager.gameprogress = do.NightOne(self.screen)
+
         self.manager.player.init_hud(self.manager.hud_groups)
-        self.manager.gameprogress = do.DayOne(self.screen)
+        self.manager.gameprogress.time_hud = src.hud.timehud.TimeHUD(self.manager.hud_groups)
 
         self.manager.gamemap.change_sect("Home")
         self.manager.gameprogress.set_progress_index(2)
@@ -215,6 +248,7 @@ class Game:
 
     @staticmethod
     def ticking_time():
+        """USE CAREFULLY HAHAHAHAHAH"""
         Game.dt = Game.clock.tick(Game.FPS) / 1000
 
     @staticmethod
@@ -238,9 +272,8 @@ class Game:
 
             self.manager.update()
 
-            pg.display.flip()
             Game.ticking_time()
 
     def __to_dead_menu(self):
         current_part = self.manager.gameprogress
-        self.manager.set_part(dm.DeadMenu(self.screen, current_part))
+        self.manager.set_game_progress(dm.DeadMenu(self.screen, current_part))

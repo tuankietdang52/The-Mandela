@@ -113,7 +113,7 @@ class BeginStory(gp.ProgressManager):
 
         lily = ll.Lily(start_pos)
         lily.is_harmless = True
-        self.add_special_enemy("lily", lily, mphouse.Room)
+        self.spawn_manager.add_special_enemy("lily", lily, mphouse.Room)
         self.next()
 
     def __to_dream(self):
@@ -134,7 +134,7 @@ class BeginStory(gp.ProgressManager):
         player = gm.Manager.get_instance().player
         areas = gm.Manager.get_instance().gamemap.sect.areas
 
-        lily = self.get_special_enemy("lily")
+        lily = self.spawn_manager.get_special_enemy("lily")
         lily_position = lily.get_position()
 
         player_rect = player.get_rect()
@@ -169,7 +169,7 @@ class BeginStory(gp.ProgressManager):
         manager = gm.Manager.get_instance()
         player = manager.player
 
-        lily = self.get_special_enemy("lily")
+        lily = self.spawn_manager.get_special_enemy("lily")
         player_rect = player.get_rect()
 
         if not Physic.is_collide(player_rect, lily.get_rect()):
@@ -183,5 +183,5 @@ class BeginStory(gp.ProgressManager):
         SoundUtils.clear_all_sound()
         manager.wait(2)
 
-        self.remove_special_enemy("lily")
-        manager.set_part(mandela.TheMandela(self.screen))
+        self.spawn_manager.remove_special_enemy("lily")
+        manager.set_game_progress(mandela.TheMandela(self.screen))

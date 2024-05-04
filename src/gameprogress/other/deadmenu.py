@@ -13,7 +13,7 @@ class DeadMenu(gp.ProgressManager):
     def __init__(self, screen: pg.surface.Surface, current_part: gp.ProgressManager):
         super().__init__(screen)
 
-        self.dead_menu = dm.DeadMenuHUD(self.screen)
+        self.dead_menu = dm.DeadMenuHUD(self.screen, self.manager.hud_groups)
         self.current_part = current_part
 
         self.setup()
@@ -54,6 +54,8 @@ class DeadMenu(gp.ProgressManager):
 
     def __show_dead_msg(self):
         Effect.fade_out_screen(False)
+        self.__hide_hud()
+
         msg = self.dead_menu.get_dead_msg()
 
         self.screen.blit(msg[0], msg[1])
@@ -61,6 +63,10 @@ class DeadMenu(gp.ProgressManager):
 
         gm.Manager.get_instance().wait(2)
         Effect.fade_out_list(self.screen, [msg])
+
+    def __hide_hud(self):
+        self.manager.player.hungry_bar.set_visible(False)
+        self.manager.player.sanity_bar.set_visible(False)
 
     def __draw_dead_menu(self):
         elements = self.dead_menu.get_elements()
@@ -91,13 +97,28 @@ class DeadMenu(gp.ProgressManager):
         player.set_position(point)
 
     def __replay(self):
-        self.manager.player.reset()
+        self.dead_menu.destroy()
+
         self.reset_map()
-        self.manager.set_part(self.current_part)
+        self.manager.player.reset()
+        self.manager.set_game_progress(self.current_part)
+        self.manager.gameprogress.set_progress_index(self.current_part.load_progress_index)
+
+        self.manager.reset_time()
         Effect.fade_in_screen()
         SoundUtils.clear_all_sound()
 
     def __to_main_menu(self):
-        Effect.fade_out_screen()
-        self.manager.set_part(sm.StartMenu(self.screen))
+        self.destroy()
+        self.destroy_hud()
+
+        self.manager.set_game_progress(sm.StartMenu(self.screen))
         self.manager.gameprogress.set_progress_index(1)
+
+    def destroy(self):
+        Effect.fade_out_screen()
+        self.dead_menu.destroy()
+
+    def destroy_hud(self):
+        for hud in self.manager.hud_groups:
+            hud.kill()

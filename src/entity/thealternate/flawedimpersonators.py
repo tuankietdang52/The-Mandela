@@ -107,8 +107,8 @@ class FlawedImpersonators(em.Enemy):
         pg.display.update()
 
     def on_destroy(self, args: EventArgs):
-        super().on_destroy(args)
         self.__stop_sound()
+        super().on_destroy(args)
 
     def __stop_sound(self):
         player = gm.Manager.get_instance().player

@@ -12,7 +12,7 @@ class StartMenu(gp.ProgressManager):
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
 
-        self.startmenu = hud_sm.StartMenuHUD(screen)
+        self.startmenu = hud_sm.StartMenuHUD(self.screen, self.manager.hud_groups)
         self.__hide_player()
 
         self.__is_open_board = False
@@ -71,6 +71,7 @@ class StartMenu(gp.ProgressManager):
 
         if choice == 1:
             self.can_press_key = False
+            self.startmenu.destroy()
             self.next()
 
         elif choice == 2:
@@ -120,6 +121,7 @@ class StartMenu(gp.ProgressManager):
     def __destroy_start_menu(self):
         elements = self.startmenu.get_elements()
         Effect.fade_out_list(self.screen, elements)
+        self.startmenu.destroy()
 
     def __destroying(self):
         self.__destroy_start_menu()
@@ -135,4 +137,4 @@ class StartMenu(gp.ProgressManager):
         self.manager.update_UI_ip()
         player.set_state(EState.FREE)
 
-        self.manager.set_part(bg.BeginStory(self.screen))
+        self.manager.set_game_progress(bg.BeginStory(self.screen))

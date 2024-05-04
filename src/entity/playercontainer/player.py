@@ -29,19 +29,30 @@ class Player(pg.sprite.Sprite):
 
         self.direction = "left"
 
-        self.hungry_bar: plhud.Bar | None = None
-        self.full_time = 0
-
         self.interact = EventHandle()
 
+        self.hungry_bar: plhud.Bar | None = None
         self.sanity_bar: plhud.Bar | None = None
+        self.full_time = 0
 
     def init_hud(self, hud_groups: pg.sprite.Group):
         self.hungry_bar = plhud.Bar("hungry", pg.math.Vector2(10, 0), (255, 126, 1), self, hud_groups)
         self.sanity_bar = plhud.Bar("sanity", pg.math.Vector2(10, 50), (201, 0, 255), self, hud_groups)
 
     def update(self, *args, **kwargs):
+        if self.__state == EState.DEAD:
+            return
+
         self.countdown_full_buff()
+        self.decrease_hungry_amount(0.003)
+        self.__check_hungry()
+
+    def __check_hungry(self):
+        if self.hungry_bar is None:
+            return
+
+        if self.get_hungry_amount() <= 0:
+            self.set_state(EState.DEAD)
 
     # Get Set #
     def set_image(self, image: str | pg.surface.Surface, size: tuple[float, float] = None):
@@ -101,19 +112,37 @@ class Player(pg.sprite.Sprite):
     # FOOD
 
     def increase_hungry_amount(self, amount: float):
+        if self.hungry_bar is None:
+            return
+
         self.hungry_bar.increase_amount(amount)
 
     def increase_sanity_amount(self, amount: float):
+        if self.sanity_bar is None:
+            return
+
         self.sanity_bar.increase_amount(amount)
 
     def decrease_hungry_amount(self, amount: float):
+        if self.hungry_bar is None:
+            return
+
         if self.full_time > 0:
             return
 
         self.hungry_bar.decrease_amount(amount)
 
     def decrease_sanity_amount(self, amount: float):
+        if self.sanity_bar is None:
+            return
+
         self.sanity_bar.decrease_amount(amount)
+
+    def get_hungry_amount(self) -> float:
+        if self.hungry_bar is None:
+            return 0
+
+        return self.hungry_bar.get_amount()
 
     def set_full_time(self, time: float):
         self.full_time += time
@@ -180,8 +209,6 @@ class Player(pg.sprite.Sprite):
         else:
             return
 
-        manager = gm.Manager.get_instance()
-
         if not self.can_move(velocity):
             return
 
@@ -191,7 +218,6 @@ class Player(pg.sprite.Sprite):
 
         self.__moving(velocity)
         self.__moving_animation(self.direction)
-        manager.update_UI_ip()
 
     def can_move(self, velocity: pg.math.Vector2) -> bool:
         next_pos = self.position + velocity
@@ -207,9 +233,9 @@ class Player(pg.sprite.Sprite):
         position = self.get_position() + velocity
         self.set_position(position)
 
-        self.decrease_hungry_amount(0.008)
+        self.decrease_hungry_amount(0.001)
 
-    def __moving_animation(self, direction):
+    def __moving_animation(self, direction: str):
         if self.__frame < 20:
             index = 1
 
@@ -241,3 +267,8 @@ class Player(pg.sprite.Sprite):
         self.direction = "left"
         self.set_speed(1.5)
 
+        self.set_full_time(0)
+        self.increase_hungry_amount(100)
+        self.increase_sanity_amount(100)
+        self.hungry_bar.set_visible(True)
+        self.sanity_bar.set_visible(True)

@@ -19,7 +19,7 @@ class TheMurrayResidence(em.Enemy):
                          self.size)
         self.movement = ghmv.GhostMoving(self)
 
-        self.set_speed(5)
+        self.set_speed(6)
         self.__is_chasing = False
         self.__sound: pg.mixer.Channel | None = None
 
@@ -85,10 +85,10 @@ class TheMurrayResidence(em.Enemy):
         self.__chase_animation()
 
     def on_destroy(self, args: EventArgs):
-        super().on_destroy(args)
         player = gm.Manager.get_instance().player
 
         if player.get_state() == EState.DEAD:
+            super().on_destroy(args)
             return
 
         gm.Manager.get_instance().player.set_speed(1.5)
@@ -96,3 +96,5 @@ class TheMurrayResidence(em.Enemy):
 
         if self.__sound is not None and player.get_state() != EState.DEAD:
             self.__sound.stop()
+
+        super().on_destroy(args)

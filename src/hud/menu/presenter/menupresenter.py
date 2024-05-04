@@ -2,13 +2,12 @@ from src.hud.menu.contract import *
 
 
 class MenuPresenter(MenuContract.IPresenter):
-    fontpath = "../Assets/Font/Crang.ttf"
-
     def __init__(self, view: MenuContract.IView, model: MenuContract.IModel):
         self.__view = view
         self.__model = model
         self.screen = view.get_screen()
         self.pointer = Pointer(self.screen)
+        self.pointer.set_visible(False)
 
     def get_pointer(self) -> Pointer:
         return self.pointer

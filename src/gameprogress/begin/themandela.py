@@ -3,7 +3,7 @@ import pygame as pg
 import src.gameprogress.progressmanager as gp
 import src.gamemanage.game as gm
 import src.mapcontainer.housenormal as mphouse
-import src.gameprogress.mainprogess.dayone as do
+import src.gameprogress.mainprogess.nightone as do
 import src.hud.hudcomp as hud
 
 from src.utils import *
@@ -152,4 +152,4 @@ always carry a firearm with you
         self.__destroying()
 
     def __destroying(self):
-        self.manager.set_part(do.DayOne(self.screen))
+        self.manager.set_game_progress(do.NightOne(self.screen))
