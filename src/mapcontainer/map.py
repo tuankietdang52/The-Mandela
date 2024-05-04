@@ -63,8 +63,10 @@ class Sect:
     def get_map_OFFSET(self) -> tuple[int, int]:
         return self.MAP_OFFSETX, self.MAP_OFFSETY
 
-    def load(self, path):
+    def load(self, path: str):
+        # Get absolute path of this module/file (__file__ will be where this file in)
         file_path = Path(__file__)
+        # Get its x2 parent -> src
         src_path = file_path.parent.parent
         if Path(os.getcwd()) == src_path:
             self.map = pytmx.load_pygame(path)

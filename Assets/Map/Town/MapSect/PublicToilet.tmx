@@ -178,11 +178,11 @@
 </data>
  </layer>
  <objectgroup id="8" name="Areas">
-  <object id="1" name="Mart" x="-21.7135" y="14.161" width="37.2905" height="320.51"/>
+  <object id="1" name="OutsideMarket" x="-21.7135" y="14.161" width="37.2905" height="320.51"/>
   <object id="4" name="RoadToPolice" x="50" y="384.5" width="240.5" height="55.5"/>
  </objectgroup>
  <objectgroup id="10" name="Points">
-  <object id="7" name="MartBk" x="66.3333" y="245.333">
+  <object id="7" name="OutsideMarketBk" x="66.3333" y="245.333">
    <point/>
   </object>
   <object id="8" name="Start" x="139.667" y="250">

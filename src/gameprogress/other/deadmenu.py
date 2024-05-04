@@ -1,7 +1,7 @@
 import sys
 import pygame as pg
 import src.gamemanage.game as gm
-import src.gameprogress.part as gp
+import src.gameprogress.progressmanager as gp
 import src.hud.menu.view.deadmenuhud as dm
 import src.gameprogress.other.startmenu as sm
 import src.mapcontainer.housenormal as mphouse
@@ -9,8 +9,8 @@ import src.mapcontainer.housenormal as mphouse
 from src.utils import *
 
 
-class DeadMenu(gp.Part):
-    def __init__(self, screen: pg.surface.Surface, current_part: gp.Part):
+class DeadMenu(gp.ProgressManager):
+    def __init__(self, screen: pg.surface.Surface, current_part: gp.ProgressManager):
         super().__init__(screen)
 
         self.dead_menu = dm.DeadMenuHUD(self.screen)
@@ -19,8 +19,8 @@ class DeadMenu(gp.Part):
         self.setup()
 
     def setup(self):
-        self.enemies.clear()
-        self.update_list_entities()
+        self.spawn_manager.clear_enemies()
+        super().setup()
 
     def event_action(self):
         for event in pg.event.get():
@@ -28,16 +28,14 @@ class DeadMenu(gp.Part):
                 sys.exit()
 
     def pressing_key(self):
-        if not self.can_press_key:
-            return
-
-        keys = pg.key.get_pressed()
+        pass
 
     def update(self):
-        if self.get_progress_index() != 2:
-            super().update()
-        else:
+        if self.get_progress_index() == 2:
+            # block event update because in deadmenuhud already have one
             self.manage_progress()
+        else:
+            super().update()
 
     def manage_progress(self):
         progress = self.get_progress_index()
@@ -102,4 +100,4 @@ class DeadMenu(gp.Part):
     def __to_main_menu(self):
         Effect.fade_out_screen()
         self.manager.set_part(sm.StartMenu(self.screen))
-        self.manager.gamepart.set_progress_index(1)
+        self.manager.gameprogress.set_progress_index(1)

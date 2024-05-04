@@ -111,6 +111,13 @@
             "width": 400,
             "x": 16,
             "y": 384
+        },
+        {
+            "fileName": "MapSect/OutsideMarket.tmx",
+            "height": 400,
+            "width": 400,
+            "x": 896,
+            "y": -528
         }
     ],
     "onlyShowAdjacentMaps": false,

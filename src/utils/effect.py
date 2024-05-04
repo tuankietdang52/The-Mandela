@@ -11,6 +11,7 @@ class Effect:
 
         mp.set_opacity(0)
         player.get_image().set_alpha(0)
+        manager.set_hud_opacity(0)
         manager.set_appear_entity_opacity(0)
 
         manager.screen.fill((0, 0, 0))
@@ -26,6 +27,7 @@ class Effect:
         manager.screen.fill((0, 0, 0))
         mp.set_opacity(254)
         manager.set_appear_entity_opacity(254)
+        manager.set_hud_opacity(254)
         player.get_image().set_alpha(254)
 
         manager.update_UI_ip()
@@ -47,6 +49,7 @@ class Effect:
             if fade_in_entities:
                 manager.set_appear_entity_opacity(alpha)
                 player.get_image().set_alpha(alpha)
+                manager.set_hud_opacity(alpha)
 
             manager.update_UI_ip()
 
@@ -67,6 +70,7 @@ class Effect:
             if fade_out_entities:
                 manager.set_appear_entity_opacity(alpha)
                 player.get_image().set_alpha(alpha)
+                manager.set_hud_opacity(alpha)
 
             manager.update_UI_ip()
 

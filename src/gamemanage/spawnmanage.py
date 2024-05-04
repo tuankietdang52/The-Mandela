@@ -1,161 +1,51 @@
-import abc
 import random
-
-import src.utils.effect as ge
-import src.mapcontainer.map as mp
-import src.hud.hudcomp as hud
-import src.entity.thealternate.enemy as em
+import pygame as pg
+import src.gamemanage.game as gm
+import src.gameitem.food as fd
 import src.movingtype.ghostmoving as ghmv
+import src.entity.thealternate.enemy as em
+import src.mapcontainer.map as mp
 
 from src.entity.thealternate import (themurrayresidence as mr,
                                      doppelganger as dp,
                                      mimic as mm,
                                      flawedimpersonators as fi)
-from src.pjenum import *
+
 from src.utils import *
 
 
-class Part(abc.ABC):
-    def __init__(self, screen: pg.surface.Surface):
-        self.screen = screen
+class SpawnManager:
+    def __init__(self):
+        self.manager = gm.Manager.get_instance()
 
         self.enemies: list[em.Enemy] = list()
         self.special_enemies: set[tuple[str, em.Enemy, type[mp.Sect]]] = set()
+        self.game_items = pg.sprite.Group()
 
-        self.is_occur_start_event = False
         self.is_trigger_spawn = False
-        self.can_press_key = False
-        self.can_change_map = False
 
-        self.__progress = 0
+        self.enemy_spawn_chance = 0
 
-        self.nextpart = None
-        self.to_next = True
+    def set_enemy_spawn_chance(self, spawn_chance):
+        self.enemy_spawn_chance = spawn_chance
 
-        self.spawn_chance = 0
-
-        self.manager = gm.Manager.get_instance()
-
-    @abc.abstractmethod
-    def setup(self):
-        pass
-
-    def update(self):
-        self.event_action()
-        self.pressing_key()
-
-        self.handle_change_map()
-        self.handle_change_sect()
-        self.manage_progress()
-
-    @abc.abstractmethod
-    def event_action(self):
-        pass
-
-    @abc.abstractmethod
-    def pressing_key(self):
-        pass
-
-    @abc.abstractmethod
-    def manage_progress(self):
-        pass
-
-    def set_progress_index(self, progress_index: int):
-        self.__progress = progress_index
-        self.is_occur_start_event = False
-
-    def next(self):
-        self.__progress += 1
-        self.is_occur_start_event = False
-
-    def previous(self):
-        self.__progress -= 1
-
-    def get_progress_index(self) -> int:
-        return self.__progress
-
-    def handle_change_map(self):
-        if not self.can_change_map:
-            return
-
-        sect = self.manager.gamemap.sect
-        player = self.manager.player
-
-        area = sect.in_area(player.get_rect())
-        keys = pg.key.get_pressed()
-
-        if not keys[pg.K_f]:
-            return
-
-        map_comp = self.manager.gamemap.get_next_map(area)
-        if map_comp is None:
-            return
-
-        next_map, text = map_comp
-
-        hud.HUDComp.create_board_text(text)
-        choice = hud.HUDComp.create_accept_board().yes_choice
-
-        if choice:
-            self.changing_map(next_map)
-            self.is_trigger_spawn = False
-            self.enemies.clear()
-
-    def changing_map(self, next_map: mp.Map):
-        self.manager.set_map(next_map)
-        sect = self.manager.gamemap.sect
-
-        ge.Effect.fade_out_screen()
-
+    def clear_object_and_enemies(self):
         self.enemies.clear()
-        self.manager.clear_entities()
         self.update_list_entities()
+        self.update_list_object()
 
-        sect.create()
-        sect.set_opacity(0)
-
-        self.reposition_player()
-
-        self.manager.wait(1)
-        pg.mixer.stop()
-        ge.Effect.fade_in_screen()
-
-    def handle_change_sect(self):
-        gamemap = self.manager.gamemap
-        player = self.manager.player
-
-        if gamemap is None or player.get_state() == EState.DEAD:
-            return
-
-        sect_name = gamemap.sect.in_area(player.get_rect())
-        current = gamemap.sect
-
-        gamemap.change_sect(sect_name)
-
-        if gamemap.sect == current:
-            return
-
-        self.is_trigger_spawn = False
+    def clear_enemies(self):
         self.enemies.clear()
         self.update_list_entities()
 
-        gamemap.sect.create()
-        self.reposition_player()
-
-        self.manager.update_UI_ip()
-
-    def reposition_player(self):
-        """Place player in map section start point"""
-        player = self.manager.player
-        sect = self.manager.gamemap.sect
-        start_pos = sect.get_start_point()
-
-        player.set_position(start_pos)
+    def clear_special_enemies(self):
+        self.special_enemies.clear()
+        self.update_list_entities()
 
     def __is_spawn_alternate(self) -> bool:
         chance = random.randint(0, 100)
         print(chance)
-        if chance <= self.spawn_chance:
+        if chance <= self.enemy_spawn_chance:
             return True
 
         return False
@@ -263,3 +153,19 @@ class Part(abc.ABC):
             return True
 
         return False
+
+    def add_food(self, food):
+        self.game_items.add(food)
+        self.update_list_object()
+
+    def remove_food(self, food):
+        self.game_items.add(food)
+        self.update_list_object()
+
+    def update_list_object(self):
+        sect = self.manager.gamemap.sect
+        self.manager.appear_object.empty()
+
+        for food in self.game_items:
+            if food.appear_sect == type(sect):
+                self.manager.appear_object.add(food)

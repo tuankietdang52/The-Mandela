@@ -65,7 +65,7 @@ class Board:
             self.rect.bottomleft
         ]
 
-        pg.draw.lines(self.screen, (0, 0, 0), True, points, 7)
+        pg.draw.lines(self.screen, (255, 0, 0), True, points, 7)
 
         self.__draw_content()
 
@@ -73,8 +73,10 @@ class Board:
         for item in self.content:
             # keep a rect inside another
             inside_rect = item[1].clamp(self.rect)
-            rect = inside_rect.move(inside_rect.x + 20, 20)
+            rect = inside_rect.move(10, 20)
 
+            # pg.draw.circle(self.screen, (255, 0, 0), rect.topleft, 5)
+            # pg.display.update()
             self.screen.blit(item[0], rect)
 
     def insert_content(self, content: pg.surface.Surface, rect: pg.rect.Rect):
@@ -95,7 +97,7 @@ class StoryText:
         self.text = text
         self.size = size
 
-        self.space_distance = self.size / 3
+        self.space_distance = self.size / 4
 
         self.board = board
 
@@ -107,11 +109,9 @@ class StoryText:
         font = pg.font.Font(self.fontpath, self.size)
 
         start = self.board.rect.topleft
-        width = self.board.rect.width
 
         pos = start
-
-        end = (start[0] + width) / 2.2
+        end = self.board.rect.topright[0] - 10
 
         for word in words:
             pos = self.__get_position_word(word, pos, start[0], end)
@@ -124,7 +124,7 @@ class StoryText:
                 rect = surf.get_rect(topleft=pos)
 
                 self.board.insert_content(surf, rect)
-                pos = self.__spacing(char, pos, self.space_distance)
+                pos = self.__spacing_character(rect, self.space_distance)
 
     def __get_position_word(self,
                             word: str,
@@ -132,40 +132,33 @@ class StoryText:
                             start_x: float,
                             end_x: float) -> tuple[float, float]:
         if cur[0] != start_x:
-            cur = self.__spacing(' ', cur, self.space_distance)
+            cur = cur[0] + self.space_distance * 2, cur[1]
+
         pos = cur
-
         i = 0
+        font = pg.font.Font(self.fontpath, self.size)
+
         while i < len(word):
+            surf = font.render(word[i], 1, (255, 255, 255))
+            end_rect = surf.get_rect(topleft=cur)
+
             if word[i] == '|':
-                cur = start_x, cur[1] + self.space_distance * 4
+                cur = start_x, cur[1] + self.space_distance * 6
                 return cur
 
-            elif cur[0] >= end_x:
-                cur = start_x, cur[1] + self.space_distance * 4
+            elif end_rect.topright[0] >= end_x:
+                cur = start_x, cur[1] + self.space_distance * 6
                 return cur
 
-            cur = self.__spacing(word[i], cur, self.space_distance)
+            cur = self.__spacing_character(end_rect, self.space_distance)
+
             i += 1
 
         return pos
 
-    def __spacing(self, word: str, pos: tuple[float, float], space: float) -> tuple[float, float]:
-        word_extra_space = {'n'}
-        word_extra_space_x2 = {'M', 'm', 'N'}
-        word_decrease_space = {'I', 'i'}
-
-        if word in word_decrease_space:
-            pos = pos[0] + space / 2, pos[1]
-
-        elif word in word_extra_space:
-            pos = pos[0] + space + 1, pos[1]
-
-        elif word in word_extra_space_x2:
-            pos = pos[0] + space + 3, pos[1]
-
-        else:
-            pos = pos[0] + space, pos[1]
+    def __spacing_character(self, rect: pg.rect.Rect, space: float) -> tuple[float, float]:
+        pos = rect.topright
+        pos = pos[0] + space / 2, pos[1]
 
         return pos
 
@@ -229,7 +222,7 @@ class AcceptBoard:
     def changing_choice(self):
         keys = pg.key.get_pressed()
 
-        new_y = self.board_txt.txt.space_distance * 8
+        new_y = self.board_txt.txt.space_distance * 12
 
         if keys[pg.K_w]:
             if self.yes_choice:
@@ -270,7 +263,7 @@ class HUDComp:
         pg.display.update(board.rect)
 
         while True:
-            if HUDComp.__check_closing_board():
+            if HUDComp.is_closing_board():
                 break
 
         if sound is not None:
@@ -295,7 +288,7 @@ class HUDComp:
 
         while True:
             board.changing_choice()
-            if HUDComp.__check_closing_board():
+            if HUDComp.is_closing_board():
                 board.pointer.play_choose_sound()
                 break
 
@@ -304,7 +297,7 @@ class HUDComp:
         return board
 
     @staticmethod
-    def __check_closing_board() -> bool:
+    def is_closing_board() -> bool:
         for event in pg.event.get():
             """Prevent game to freezing itself"""
             if event.type == pg.QUIT:

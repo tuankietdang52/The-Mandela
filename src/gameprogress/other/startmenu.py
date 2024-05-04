@@ -1,6 +1,6 @@
 import src.hud.menu.view.startmenuhud as hud_sm
 import src.gameprogress.begin.beginning as bg
-import src.gameprogress.part as gp
+import src.gameprogress.progressmanager as gp
 import src.mapcontainer.housenormal as mphouse
 
 from src.pjenum import EState
@@ -8,7 +8,7 @@ from src.hud import *
 from src.utils import *
 
 
-class StartMenu(gp.Part):
+class StartMenu(gp.ProgressManager):
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
 
@@ -58,10 +58,7 @@ class StartMenu(gp.Part):
             gm.Manager.get_instance().wait(2)
 
     def pressing_key(self):
-        if not self.can_press_key:
-            return
-
-        keys = pg.key.get_pressed()
+        pass
 
     def event_action(self):
         for event in pg.event.get():
@@ -86,10 +83,11 @@ class StartMenu(gp.Part):
             sys.exit()
 
     def update(self):
-        if self.get_progress_index() != 3:
-            super().update()
-        else:
+        if self.get_progress_index() == 3:
+            # block event update because in deadmenuhud already have one
             self.manage_progress()
+        else:
+            super().update()
 
     def manage_progress(self):
         progress = self.get_progress_index()

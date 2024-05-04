@@ -5,7 +5,7 @@ import src.movingtype.movement as mv
 import src.gamemanage.game as gm
 
 from src.pjenum import *
-from src.eventhandle.argument.eventargument import *
+from src.eventhandle.argument import *
 from src.utils import *
 
 
@@ -33,7 +33,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         self.movement = None
         self.is_harmless = False
 
-        gm.Manager.get_instance().on_destroy += (self.on_destroy, EventArgs.empty())
+        gm.Manager.get_instance().on_entities_destroy += (self.on_destroy, EventArgs.empty())
 
     def update(self, *args, **kwargs):
         if self.is_hit_player():

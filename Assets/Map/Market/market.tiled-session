@@ -1,0 +1,108 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "MapSect/Market.tmx",
+    "expandedProjectPaths": [
+        "Tile",
+        "MapSect",
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "MapSect/Market.tmx": {
+            "scale": 3,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 171.99999999999997,
+                "y": 94.66666666666667
+            }
+        },
+        "MapSect/greenblock.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "MapSect/kitchen.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "MapSect/seven_eleven_tileset_big.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "MapSect/sevenelevent.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "Tile/blackblock.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tile/caro.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tile/greenblock.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "Tile/house.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 1
+        },
+        "Tile/seven_eleven_tileset.tsx": {
+            "scaleInDock": 4,
+            "scaleInEditor": 1
+        },
+        "Tile/seven_eleven_tileset_big.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "blackblock.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "house.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "whiteblock.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/ADMIN/PycharmProjects/Nightmare/Assets/Map/Market/Package",
+    "map.height": 30,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "MapSect/Market.tmx",
+        "Tile/house.tsx",
+        "Tile/caro.tsx",
+        "Tile/seven_eleven_tileset_big.tsx",
+        "Tile/blackblock.tsx",
+        "Tile/greenblock.tsx"
+    ],
+    "project": "market.tiled-project",
+    "recentFiles": [
+        "Tile/greenblock.tsx",
+        "Tile/blackblock.tsx",
+        "Tile/seven_eleven_tileset_big.tsx",
+        "Tile/caro.tsx",
+        "Tile/house.tsx",
+        "MapSect/Market.tmx",
+        "MapSect/greenblock.tsx",
+        "MapSect/seven_eleven_tileset_big.tsx",
+        "Tile/seven_eleven_tileset.tsx",
+        "MapSect/sevenelevent.tsx",
+        "MapSect/kitchen.tsx",
+        "whiteblock.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
