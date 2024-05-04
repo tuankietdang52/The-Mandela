@@ -61,4 +61,3 @@ class RandomMovement(mv.Movement):
             return
 
         self.owner.set_position(next_position)
-        self.manager.update_UI_ip()

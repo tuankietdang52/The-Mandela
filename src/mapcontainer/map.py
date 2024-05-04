@@ -37,7 +37,9 @@ class Sect:
         self.walls = set()
 
         self.is_created = False
-        self.spawn_area_count = 0
+
+        self.spawn_enemy_area_count = 0
+        self.spawn_item_area_count = 0
 
         self.ori_block_size = 16
         self.size = 64
@@ -128,7 +130,9 @@ class Sect:
             self.screen.blit(tilemp.image, tilemp.rect)
 
     def __init_areas(self, layer):
-        self.spawn_area_count = 0
+        self.spawn_enemy_area_count = 0
+        self.spawn_item_area_count = 0
+
         for area in layer:
             offset = self.size / self.ori_block_size
 
@@ -141,7 +145,10 @@ class Sect:
             Area(area.name, pos, width, height, EPosition.TOPLEFT, self.areas)
 
             if "SpawnArea" in area.name:
-                self.spawn_area_count += 1
+                self.spawn_enemy_area_count += 1
+
+            if "ItemSpawn" in area.name:
+                self.spawn_item_area_count += 1
 
     def __init_points(self, layer):
         for item in layer:

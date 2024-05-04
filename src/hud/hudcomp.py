@@ -5,11 +5,13 @@ import src.gamemanage.game as gm
 from src.utils import *
 
 
-class Pointer:
+class Pointer(pg.sprite.Sprite):
     """Position by topleft"""
     size = (20, 30)
 
     def __init__(self, screen: pg.surface.Surface):
+        super().__init__(gm.Manager.get_instance().hud_groups)
+
         self.image = pg.image.load("../Assets/HUD/pointer.png").convert_alpha()
 
         self.image = pg.transform.scale(self.image, self.size)
@@ -17,6 +19,12 @@ class Pointer:
 
         self.screen = screen
         self.is_set = False
+
+    def set_visible(self, is_visible: bool):
+        if not is_visible:
+            self.image.set_alpha(0)
+        else:
+            self.image.set_alpha(254)
 
     def set_position(self, pos: tuple[float, float]):
         self.play_select_sound()
@@ -38,6 +46,9 @@ class Pointer:
 
     def play_choose_sound(self):
         SoundUtils.play_sound("../Assets/Sound/Other/choose.mp3")
+
+    def destroy(self):
+        self.kill()
 
 
 class Board:
@@ -85,7 +96,7 @@ class Board:
 
 class StoryText:
     """Position by topleft"""
-    fontpath = "../Assets/Font/Crang.ttf"
+    FONTPATH = "../Assets/Font/Crang.ttf"
 
     def __init__(self, screen: pg.surface.Surface, text: str, size: int, board: Board):
         """
@@ -106,7 +117,7 @@ class StoryText:
     def write(self):
         words = self.text.split()
 
-        font = pg.font.Font(self.fontpath, self.size)
+        font = pg.font.Font(self.FONTPATH, self.size)
 
         start = self.board.rect.topleft
 
@@ -136,7 +147,7 @@ class StoryText:
 
         pos = cur
         i = 0
-        font = pg.font.Font(self.fontpath, self.size)
+        font = pg.font.Font(self.FONTPATH, self.size)
 
         while i < len(word):
             surf = font.render(word[i], 1, (255, 255, 255))
@@ -263,6 +274,7 @@ class HUDComp:
         pg.display.update(board.rect)
 
         while True:
+            gm.Game.ticking_time()
             if HUDComp.is_closing_board():
                 break
 
@@ -288,10 +300,12 @@ class HUDComp:
 
         while True:
             board.changing_choice()
+            gm.Game.ticking_time()
             if HUDComp.is_closing_board():
                 board.pointer.play_choose_sound()
                 break
 
+        board.pointer.destroy()
         screen.fill((0, 0, 0))
         manager.update_UI_ip()
         return board

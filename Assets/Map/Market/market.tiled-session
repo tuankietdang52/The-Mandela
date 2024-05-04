@@ -6,8 +6,8 @@
     "activeFile": "MapSect/Market.tmx",
     "expandedProjectPaths": [
         "Tile",
-        "MapSect",
-        "."
+        ".",
+        "MapSect"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -15,8 +15,8 @@
             "scale": 3,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 171.99999999999997,
-                "y": 94.66666666666667
+                "x": 170.99999999999997,
+                "y": 165
             }
         },
         "MapSect/greenblock.tsx": {

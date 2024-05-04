@@ -37,7 +37,11 @@ class Bar(pg.sprite.Sprite):
 
         self.__update_health_bar()
 
-    reac = None
+    def set_visible(self, is_visible: bool):
+        if not is_visible:
+            self.image.set_alpha(0)
+        else:
+            self.image.set_alpha(254)
 
     def __update_health_bar(self):
         self.image.fill((0, 0, 0, 0))
@@ -62,15 +66,14 @@ class Bar(pg.sprite.Sprite):
         if self.amount > 100:
             self.amount = 100
 
-        self.update()
-
     def decrease_amount(self, amount: float):
         self.amount -= amount
 
         if self.amount < 0:
             self.amount = 0
 
-        self.update()
+    def get_amount(self) -> float:
+        return self.amount
 
     def update(self, *args, **kwargs):
         self.amount_surf.fill(self.color)

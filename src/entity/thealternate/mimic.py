@@ -27,12 +27,12 @@ class Mimic(em.Enemy):
 
         self.__flip()
         self.__crying_sound: pg.mixer.Channel | None = None
-        
+
     def get_rect(self) -> pg.rect.Rect:
         if not self.__is_chasing:
             surf = pg.surface.Surface(self.size)
             return surf.get_rect(center=self.position)
-        
+
         else:
             return super().get_rect()
 
@@ -47,7 +47,8 @@ class Mimic(em.Enemy):
             ("sewer2", (32, 32)),
             ("trash", (32, 64)),
             ("lamp", (96, 144)),
-            ("warning", (64, 64))
+            ("warning", (64, 64)),
+            ("spam", (50, 50))
         ]
 
         index = random.randint(0, len(image) - 1)
@@ -86,14 +87,15 @@ class Mimic(em.Enemy):
             super().update()
             self.set_speed(self.get_speed() + 0.001)
             self.moving()
-            
+
     def moving(self):
         self.movement.moving()
         self.__moving_animate()
 
     def on_destroy(self, args: EventArgs):
         player = gm.Manager.get_instance().player
-        super().on_destroy(args)
 
         if self.__crying_sound is not None and player.get_state() != EState.DEAD:
             self.__crying_sound.stop()
+
+        super().on_destroy(args)

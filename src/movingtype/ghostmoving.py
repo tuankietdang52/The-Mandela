@@ -18,8 +18,6 @@ class GhostMoving(mv.Movement):
 
         self.__chase(velocity)
 
-        self.manager.update_UI_ip()
-
     def __chase(self, velocity: pg.math.Vector2):
         position = self.owner.get_position() + velocity
         self.owner.set_position(position)

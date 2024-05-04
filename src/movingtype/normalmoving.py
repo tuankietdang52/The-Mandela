@@ -42,8 +42,6 @@ class NormalMovement(mv.Movement):
 
         self.__chasing_player()
 
-        self.manager.update_UI_ip()
-
     __ways = list()
 
     def __chasing_player(self):

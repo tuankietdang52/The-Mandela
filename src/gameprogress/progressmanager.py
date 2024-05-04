@@ -4,9 +4,9 @@ import random
 import src.utils.effect as ge
 import src.mapcontainer.map as mp
 import src.hud.hudcomp as hud
-import src.gamemanage.spawnmanage as spm
+import src.gamemanage.spawnmanager as spm
 
-
+from src.hud.timehud import *
 from src.pjenum import *
 from src.utils import *
 
@@ -20,12 +20,14 @@ class ProgressManager(abc.ABC):
         self.can_change_map = False
 
         self.__progress = 0
+        self.load_progress_index = 0
 
         self.nextpart = None
         self.to_next = True
 
         self.manager = gm.Manager.get_instance()
         self.spawn_manager = spm.SpawnManager()
+        self.time_hud: TimeHUD | None = None
 
     def setup(self):
         self.spawn_manager.update_list_entities()
@@ -145,3 +147,7 @@ class ProgressManager(abc.ABC):
         start_pos = sect.get_start_point()
 
         player.set_position(start_pos)
+
+    def kill_time_hud(self):
+        if self.time_hud is not None:
+            self.time_hud.kill()

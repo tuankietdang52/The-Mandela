@@ -33,7 +33,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         self.movement = None
         self.is_harmless = False
 
-        gm.Manager.get_instance().on_entities_destroy += (self.on_destroy, EventArgs.empty())
+        self.destroy_callback = (self.on_destroy, EventArgs.empty())
 
     def update(self, *args, **kwargs):
         if self.is_hit_player():
@@ -149,3 +149,5 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         manager = gm.Manager.get_instance()
         manager.appear_enemy.remove(self)
         manager.entities.remove(self)
+
+        manager.on_entities_destroy -= self.destroy_callback

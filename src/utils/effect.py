@@ -10,9 +10,10 @@ class Effect:
         player = manager.player
 
         mp.set_opacity(0)
+        manager.set_appear_entity_opacity(0)
+        manager.set_appear_item_opacity(0)
         player.get_image().set_alpha(0)
         manager.set_hud_opacity(0)
-        manager.set_appear_entity_opacity(0)
 
         manager.screen.fill((0, 0, 0))
 
@@ -27,6 +28,7 @@ class Effect:
         manager.screen.fill((0, 0, 0))
         mp.set_opacity(254)
         manager.set_appear_entity_opacity(254)
+        manager.set_appear_item_opacity(254)
         manager.set_hud_opacity(254)
         player.get_image().set_alpha(254)
 
@@ -48,6 +50,7 @@ class Effect:
 
             if fade_in_entities:
                 manager.set_appear_entity_opacity(alpha)
+                manager.set_appear_item_opacity(alpha)
                 player.get_image().set_alpha(alpha)
                 manager.set_hud_opacity(alpha)
 
@@ -69,6 +72,7 @@ class Effect:
 
             if fade_out_entities:
                 manager.set_appear_entity_opacity(alpha)
+                manager.set_appear_item_opacity(alpha)
                 player.get_image().set_alpha(alpha)
                 manager.set_hud_opacity(alpha)
 
@@ -77,7 +81,7 @@ class Effect:
     @staticmethod
     def fade_in_list(screen: pg.surface.Surface, ls: list[tuple[pg.surface.Surface, pg.rect.Rect]]):
         manager = gm.Manager.get_instance()
-        max_alpha = 255
+        max_alpha = 254
         alpha = 0
         delay = float(0)
 
@@ -91,7 +95,7 @@ class Effect:
 
             for item in ls:
                 item[0].set_alpha(alpha)
-                screen.blit(item[0], item[1])
+                gm.Manager.get_instance().screen.blit(item[0], item[1])
 
             pg.display.update()
             alpha += 1

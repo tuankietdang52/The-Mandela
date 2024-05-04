@@ -1,10 +1,12 @@
 import random
 import pygame as pg
 import src.gamemanage.game as gm
+import src.gameitem.item as gi
 import src.gameitem.food as fd
+import src.mapcontainer.map as mp
+import src.mapcontainer.market as mk
 import src.movingtype.ghostmoving as ghmv
 import src.entity.thealternate.enemy as em
-import src.mapcontainer.map as mp
 
 from src.entity.thealternate import (themurrayresidence as mr,
                                      doppelganger as dp,
@@ -12,6 +14,8 @@ from src.entity.thealternate import (themurrayresidence as mr,
                                      flawedimpersonators as fi)
 
 from src.utils import *
+from src.tilemap import *
+from src.eventhandle.argument import *
 
 
 class SpawnManager:
@@ -26,7 +30,7 @@ class SpawnManager:
 
         self.enemy_spawn_chance = 0
 
-    def set_enemy_spawn_chance(self, spawn_chance):
+    def set_enemy_spawn_chance(self, spawn_chance: int):
         self.enemy_spawn_chance = spawn_chance
 
     def clear_object_and_enemies(self):
@@ -42,23 +46,12 @@ class SpawnManager:
         self.special_enemies.clear()
         self.update_list_entities()
 
-    def __is_spawn_alternate(self) -> bool:
-        chance = random.randint(0, 100)
-        print(chance)
-        if chance <= self.enemy_spawn_chance:
-            return True
+    def clear_all_enemies(self):
+        self.enemies.clear()
+        self.special_enemies.clear()
+        self.update_list_entities()
 
-        return False
-
-    def __get_spawn_area(self) -> pg.math.Vector2 | None:
-        sect = self.manager.gamemap.sect
-
-        index = random.randint(0, sect.spawn_area_count)
-        area = sect.get_area(f"SpawnArea{index}")
-
-        if area is None:
-            return None
-
+    def __get_spawn_position(self, area: Area) -> pg.math.Vector2:
         area_rect = area.get_rect()
         area_tl = area_rect.topleft
 
@@ -69,6 +62,25 @@ class SpawnManager:
         y = random.randint(round(area.y), y_limit)
 
         return pg.math.Vector2(x, y)
+
+    def __is_spawn_alternate(self) -> bool:
+        chance = random.randint(0, 100)
+        # print(chance)
+        if chance <= self.enemy_spawn_chance:
+            return True
+
+        return False
+
+    def __get_spawn_enemy_area(self) -> pg.math.Vector2 | None:
+        sect = self.manager.gamemap.sect
+
+        index = random.randint(0, sect.spawn_enemy_area_count)
+        area = sect.get_area(f"SpawnArea{index}")
+
+        if area is None:
+            return None
+
+        return self.__get_spawn_position(area)
 
     def __get_random_alternate(self, position: pg.math.Vector2) -> em.Enemy:
         chance = random.randint(0, 100)
@@ -90,7 +102,7 @@ class SpawnManager:
         if not self.__is_spawn_alternate():
             return
 
-        position = self.__get_spawn_area()
+        position = self.__get_spawn_enemy_area()
 
         if position is None:
             return
@@ -109,6 +121,7 @@ class SpawnManager:
         self.update_list_entities()
 
     def remove_enemy(self, enemy: em.Enemy):
+        enemy.on_destroy(EventArgs.empty())
         enemy.kill()
         self.update_list_entities()
 
@@ -126,6 +139,7 @@ class SpawnManager:
     def remove_special_enemy(self, name: str):
         for item in self.special_enemies:
             if item[0] == name:
+                item[1].on_destroy(EventArgs.empty())
                 item[1].kill()
                 break
 
@@ -136,11 +150,13 @@ class SpawnManager:
             return
 
         for enemy in self.enemies:
+            self.manager.on_entities_destroy += enemy.destroy_callback
             self.manager.appear_enemy.add(enemy)
             self.manager.entities.add(enemy)
 
         for enemy in self.special_enemies:
             if self.__check_appear(enemy[2]):
+                self.manager.on_entities_destroy += enemy[1].destroy_callback
                 self.manager.appear_enemy.add(enemy[1])
                 self.manager.entities.add(enemy[1])
 
@@ -154,18 +170,42 @@ class SpawnManager:
 
         return False
 
-    def add_food(self, food):
+    def __get_item_area(self) -> pg.math.Vector2 | None:
+        sect = self.manager.gamemap.sect
+
+        index = random.randint(0, sect.spawn_item_area_count)
+        area = sect.get_area(f"ItemSpawn{index}")
+
+        if area is None:
+            return None
+
+        return self.__get_spawn_position(area)
+
+    def spawn_food_in_market(self):
+        i = 0
+        while i < 10:
+            position = self.__get_item_area()
+
+            if position is None:
+                continue
+
+            food = fd.Spam(position, mk.MarketSect)
+            self.add_food(food)
+
+            i += 1
+
+    def add_food(self, food: gi.Item):
         self.game_items.add(food)
         self.update_list_object()
 
-    def remove_food(self, food):
+    def remove_food(self, food: gi.Item):
         self.game_items.add(food)
         self.update_list_object()
 
     def update_list_object(self):
         sect = self.manager.gamemap.sect
-        self.manager.appear_object.empty()
+        self.manager.appear_item.empty()
 
         for food in self.game_items:
             if food.appear_sect == type(sect):
-                self.manager.appear_object.add(food)
+                self.manager.appear_item.add(food)

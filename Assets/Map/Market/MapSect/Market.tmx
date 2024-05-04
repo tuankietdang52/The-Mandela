@@ -118,8 +118,8 @@
  <objectgroup id="10" name="Areas">
   <object id="3" name="ItemSpawn0" x="64" y="142.75" width="0.25" height="39"/>
   <object id="5" name="ItemSpawn1" x="38.75" y="100.25" width="195.5" height="2.75"/>
-  <object id="6" name="ItemSpawn2" x="101" y="110.25" width="2.75" height="104"/>
-  <object id="8" name="Town" x="79.75" y="249.5" width="48.5" height="22.25"/>
+  <object id="6" name="ItemSpawn2" x="101" y="110.25" width="2.75" height="81.3333"/>
+  <object id="8" name="Town" x="79.75" y="242.5" width="48.5" height="29.25"/>
   <object id="12" name="ItemSpawn3" x="340.333" y="113.667" width="25.6667" height="101"/>
  </objectgroup>
 </map>

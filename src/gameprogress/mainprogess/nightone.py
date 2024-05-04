@@ -1,13 +1,16 @@
 import pygame as pg
 import src.gamemanage.game as gm
 import src.gameprogress.progressmanager as gp
-import src.gameitem.food as fd
+import src.mapcontainer.market as mk
+
 import src.mapcontainer.town as mptown
+import src.gameitem.food as fd
 
 from src.hud.hudcomp import *
+from src.hud.timehud import *
 
 
-class DayOne(gp.ProgressManager):
+class NightOne(gp.ProgressManager):
 
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen)
@@ -15,6 +18,8 @@ class DayOne(gp.ProgressManager):
         self.can_press_key = False
         self.can_change_map = True
         self.setup()
+
+        self.load_progress_index = 0
 
         self.spawn_manager.set_enemy_spawn_chance(20)
 
@@ -49,16 +54,25 @@ class DayOne(gp.ProgressManager):
         Effect.to_black_screen()
         title = self.__get_title()
         self.__draw_title(title[0], title[1])
+
         self.manager.wait(2)
+
         Effect.fade_out_list(self.screen, [title])
         Effect.set_full_opacity_screen()
 
         self.can_press_key = True
 
+    def __setup_hud(self):
+        self.manager.player.init_hud(self.manager.hud_groups)
+        self.time_hud = TimeHUD(self.manager.hud_groups)
+
     def __show_guide(self):
         guide = """In the upper left corner, there are 2 bars.
         |One show how hungry you are, if the bar is down to empty. You'll die
-        |Other will show your sanity. The lower sanity you are, the more alternate spawn"""
+        |Other will show your sanity. The lower sanity you are, the more alternate spawn
+        | |You can only sleep after 2 AM |[Go to bed and press F]
+        | | | |WARNING: COMEBACK HOME AND SLEEP BEFORE 3 AM"""
+
         width, height = self.screen.get_size()
         board = BoardText(self.screen, guide, 20, (width / 2, height / 2), (width * 0.7, height - 20))
 
@@ -85,11 +99,26 @@ class DayOne(gp.ProgressManager):
             self.next()
 
         elif progress == 1:
-            self.__show_guide()
+            self.__setup_hud()
             self.next()
 
         elif progress == 2:
-            size = self.manager.gamemap.sect.size
-            food = fd.Spam(pg.math.Vector2(10 * size, 15 * size), mptown.Home)
-            self.spawn_manager.add_food(food)
+            self.__show_guide()
             self.next()
+
+        elif progress == 3:
+            self.__spawn_food()
+            self.next()
+
+        # elif progress == 4:
+
+    def __spawn_food(self):
+        sect = self.manager.gamemap.sect
+        if type(sect) is not mk.MarketSect:
+            return
+
+        self.spawn_manager.spawn_food_in_market()
+        self.next()
+
+    # def __get_to_phone(self):
+    #

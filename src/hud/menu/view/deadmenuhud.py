@@ -1,3 +1,4 @@
+import pygame as pg
 import src.utils.effect as ge
 import src.hud.menu.view.basemenuview as vw
 
@@ -5,11 +6,16 @@ from src.hud.menu.contract import *
 
 
 class DeadMenuHUD(vw.BaseMenuView):
-    fontpath = "../Assets/Font/Crang.ttf"
-
-    def __init__(self, screen: pg.surface.Surface):
-        super().__init__(screen, 2)
+    def __init__(self, screen: pg.surface.Surface, groups: pg.sprite.Group):
+        super().__init__(screen, 2, groups)
         self.choice = -1
+
+        self.size = self.screen.get_width(), self.screen.get_height()
+        self.pos = self.screen.get_width() / 2, self.screen.get_height() / 2
+
+        self.image = pg.surface.Surface(self.size, pg.SRCALPHA).convert_alpha()
+        self.image.fill((0, 0, 0, 0))
+        self.rect = self.image.get_rect(center=self.pos)
 
         self.setup()
 
@@ -22,9 +28,10 @@ class DeadMenuHUD(vw.BaseMenuView):
     def init_pointer(self):
         width, height = self.screen.get_width(), self.screen.get_height()
         self.presenter.set_pointer_position((width / 2 - 150, height - 270))
+        self.presenter.get_pointer().set_visible(True)
 
     def get_dead_msg(self) -> tuple[pg.surface.Surface, pg.rect.Rect]:
-        font = pg.font.Font(self.fontpath, 30)
+        font = pg.font.Font(self.FONTPATH, 30)
 
         msg_surf = ge.Effect.create_text_outline(font,
                                                  "uh oh bad decision viole...",
