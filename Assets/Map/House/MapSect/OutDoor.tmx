@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="24">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="10" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="25">
  <tileset firstgid="1" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="2" source="../Tile/housetile.tsx"/>
  <layer id="2" name="Void" width="14" height="10" visible="0">
@@ -103,6 +103,9 @@
    <point/>
   </object>
   <object id="23" name="ToiletBk" x="184.182" y="20.9091">
+   <point/>
+  </object>
+  <object id="24" name="Instruder" x="102.667" y="21">
    <point/>
   </object>
  </objectgroup>

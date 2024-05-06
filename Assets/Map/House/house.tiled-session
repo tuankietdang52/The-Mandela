@@ -6,9 +6,9 @@
     "activeFile": "MapSect/Room.tmx",
     "expandedProjectPaths": [
         "World",
-        "Tile",
+        "MapSect",
         ".",
-        "MapSect"
+        "Tile"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -20,19 +20,19 @@
             "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 112.16666666666664,
+                "x": 111.99999999999999,
                 "y": 56
             }
         },
         "MapSect/Kitchen.tmx": {
             "expandedObjectLayers": [
-                8,
-                9
+                9,
+                8
             ],
-            "scale": 4,
+            "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 80.125,
+                "x": 79.99999999999999,
                 "y": 104
             }
         },
@@ -41,11 +41,11 @@
                 6,
                 10
             ],
-            "scale": 5.5,
+            "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 111.9090909090909,
-                "y": 80
+                "x": 111.66666666666666,
+                "y": 79.66666666666667
             }
         },
         "MapSect/Room.tmx": {
@@ -53,22 +53,22 @@
                 8,
                 11
             ],
-            "scale": 3,
-            "selectedLayer": 8,
+            "scale": 5.5,
+            "selectedLayer": 9,
             "viewCenter": {
-                "x": 205.33333333333331,
-                "y": 142.66666666666663
+                "x": 122.9090909090909,
+                "y": 128
             }
         },
         "MapSect/Toilet.tmx": {
             "expandedObjectLayers": [
-                8,
-                7
+                7,
+                8
             ],
-            "scale": 4,
+            "scale": 3,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 40.125,
+                "x": 40,
                 "y": 96
             }
         },

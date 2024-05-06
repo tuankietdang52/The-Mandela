@@ -74,8 +74,9 @@ class StartMenuHUD(vw.BaseMenuView):
             self.create_txt_element("NIGHTMARE", 80, (width / 2, 200)),
             self.create_txt_element("Start", 30, (width / 2, height - 300)),
             self.create_txt_element("Load", 30, (width / 2, height - 250)),
-            self.create_txt_element("Setting", 30, (width / 2, height - 200)),
-            self.create_txt_element("Quit", 30, (width / 2, height - 150))
+            # self.create_txt_element("Setting", 30, (width / 2, height - 200)),
+            # self.create_txt_element("Quit", 30, (width / 2, height - 150))
+            self.create_txt_element("Quit", 30, (width / 2, height - 200))
         ])
 
     def update(self):

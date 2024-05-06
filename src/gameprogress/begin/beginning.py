@@ -24,6 +24,9 @@ class BeginStory(gp.ProgressManager):
         super().setup()
         gm.Manager.play_theme("../Assets/Music/Lily.mp3")
 
+    def re_setup(self):
+        self.can_press_key = True
+
     def event_action(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -113,7 +116,7 @@ class BeginStory(gp.ProgressManager):
 
         lily = ll.Lily(start_pos)
         lily.is_harmless = True
-        self.spawn_manager.add_special_enemy("lily", lily, mphouse.Room)
+        self.spawn_manager.add_special_entity("lily", lily, mphouse.Room)
         self.next()
 
     def __to_dream(self):
@@ -134,7 +137,7 @@ class BeginStory(gp.ProgressManager):
         player = gm.Manager.get_instance().player
         areas = gm.Manager.get_instance().gamemap.sect.areas
 
-        lily = self.spawn_manager.get_special_enemy("lily")
+        lily = self.spawn_manager.get_special_entity("lily")
         lily_position = lily.get_position()
 
         player_rect = player.get_rect()
@@ -169,7 +172,7 @@ class BeginStory(gp.ProgressManager):
         manager = gm.Manager.get_instance()
         player = manager.player
 
-        lily = self.spawn_manager.get_special_enemy("lily")
+        lily = self.spawn_manager.get_special_entity("lily")
         player_rect = player.get_rect()
 
         if not Physic.is_collide(player_rect, lily.get_rect()):

@@ -7,7 +7,7 @@ class HouseNormal(mp.Map):
     def __init__(self, screen: pg.surface.Surface):
         super().__init__(screen, "../Assets/Map/House/MapSect/")
 
-        self.change_sect("OutDoor")
+        self.change_sect("Room")
 
     def get_next_map(self, area_name: mp.Map) -> tuple[mp.Map, str] | None:
         if area_name == "Town":

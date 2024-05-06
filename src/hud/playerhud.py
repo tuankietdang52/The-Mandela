@@ -48,6 +48,7 @@ class Bar(pg.sprite.Sprite):
 
         percent = self.amount / 100
         size = self.image.get_size()
+
         amount_size = (size[0] * 0.57) * percent, 20
 
         self.amount_surf = pg.transform.scale(self.amount_surf, amount_size)

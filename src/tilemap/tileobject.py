@@ -35,6 +35,10 @@ class Area:
 
         return area_rect.center
 
+    def set_size(self, size: tuple[int, int]):
+        self.width = size[0]
+        self.height = size[1]
+
     def get_rect(self) -> pg.rect.Rect:
         surf = pg.surface.Surface((self.width, self.height))
         rect = surf.get_rect(center=(self.x, self.y))

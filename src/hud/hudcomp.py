@@ -311,6 +311,24 @@ class HUDComp:
         return board
 
     @staticmethod
+    def show_note(note: str, fontsize: int):
+        manager = gm.Manager.get_instance()
+        screen = manager.screen
+
+        width, height = screen.get_size()
+        board = BoardText(screen, note, fontsize, (width / 2, height / 2), (width * 0.7, height - 20))
+
+        board.draw()
+        pg.display.update()
+
+        while True:
+            gm.Game.ticking_time()
+            if HUDComp.is_closing_board():
+                break
+
+        manager.update_UI_ip()
+
+    @staticmethod
     def is_closing_board() -> bool:
         for event in pg.event.get():
             """Prevent game to freezing itself"""

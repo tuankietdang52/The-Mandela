@@ -23,6 +23,9 @@ class TheMurrayResidence(em.Enemy):
         self.__is_chasing = False
         self.__sound: pg.mixer.Channel | None = None
 
+    def set_chasing(self, is_chasing: bool):
+        self.__is_chasing = is_chasing
+
     def __chase_animation(self):
         if self.__frame < 10:
             index = 1

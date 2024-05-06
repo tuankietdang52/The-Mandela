@@ -161,7 +161,7 @@
   </object>
  </objectgroup>
  <objectgroup id="13" name="SpawnAreaLayer">
-  <object id="25" name="SpawnArea1" x="165.667" y="219" width="194.667" height="100.333"/>
+  <object id="25" name="SpawnArea1" x="165.667" y="219" width="133.334" height="100.333"/>
   <object id="26" name="SpawnArea0" x="16" y="267.667" width="148.667" height="52.3336"/>
  </objectgroup>
 </map>

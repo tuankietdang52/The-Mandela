@@ -147,7 +147,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
 
     def on_destroy(self, args: EventArgs):
         manager = gm.Manager.get_instance()
-        manager.appear_enemy.remove(self)
+        manager.appear_entities.remove(self)
         manager.entities.remove(self)
 
         manager.on_entities_destroy -= self.destroy_callback

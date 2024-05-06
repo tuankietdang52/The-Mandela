@@ -35,6 +35,8 @@ class Player(pg.sprite.Sprite):
         self.sanity_bar: plhud.Bar | None = None
         self.full_time = 0
 
+        self.busy_time = 0
+
     def init_hud(self, hud_groups: pg.sprite.Group):
         self.hungry_bar = plhud.Bar("hungry", pg.math.Vector2(10, 0), (255, 126, 1), self, hud_groups)
         self.sanity_bar = plhud.Bar("sanity", pg.math.Vector2(10, 50), (201, 0, 255), self, hud_groups)
@@ -44,6 +46,7 @@ class Player(pg.sprite.Sprite):
             return
 
         self.countdown_full_buff()
+        self.countdown_busy_time()
         self.decrease_hungry_amount(0.003)
         self.__check_hungry()
 
@@ -144,8 +147,17 @@ class Player(pg.sprite.Sprite):
 
         return self.hungry_bar.get_amount()
 
+    def get_sanity_amount(self) -> float:
+        if self.sanity_bar is None:
+            return 0
+
+        return self.sanity_bar.get_amount()
+
     def set_full_time(self, time: float):
         self.full_time += time
+
+    def set_busy_time(self, time: float):
+        self.busy_time += time
 
     def countdown_full_buff(self):
         if self.full_time > 0:
@@ -154,6 +166,14 @@ class Player(pg.sprite.Sprite):
 
         if self.full_time == 0:
             self.full_time = 0
+
+    def countdown_busy_time(self):
+        if self.busy_time > 0:
+            time = gm.Game.get_time()
+            self.busy_time -= time
+
+        if self.busy_time == 0:
+            self.busy_time = 0
 
     # Movement #
     def __get_reverse_animate(self) -> str:
@@ -225,6 +245,9 @@ class Player(pg.sprite.Sprite):
         rect = self.image.get_rect(center=next_pos)
 
         if Physic.is_collide_wall(rect):
+            return False
+
+        if Physic.is_collide_object(rect):
             return False
 
         return True

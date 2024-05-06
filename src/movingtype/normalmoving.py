@@ -121,7 +121,13 @@ class NormalMovement(mv.Movement):
         path = list()
         x, y = dest.x, dest.y
 
+        src = self.owner.get_position()[0] / 32, self.owner.get_position()[1] / 32
+        src = round(src[0]), round(src[1])
+
         while detail[y][x].parent.x != x or detail[y][x].parent.y != y:
+            if x == src[0] and y == src[1]:
+                break
+
             path.append(pg.math.Vector2(x, y))
             tempx, tempy = detail[y][x].parent.x, detail[y][x].parent.y
             x, y = tempx, tempy
@@ -235,6 +241,9 @@ class NormalMovement(mv.Movement):
         rect = self.owner.get_image().get_rect(center=(cur.x * 32, cur.y * 32))
 
         if Physic.is_collide_wall(rect):
+            return False
+
+        if Physic.is_collide_object(rect):
             return False
 
         return True
