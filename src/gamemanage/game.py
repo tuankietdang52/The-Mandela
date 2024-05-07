@@ -253,7 +253,7 @@ class Game:
     def setup(self):
         icon = pg.image.load(self.ICON_PATH).convert()
         pg.display.set_icon(icon)
-        pg.display.set_caption("Nightmare")
+        pg.display.set_caption("The Mandela")
 
     def setup_manager(self):
         self.manager.player = pl.Player(self.screen, self.manager.entities)
