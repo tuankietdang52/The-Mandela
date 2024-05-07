@@ -198,6 +198,6 @@
  </objectgroup>
  <objectgroup id="9" name="SpawnAreaLayer">
   <object id="15" name="SpawnArea0" x="50.3333" y="65" width="211.667" height="54"/>
-  <object id="18" name="SpawnArea1" x="95.6667" y="228.667" width="9.33333" height="7.66667"/>
+  <object id="18" name="SpawnArea1" x="98.5" y="295.167" width="9.33333" height="7.66667"/>
  </objectgroup>
 </map>

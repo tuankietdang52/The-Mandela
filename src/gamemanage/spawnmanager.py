@@ -25,12 +25,14 @@ class SpawnManager:
     def __init__(self, game_objects: pg.sprite.Group = None):
         self.manager = gm.Manager.get_instance()
 
-        self.enemies: list[em.Enemy] = list()
-        self.special_entities: set[tuple[str, em.Enemy, type[mp.Sect]]] = set()
+        self.special_entities: set[tuple[str, pg.sprite.Sprite, type[mp.Sect]]] = set()
+
         self.game_objects = pg.sprite.Group()
+        self.game_objects_backup = pg.sprite.Group()
 
         if game_objects is not None:
             self.game_objects = game_objects
+            self.game_objects_backup = game_objects.copy()
 
         self.is_trigger_spawn = False
         self.is_have_instruder = False
@@ -43,25 +45,27 @@ class SpawnManager:
     def set_game_objects(self, game_objects: pg.sprite.Group):
         self.game_objects = game_objects.copy()
 
+    def reset_game_objects(self):
+        self.game_objects = self.game_objects_backup.copy()
+
+        for obj in self.game_objects:
+            if obj.is_back_up:
+                obj.re_setup()
+
     def clear_object_and_enemies(self):
-        self.enemies.clear()
-        self.update_list_entities()
+        self.clear_enemies()
+        self.update_special_entities()
         self.update_list_object()
 
     def clear_enemies(self):
-        self.enemies.clear()
-        self.update_list_entities()
+        for enemy in self.manager.appear_enemies:
+            self.remove_enemy(enemy)
 
     def clear_special_enemies(self):
         self.special_entities.clear()
-        self.update_list_entities()
+        self.update_special_entities()
 
-    def clear_all_enemies(self):
-        self.enemies.clear()
-        self.special_entities.clear()
-        self.update_list_entities()
-
-    def __get_spawn_position(self, area: Area) -> pg.math.Vector2:
+    def get_spawn_position(self, area: Area) -> pg.math.Vector2:
         area_rect = area.get_rect()
         area_tl = area_rect.topleft
 
@@ -85,7 +89,7 @@ class SpawnManager:
 
         return False
 
-    def __get_spawn_enemy_area(self) -> pg.math.Vector2 | None:
+    def __get_spawn_enemy_position(self) -> pg.math.Vector2 | None:
         sect = self.manager.gamemap.sect
 
         index = random.randint(0, sect.spawn_enemy_area_count)
@@ -94,7 +98,7 @@ class SpawnManager:
         if area is None:
             return None
 
-        return self.__get_spawn_position(area)
+        return self.get_spawn_position(area)
 
     def __get_random_alternate(self, position: pg.math.Vector2) -> em.Enemy:
         chance = random.randint(0, 100)
@@ -116,7 +120,7 @@ class SpawnManager:
         if not self.__is_spawn_alternate():
             return
 
-        position = self.__get_spawn_enemy_area()
+        position = self.__get_spawn_enemy_position()
 
         if position is None:
             return
@@ -162,19 +166,18 @@ class SpawnManager:
         self.add_enemy(instruder)
 
     def add_enemy(self, enemy: em.Enemy):
-        self.enemies.append(enemy)
-        self.update_list_entities()
+        self.manager.appear_enemies.add(enemy)
+        self.manager.entities.add(enemy)
 
     def remove_enemy(self, enemy: em.Enemy):
         enemy.on_destroy(EventArgs.empty())
         enemy.kill()
-        self.update_list_entities()
 
-    def add_special_entity(self, name: str, enemy: em.Enemy, section: type[mp.Sect]):
+    def add_special_entity(self, name: str, enemy: pg.sprite.Sprite, section: type[mp.Sect]):
         self.special_entities.add((name, enemy, section))
-        self.update_list_entities()
+        self.update_special_entities()
 
-    def get_special_entity(self, name: str) -> em.Enemy | None:
+    def get_special_entity(self, name: str) -> pg.sprite.Sprite | None:
         for enemy in self.special_entities:
             if enemy[0] == name:
                 return enemy[1]
@@ -182,40 +185,44 @@ class SpawnManager:
         return None
 
     def remove_special_entity(self, name: str):
+        entity = None
         for item in self.special_entities:
-            if item[0] == name:
-                item[1].on_destroy(EventArgs.empty())
-                item[1].kill()
-                break
+            if item[0] != name:
+                continue
 
-    def update_list_entities(self):
+            entity = item
+            if type(item[1]) is em.Enemy:
+                item[1].on_destroy(EventArgs.empty())
+            item[1].kill()
+
+        if entity is not None:
+            self.special_entities.remove(entity)
+
+    def update_special_entities(self):
         self.manager.clear_entities()
 
-        if len(self.enemies) == 0 and len(self.special_entities) == 0:
+        if len(self.special_entities) == 0:
             return
 
-        for enemy in self.enemies:
-            self.manager.on_entities_destroy += enemy.destroy_callback
-            self.manager.appear_entities.add(enemy)
-            self.manager.entities.add(enemy)
+        for entity in self.special_entities:
+            if not self.__check_appear(entity[2]):
+                continue
 
-        for enemy in self.special_entities:
-            if self.__check_appear(enemy[2]):
-                self.manager.on_entities_destroy += enemy[1].destroy_callback
-                self.manager.appear_entities.add(enemy[1])
-                self.manager.entities.add(enemy[1])
+            if type(entity[1]).__mro__[1] is em.Enemy:
+                self.manager.appear_enemies.add(entity[1])
 
-        self.manager.update_UI_ip()
+            self.manager.on_entities_destroy += entity[1].destroy_callback
+            self.manager.entities.add(entity[1])
 
     def __check_appear(self, entity_sect: type[mp.Sect]):
         cur = self.manager.gamemap.sect
 
-        if entity_sect == type(cur):
+        if type(cur) is entity_sect:
             return True
 
         return False
 
-    def __get_object_area(self) -> tuple[str, pg.math.Vector2 | None]:
+    def __get_object_position(self) -> tuple[str, pg.math.Vector2 | None]:
         sect = self.manager.gamemap.sect
 
         index = random.randint(0, sect.spawn_item_area_count)
@@ -224,12 +231,12 @@ class SpawnManager:
         if area is None:
             return "", None
 
-        return area.name, self.__get_spawn_position(area)
+        return area.name, self.get_spawn_position(area)
 
     def spawn_items_in_market(self):
         i = 0
         while i < 25:
-            area_name, position = self.__get_object_area()
+            area_name, position = self.__get_object_position()
 
             if position is None:
                 continue

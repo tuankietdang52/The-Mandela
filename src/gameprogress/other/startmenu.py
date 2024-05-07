@@ -46,6 +46,9 @@ class StartMenu(gp.ProgressManager):
         player = self.manager.player
         gamemap = self.manager.gamemap
 
+        if not player.alive():
+            self.manager.entities.add(player)
+
         point = gamemap.sect.get_point("Spawn")
         position = pg.math.Vector2(point.x, point.y)
 
@@ -79,13 +82,13 @@ class StartMenu(gp.ProgressManager):
             self.next()
 
         elif choice == 2:
-            pass
-
-        elif choice == 3:
-            pass
-
-        elif choice == 4:
             sys.exit()
+
+        # elif choice == 3:
+        #     pass
+        #
+        # elif choice == 4:
+        #     pass
 
     def update(self):
         if self.get_progress_index() == 3:

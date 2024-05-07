@@ -33,7 +33,13 @@ class NightOne(gp.ProgressManager):
         self.can_sleep = False
         self.visited_sect = set()
 
+        self.is_occur_start_event = False
+
+        self.manager.progress_status.reset()
+
         self.spawn_manager.set_enemy_spawn_chance(5)
+        self.manager.hud_groups.empty()
+        self.spawn_manager.set_game_objects(pg.sprite.Group())
 
     def event_action(self):
         for event in pg.event.get():
@@ -59,6 +65,14 @@ class NightOne(gp.ProgressManager):
         | | | |WARNING: COMEBACK HOME AND SLEEP BEFORE 3 AM"""
 
         HUDComp.show_note(guide, 20)
+        self.__show_next_guide()
+
+    def __show_next_guide(self):
+        guide = """You need to survive until night 4. 
+        | |You need to call for help before night 4 or you will never get out of here
+        """
+
+        HUDComp.show_note(guide, 20)
 
     def update(self):
         super().update()
@@ -67,7 +81,7 @@ class NightOne(gp.ProgressManager):
             self.spawn_manager.spawn_alternate()
 
         if self.is_sleep():
-            tomorrow = n2.NightTwo(self.screen, self.spawn_manager.game_object)
+            tomorrow = n2.NightTwo(self.screen, self.spawn_manager.game_objects)
             self.changing_night_when_sleep(tomorrow)
 
         self.three_am_event()
@@ -98,6 +112,8 @@ class NightOne(gp.ProgressManager):
             self.__find_someone()
 
         elif progress == 6:
+            self.__visit_police_sect()
+            self.__visit_graveyard_sect()
             self.__visit_sect()
 
     def __mission(self):
@@ -149,3 +165,40 @@ class NightOne(gp.ProgressManager):
 
         self.can_change_map = True
         self.next()
+
+    def __visit_police_sect(self):
+        sect = self.manager.gamemap.sect
+
+        if type(sect) is mptown.Police and sect not in self.visited_sect:
+            HUDComp.create_board_text("There is phone booth! |I can call for help",
+                                      self.manager.player.get_voice("voice17"))
+        else:
+            self.__check_phone()
+
+    def __check_phone(self):
+        sect = self.manager.gamemap.sect
+
+        if type(sect) is not mptown.Police:
+            return
+
+        area = sect.get_area("Phone")
+        player = self.manager.player
+        keys = pg.key.get_pressed()
+
+        if not keys[pg.K_f] or not area.is_overlap(player.get_rect()):
+            return
+
+        HUDComp.create_board_text("Unfortunately, I dont have coin",
+                                  player.get_voice("voice18"))
+
+    def __visit_graveyard_sect(self):
+        sect = self.manager.gamemap.sect
+
+        if type(sect) is not mptown.Graveyard or sect in self.visited_sect:
+            return
+
+        point = sect.get_point("Shovel")
+        position = pg.math.Vector2(point.x, point.y)
+
+        shovel = otherobj.Shovel(position, mptown.Graveyard)
+        self.spawn_manager.add_object(shovel)

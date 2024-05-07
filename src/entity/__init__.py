@@ -1,1 +1,1 @@
-from src.entity.playercontainer import *
+from src.entity.ally import *

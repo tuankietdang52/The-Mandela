@@ -25,11 +25,10 @@ class Potion(go.GameObject):
         if not self.area.is_overlap(player.get_rect()):
             return
 
-        self.manager.player.interact -= self.callback
-        self.kill()
+        self.destroy()
         self.manager.update_UI_ip()
 
-        self.manager.is_get_potion = True
+        self.manager.progress_status.is_get_potion = True
         HUDComp.create_board_text("You've pick up the anti-sleep potion")
 
 
@@ -58,11 +57,10 @@ class Gas(go.GameObject):
         if not self.area.is_overlap(player.get_rect()):
             return
 
-        self.manager.player.interact -= self.callback
-        self.kill()
+        self.destroy()
         self.manager.update_UI_ip()
 
-        self.manager.is_get_gas = True
+        self.manager.progress_status.is_get_gas = True
         HUDComp.create_board_text("You've pick up an empty gas can. You need to fill it")
 
 
@@ -77,18 +75,94 @@ class GasFill(go.GameObject):
         player = self.manager.player
         sect = self.manager.gamemap.sect
 
+        if not self.manager.progress_status.is_get_gas:
+            return
+
         if type(sect) is not self.appear_sect:
             return
 
         if not self.area.is_overlap(player):
             return
 
-        self.manager.gas_amount += self.amount
+        gas_amount = self.manager.progress_status.gas_amount
+        gas_amount += self.amount
 
-        if self.manager.gas_amount == 50:
+        if gas_amount == 50:
             HUDComp.create_board_text("You've refill 1/2 gas tank")
-        elif self.manager.gas_amount >= 100:
+        elif gas_amount >= 100:
             HUDComp.create_board_text("You've refill full gas tank")
 
+        self.manager.progress_status.gas_amount = gas_amount
+        self.destroy()
+
+
+class Shovel(go.GameObject):
+    def __init__(self, pos: pg.math.Vector2, appear_sect: type[mp.Sect]):
+        super().__init__(pos, "../Assets/Other/shovel.png", (108, 24), appear_sect)
+
+        self.amount = 50
+        self.set_area_size((100, 100))
+
+    def player_interact(self, args: EventArgs):
+        night = self.manager.game_night
+
+        if night != 3:
+            return
+
+        sect = self.manager.gamemap.sect
+
+        if type(sect) is not self.appear_sect:
+            return
+
+        player = self.manager.player
+        if not self.area.is_overlap(player):
+            return
+
+        HUDComp.create_board_text("You've pick up a shovel")
+        self.manager.progress_status.is_get_shovel = True
         self.kill()
-        player.interact -= self.callback
+
+
+class PoliceCar(go.GameObject):
+    def __init__(self, pos: pg.math.Vector2, appear_sect: type[mp.Sect]):
+        super().__init__(pos, "../Assets/Ally/Cop/policecar.png", (190, 95), appear_sect)
+        self.can_walk_through = False
+
+        self.set_area_size((181, 219))
+
+    def update(self, *args, **kwargs):
+        if not self.manager.progress_status.get_in_car:
+            return
+
+        position = self.get_position()
+        self.set_position(pg.math.Vector2(position.x + 10, position.y))
+
+    def player_interact(self, args: EventArgs):
+        sect = self.manager.gamemap.sect
+
+        if type(sect) is not self.appear_sect:
+            return
+
+        player = self.manager.player
+
+        if not self.area.is_overlap(player.get_rect()):
+            return
+
+        if not self.manager.progress_status.can_get_in_car:
+            return
+
+        self.manager.progress_status.get_in_car = True
+
+
+class PoiceCarFront(go.GameObject):
+    def __init__(self, pos: pg.math.Vector2, appear_sect: type[mp.Sect]):
+        super().__init__(pos, "../Assets/Ally/Cop/policecarfront.png", (308, 112), appear_sect)
+
+        self.image = pg.transform.flip(self.image, True, False)
+
+    def update(self, *args, **kwargs):
+        position = self.get_position()
+        self.set_position(pg.math.Vector2(position.x + 2, position.y))
+
+    def player_interact(self, args: EventArgs):
+        pass

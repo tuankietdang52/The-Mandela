@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="22" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="12">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="22" height="25" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="13">
  <tileset firstgid="1" source="../Tile/cyberpunk.tsx"/>
  <tileset firstgid="481" source="../Tile/town.tsx"/>
  <tileset firstgid="1081" source="../Tile/blackblock.tsx"/>
@@ -184,13 +184,13 @@
   <object id="7" name="Park1Bk" x="307" y="238.667">
    <point/>
   </object>
-  <object id="8" name="Start" x="167.333" y="237">
+  <object id="8" name="Start" x="250.333" y="291">
    <point/>
   </object>
   <object id="10" name="Broken Car" x="69.1667" y="63">
    <point/>
   </object>
-  <object id="11" name="Gas" x="118.667" y="88.6667">
+  <object id="12" name="GasCan" x="114.667" y="82">
    <point/>
   </object>
  </objectgroup>

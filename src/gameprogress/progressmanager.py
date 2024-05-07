@@ -27,6 +27,7 @@ class ProgressManager(abc.ABC):
         self.is_occur_start_event = False
         self.can_press_key = False
         self.can_change_map = False
+        self.can_change_sect = True
         self.can_sleep = False
 
         self.__progress = 0
@@ -37,15 +38,10 @@ class ProgressManager(abc.ABC):
         self.manager = gm.Manager.get_instance()
 
         self.spawn_manager = spm.SpawnManager(game_objects)
-        if game_objects is not None:
-            self.game_objects_backup = game_objects.copy()
-        else:
-            self.game_objects_backup = pg.sprite.Group()
-
         self.time_hud: TimeHUD | None = None
 
     def setup(self):
-        self.spawn_manager.update_list_entities()
+        self.spawn_manager.update_special_entities()
         self.spawn_manager.update_list_object()
 
     @abc.abstractmethod
@@ -137,6 +133,9 @@ class ProgressManager(abc.ABC):
         ge.Effect.fade_in_screen()
 
     def handle_change_sect(self):
+        if not self.can_change_sect:
+            return
+
         gamemap = self.manager.gamemap
         player = self.manager.player
 
@@ -223,6 +222,8 @@ class ProgressManager(abc.ABC):
 
         voice = pg.mixer.Sound(path_voice)
         HUDComp.create_board_text(text, voice)
+
+        return True
 
     def is_sleep(self):
         keys = pg.key.get_pressed()

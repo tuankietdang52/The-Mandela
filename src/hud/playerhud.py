@@ -4,7 +4,7 @@ import src.gamemanage.game as gm
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.entity.playercontainer.player import Player
+    from src.entity.ally.player import Player
 
 
 class Bar(pg.sprite.Sprite):
@@ -72,6 +72,9 @@ class Bar(pg.sprite.Sprite):
 
         if self.amount < 0:
             self.amount = 0
+
+    def set_amount(self, amount: float):
+        self.amount = amount
 
     def get_amount(self) -> float:
         return self.amount

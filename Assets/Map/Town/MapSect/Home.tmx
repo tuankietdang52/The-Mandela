@@ -3,6 +3,9 @@
  <tileset firstgid="1" source="../Tile/cyberpunk.tsx"/>
  <tileset firstgid="481" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="482" source="../Tile/town.tsx"/>
+ <tileset firstgid="1082" name="phone_small" tilewidth="16" tileheight="16" tilecount="2" columns="1">
+  <image source="../Package/phone_small.png" width="16" height="32"/>
+ </tileset>
  <layer id="7" name="Void" width="26" height="25">
   <data encoding="csv">
 0,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,481,

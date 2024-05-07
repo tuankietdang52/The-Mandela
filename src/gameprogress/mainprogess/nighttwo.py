@@ -6,6 +6,7 @@ import src.entity.other.doctor as doc
 import src.mapcontainer.town as mptown
 import src.gameprogress.progressmanager as gp
 import src.mapcontainer.housenormal as mphouse
+import src.gameprogress.mainprogess.nightthree as n3
 
 from src.hud.timehud import *
 from src.hud.hudcomp import *
@@ -15,10 +16,10 @@ class NightTwo(gp.ProgressManager):
     def __init__(self, screen: pg.surface.Surface, game_objects: pg.sprite.Group = None):
         super().__init__(screen, game_objects)
 
-        self.can_change_map = True
+        self.can_change_map = False
         self.can_press_key = True
         self.can_sleep = False
-        self.manager.is_get_potion = False
+        self.manager.progress_status.is_get_potion = False
 
         self.spawn_manager.set_enemy_spawn_chance(20)
         self.doctor_corpse: doc.Doctor | None = None
@@ -26,18 +27,20 @@ class NightTwo(gp.ProgressManager):
         self.__init_time_hud()
 
     def re_setup(self):
-        self.can_change_map = True
+        self.can_change_map = False
         self.can_press_key = True
         self.can_sleep = False
-        self.manager.is_get_potion = False
+        self.is_occur_start_event = False
+        self.manager.progress_status.is_get_potion = False
 
         self.doctor_corpse: doc.Doctor | None = None
 
-        self.spawn_manager.set_game_objects(self.game_objects_backup)
+        self.spawn_manager.set_enemy_spawn_chance(20)
+        self.spawn_manager.reset_game_objects()
         self.__init_time_hud()
 
     def __init_time_hud(self):
-        self.manager.set_night_and_time(2, (2, 0))
+        self.manager.set_night_and_time(2, (0, 0))
         self.time_hud = TimeHUD(self.manager.hud_groups)
 
     def event_action(self):
@@ -56,9 +59,8 @@ class NightTwo(gp.ProgressManager):
             self.spawn_manager.spawn_alternate()
 
         if self.is_sleep():
-            pass
-            # tomorrow = n3.NightFour(self.screen, self.spawn_manager.game_object)
-            # self.changing_night_when_sleep(tomorrow)
+            tomorrow = n3.NightThree(self.screen, self.spawn_manager.game_objects)
+            self.changing_night_when_sleep(tomorrow)
 
         self.three_am_event()
 
@@ -86,6 +88,7 @@ class NightTwo(gp.ProgressManager):
         if not self.watching_tv(text, "../Assets/Sound/NarratorVoice/voice2.mp3"):
             return
 
+        self.can_change_map = True
         self.next()
 
     def __spawn_doctor_corpse(self):

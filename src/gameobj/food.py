@@ -43,4 +43,6 @@ class Spam(go.GameObject):
             player.set_full_time(self.full_time)
 
         player.set_busy_time(1)
+
+        self.is_back_up = True
         self.destroy()

@@ -49,9 +49,23 @@ class DeadMenuHUD(vw.BaseMenuView):
         width, height = self.screen.get_width(), self.screen.get_height()
 
         self.elements.extend([
-            self.create_txt_element("You Died", 70, (width / 2, 200)),
-            self.create_txt_element("Replay", 30, (width / 2, height - 250)),
-            self.create_txt_element("Exit To Menu", 30, (width / 2, height - 200)),
+            self.create_txt_element("You Died",
+                                    70,
+                                    (255, 255, 255),
+                                    (255, 0, 0),
+                                    (width / 2, 200)),
+
+            self.create_txt_element("Replay",
+                                    30,
+                                    (255, 255, 255),
+                                    (255, 0, 0),
+                                    (width / 2, height - 250)),
+
+            self.create_txt_element("Exit To Menu",
+                                    30,
+                                    (255, 255, 255),
+                                    (255, 0, 0),
+                                    (width / 2, height - 200)),
         ])
 
     def get_screen(self):

@@ -154,7 +154,7 @@
   <object id="12" name="CrossroadBk" x="222.333" y="243.333">
    <point/>
   </object>
-  <object id="15" name="Start" x="139" y="238.667">
+  <object id="15" name="Start" x="137.5" y="294.167">
    <point/>
   </object>
  </objectgroup>

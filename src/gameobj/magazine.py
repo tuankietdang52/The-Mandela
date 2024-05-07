@@ -38,4 +38,6 @@ class Magazine(go.GameObject):
 
         player.increase_sanity_amount(self.amount)
         player.set_busy_time(1)
+
+        self.is_back_up = True
         self.destroy()

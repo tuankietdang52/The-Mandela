@@ -153,7 +153,7 @@ class PublicToilet(mp.Sect):
 
         self.sectpath = path + "PublicToilet.tmx"
         self.load(self.sectpath)
-        self.init_OFFSET((-132, 15), (-300, 0))
+        self.init_OFFSET((-92, 15), (-300, 0))
 
 
 class RoadToPolice(mp.Sect):

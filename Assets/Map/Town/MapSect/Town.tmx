@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="95" height="86" tilewidth="16" tileheight="16" infinite="0" nextlayerid="12" nextobjectid="3">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="95" height="86" tilewidth="16" tileheight="16" infinite="0" nextlayerid="13" nextobjectid="3">
  <tileset firstgid="1" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="2" source="../Tile/town.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
+ <tileset firstgid="1082" name="seven_eleven_tileset" tilewidth="16" tileheight="16" tilecount="90" columns="6">
+  <image source="../../Market/Package/seven_eleven_tileset.png" width="104" height="240"/>
+ </tileset>
+ <tileset firstgid="1172" name="seven_eleven_tileset" tilewidth="16" tileheight="16" tilecount="90" columns="6">
+  <image source="../../Market/Package/seven_eleven_tileset.png" width="104" height="240"/>
+ </tileset>
  <layer id="5" name="Void" width="95" height="86" visible="0">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,

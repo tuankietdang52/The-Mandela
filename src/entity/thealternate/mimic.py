@@ -12,7 +12,6 @@ from src.utils import *
 
 class Mimic(em.Enemy):
     __frame = 0
-    size = (132, 168)
 
     def __init__(self, pos: pg.math.Vector2):
         self.mimic_image, self.mimic_size = self.__random_object()
@@ -22,14 +21,18 @@ class Mimic(em.Enemy):
                          self.mimic_size)
 
         self.active_area = Area("active", pos, self.mimic_size[0] + 200, self.mimic_size[1] + 200)
-        self.__is_chasing = False
+        self.is_chasing = False
         self.speed = 1
+
+        self.size = 132, 168
+
+        self.__is_return = False
 
         self.__flip()
         self.__crying_sound: pg.mixer.Channel | None = None
 
     def get_rect(self) -> pg.rect.Rect:
-        if not self.__is_chasing:
+        if not self.is_chasing:
             surf = pg.surface.Surface(self.size)
             return surf.get_rect(center=self.position)
 
@@ -59,10 +62,12 @@ class Mimic(em.Enemy):
         player_rect = gm.Manager.get_instance().player.get_rect()
 
         if self.active_area.is_overlap(player_rect):
-            self.__is_chasing = True
+            self.is_chasing = True
             self.__return_original()
 
     def __return_original(self):
+        self.__is_return = True
+
         self.set_movement(normv.NormalMovement(self))
         self.set_image("mimic1", self.size)
 
@@ -80,13 +85,16 @@ class Mimic(em.Enemy):
             self.__frame = 0
 
     def update(self, *args, **kwargs):
-        if not self.__is_chasing:
+        if not self.is_chasing:
             self.__faking()
+            return
 
-        else:
-            super().update()
-            self.set_speed(self.get_speed() + 0.001)
-            self.moving()
+        if not self.__is_return:
+            self.__return_original()
+
+        super().update()
+        self.set_speed(self.get_speed() + 0.001)
+        self.moving()
 
     def moving(self):
         self.movement.moving()

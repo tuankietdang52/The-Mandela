@@ -170,7 +170,7 @@
   <object id="5" name="Apartment" x="-2" y="284" width="33.5" height="85.5"/>
  </objectgroup>
  <objectgroup id="16" name="Points">
-  <object id="10" name="CrossroadBk" x="270.667" y="128.333">
+  <object id="10" name="CrossroadBk" x="215.334" y="49.6663">
    <point/>
   </object>
   <object id="11" name="Start" x="123.833" y="277.25">

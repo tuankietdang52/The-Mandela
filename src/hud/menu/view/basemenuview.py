@@ -2,7 +2,6 @@ import src.utils.effect as ge
 import src.hud.menu.presenter.menupresenter as smpr
 import src.hud.menu.model.menumodel as smm
 
-
 from src.hud.menu.contract import *
 
 
@@ -19,21 +18,27 @@ class BaseMenuView(MenuContract.IView, pg.sprite.Sprite):
         self.presenter = smpr.MenuPresenter(self, smm.MenuModel(max_choice))
         self.elements: list[tuple[pg.surface.Surface, pg.rect.Rect]] = list()
 
-    def __write_text(self, text: str, size: int) -> pg.surface.Surface:
+    def __write_text(self,
+                     text: str,
+                     size: int,
+                     color: tuple[int, int, int],
+                     outline_color: tuple[int, int, int]) -> pg.surface.Surface:
         font = pg.font.Font(self.FONTPATH, size)
         text_surf = ge.Effect.create_text_outline(font,
                                                   text,
-                                                  (255, 255, 255),
+                                                  color,
                                                   3,
-                                                  (255, 0, 0))
+                                                  outline_color)
 
         return text_surf
 
     def create_txt_element(self,
                            text: str,
                            size: int,
+                           color: tuple[int, int, int],
+                           outline_color: tuple[int, int, int],
                            pos: tuple[float, float]) -> tuple[pg.surface.Surface, pg.rect.Rect]:
-        title = self.__write_text(text, size)
+        title = self.__write_text(text, size, color, outline_color)
 
         title_rect = title.get_rect(center=pos)
         return title, title_rect

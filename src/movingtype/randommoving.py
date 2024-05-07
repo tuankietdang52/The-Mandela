@@ -24,6 +24,8 @@ class RandomMovement(mv.Movement):
         top = position.y - self.moving_range
         bottom = position.y + self.moving_range
 
+        screen_size = self.manager.screen.get_size()
+
         while True:
             x = random.randint(round(left), round(right))
             y = random.randint(round(top), round(bottom))
@@ -31,6 +33,10 @@ class RandomMovement(mv.Movement):
             dest = pg.math.Vector2(x, y)
 
             if (dest.x, dest.y) in cannot_move:
+                continue
+
+            if dest.x > screen_size[0] or dest.y > screen_size[1]:
+                cannot_move.add((dest.x, dest.y))
                 continue
 
             if self.owner.can_move(dest):

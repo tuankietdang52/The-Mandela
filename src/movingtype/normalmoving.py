@@ -1,7 +1,6 @@
 import heapq
 import pygame as pg
 import numpy as np
-import src.entity.thealternate.enemy as enenemy
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
 
@@ -28,26 +27,28 @@ class Cell:
 
 
 class NormalMovement(mv.Movement):
-    def __init__(self, enemy: enenemy.Enemy):
+    def __init__(self, enemy: pg.sprite.Sprite):
         self.owner = enemy
         self.manager = gm.Manager.get_instance()
-        self.player = self.manager.player
+
+        self.dest = pg.math.Vector2()
+
+    def update_dest(self, dest: pg.math.Vector2):
+        self.dest = dest
 
     def moving(self):
-        rect = self.owner.get_rect()
-        player_rect = self.player.get_rect()
+        rect: pg.rect.Rect = self.owner.get_rect()
 
-        if Physic.is_collide(player_rect, rect):
+        if rect.center == self.dest:
             return
 
-        self.__chasing_player()
+        self.__go_to_dest()
 
     __ways = list()
 
-    def __chasing_player(self):
-        player_position = self.player.get_position()
+    def __go_to_dest(self):
         src = self.owner.get_position()
-        dest = player_position
+        dest = self.dest
 
         speed = self.owner.get_speed()
         position = src
@@ -63,12 +64,10 @@ class NormalMovement(mv.Movement):
         self.__ways = self.__find_way(self.owner.get_position(), dest)
 
         if len(self.__ways) == 0:
-            self.__approach_player()
+            self.__approach_to_dest()
 
-    def __approach_player(self):
-        player_position = self.player.get_position()
-
-        direction = self.owner.calculate_direction(player_position)
+    def __approach_to_dest(self):
+        direction = self.owner.calculate_direction(self.dest)
         velocity = direction * self.owner.get_speed()
 
         next_position = self.owner.get_position() + velocity

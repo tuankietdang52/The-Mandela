@@ -120,7 +120,7 @@ class Sect:
 
             surf = pg.transform.scale(surf, tilesize)
 
-            group = self.olptiles if layer.name == "OverlapPlayer" else self.tilegroup
+            group = self.olptiles if "OverlapPlayer" in layer.name else self.tilegroup
 
             tilemp = Tile(self.screen, surf, pos, layer.name, layer.id, layer.data[y][x], group)
 
@@ -192,7 +192,7 @@ class Sect:
 
         return None
 
-    def get_point(self, name):
+    def get_point(self, name) -> Point | None:
         for point in self.points:
             if point.name == name:
                 return point
