@@ -1,0 +1,13 @@
+Viole:
+pitch: 93
+speed: default
+mouth: default
+throat: 128
+
+https://imrane03.github.io/better-sam/
+
+Police:
+pitch: 85
+speed: 68
+mouth: 125
+throat: 95

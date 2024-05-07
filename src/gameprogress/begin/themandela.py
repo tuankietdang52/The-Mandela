@@ -20,6 +20,9 @@ class TheMandela(gp.ProgressManager):
         super().setup()
         pg.mixer.music.stop()
 
+    def re_setup(self):
+        self.can_press_key = True
+
     def event_action(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -79,8 +82,7 @@ class TheMandela(gp.ProgressManager):
             return
 
         if not self.is_occur_start_event:
-            sound = pg.mixer.Sound("../Assets/Sound/Other/tvlost.mp3")
-            sound.play(-1)
+            SoundUtils.play_sound("../Assets/Sound/Other/tvlost.mp3", True)
             self.is_occur_start_event = True
 
         area = sect.get_area("TV")

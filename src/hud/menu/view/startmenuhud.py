@@ -7,7 +7,7 @@ from src.hud.menu.contract import *
 
 class StartMenuHUD(vw.BaseMenuView):
     def __init__(self, screen: pg.surface.Surface, groups: pg.sprite.Group):
-        super().__init__(screen, 4, groups)
+        super().__init__(screen, 2, groups)
 
         self.__sponsor_list: list[tuple[pg.surface.Surface, pg.rect.Rect]] = []
 
@@ -71,11 +71,30 @@ class StartMenuHUD(vw.BaseMenuView):
         width, height = self.screen.get_width(), self.screen.get_height()
 
         self.elements.extend([
-            self.create_txt_element("NIGHTMARE", 80, (width / 2, 200)),
-            self.create_txt_element("Start", 30, (width / 2, height - 300)),
-            self.create_txt_element("Load", 30, (width / 2, height - 250)),
-            self.create_txt_element("Setting", 30, (width / 2, height - 200)),
-            self.create_txt_element("Quit", 30, (width / 2, height - 150))
+            self.create_txt_element("NIGHTMARE",
+                                    80,
+                                    (255, 255, 255),
+                                    (255, 0, 0),
+                                    (width / 2, 200)),
+
+            self.create_txt_element("Start",
+                                    30,
+                                    (255, 255, 255),
+                                    (255, 0, 0),
+                                    (width / 2, height - 300)),
+
+            # self.create_txt_element("Load",
+            #                         30,
+            #                         (255, 255, 255),
+            #                         (255, 0, 0),
+            #                         (width / 2, height - 250)),
+            # self.create_txt_element("Setting", 30, (width / 2, height - 200)),
+            # self.create_txt_element("Quit", 30, (width / 2, height - 150))
+            self.create_txt_element("Quit",
+                                    30,
+                                    (255, 255, 255),
+                                    (255, 0, 0),
+                                    (width / 2, height - 250))
         ])
 
     def update(self):

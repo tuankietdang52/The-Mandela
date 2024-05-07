@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import pygame as pg
 
-import src.gameprogress.progressmanager as gp
-import src.entity.playercontainer.player as pl
 import src.hud.timehud
+import src.gameprogress.progressmanager as gp
+import src.entity.ally.player as pl
 import src.mapcontainer.map as mp
 import src.gameprogress.other.deadmenu as dm
 
@@ -16,9 +16,32 @@ from src.pjenum import *
 import src.mapcontainer.housenormal as mphouse
 import src.mapcontainer.town as mptown
 import src.gameprogress.other.startmenu as sm
-import src.gameprogress.mainprogess.nightone as do
+import src.gameprogress.mainprogess.nightone as n1
+import src.gameprogress.mainprogess.nighttwo as n2
+import src.gameprogress.mainprogess.nightthree as n3
+import src.gameprogress.mainprogess.nightfour as n4
 import src.gameprogress.begin.themandela as tm
 import src.gameprogress.begin.beginning as bg
+
+
+class ProgressStatus:
+    def __init__(self):
+        self.is_get_potion = False
+        self.is_get_gas = False
+        self.gas_amount = 0
+        self.is_get_shovel = False
+        self.is_call_help = False
+        self.can_get_in_car = False
+        self.get_in_car = False
+
+    def reset(self):
+        self.is_get_potion = False
+        self.is_get_gas = False
+        self.gas_amount = 0
+        self.is_get_shovel = False
+        self.is_call_help = False
+        self.can_get_in_car = False
+        self.get_in_car = False
 
 
 class Manager:
@@ -31,11 +54,13 @@ class Manager:
     player: pl.Player = None
 
     entities = pg.sprite.Group()
-    appear_enemy = pg.sprite.Group()
-    appear_item = pg.sprite.Group()
+    appear_enemies = pg.sprite.Group()
+    appear_object = pg.sprite.Group()
     hud_groups = pg.sprite.Group()
 
-    game_time = [23, 0]
+    progress_status = ProgressStatus()
+
+    game_time = 0, 0
     game_time_second = 0
     game_night = 1
 
@@ -77,7 +102,7 @@ class Manager:
             return
 
         self.gamemap.sect.redraw()
-        self.appear_item.draw(self.screen)
+        self.appear_object.draw(self.screen)
         self.entities.draw(self.screen)
         self.gamemap.sect.redraw_overlap_tile()
         self.hud_groups.draw(self.screen)
@@ -89,26 +114,41 @@ class Manager:
     def update(self):
         self.gameprogress.update()
         self.update_entities()
+        self.update_object()
         self.update_time()
         self.update_hud()
         self.update_UI_ip()
 
     def update_time(self):
         self.game_time_second += Game.get_time()
-        self.game_time[1] = round(self.game_time_second)
+
+        self.game_time = self.game_time[0], round(self.game_time_second)
+
+        if self.game_time[0] == 2:
+            self.gameprogress.can_sleep = True
 
         if self.game_time[0] == 24:
-            self.game_time = [0, 0]
+            self.game_time = 0, 0
 
         if self.game_time[1] == 60:
-            self.game_time[1] = 0
+            self.game_time = self.game_time[0] + 1, 0
             self.game_time_second = 0
-            self.game_time[0] += 1
+
+    def set_night_and_time(self, night: int, time: tuple[int, int]):
+        self.game_night = night
+        self.game_time = time
+        self.game_time_second = time[1]
+
+    def update_object(self):
+        self.appear_object.update()
 
     def update_entities(self):
+        if self.progress_status.get_in_car:
+            return
+
         self.entities.update()
 
-        if len(self.appear_enemy) != 0:
+        if len(self.appear_enemies) != 0:
             self.player.decrease_sanity_amount(0.008)
 
     def update_hud(self):
@@ -162,12 +202,12 @@ class Manager:
         for item in self.hud_groups:
             item.image.set_alpha(alpha)
 
-    def set_appear_entity_opacity(self, alpha: int):
-        for em in self.appear_enemy:
+    def set_appear_enemies_opacity(self, alpha: int):
+        for em in self.appear_enemies:
             em.image.set_alpha(alpha)
 
     def set_appear_item_opacity(self, alpha: int):
-        for item in self.appear_item:
+        for item in self.appear_object:
             item.image.set_alpha(alpha)
 
     def reset_time(self):
@@ -182,8 +222,8 @@ class Game:
     WIDTH = 800
     HEIGHT = 800
 
-    IS_TEST = True
-    IS_FULLSCREEN = False
+    IS_TEST = False
+    IS_FULLSCREEN = True
 
     clock = pg.time.Clock()
     dt = 0
@@ -221,15 +261,15 @@ class Game:
 
     def test(self):
         """test element"""
-        self.manager.gamemap = mptown.Town(self.screen)
+        self.manager.gamemap = mphouse.HouseNormal(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        self.manager.gameprogress = do.NightOne(self.screen)
+        self.manager.gameprogress = bg.BeginStory(self.screen)
 
-        self.manager.player.init_hud(self.manager.hud_groups)
-        self.manager.gameprogress.time_hud = src.hud.timehud.TimeHUD(self.manager.hud_groups)
+        # self.manager.player.init_hud(self.manager.hud_groups)
+        # self.manager.gameprogress.time_hud = src.hud.timehud.TimeHUD(self.manager.hud_groups)
 
         self.manager.gamemap.change_sect("Home")
-        self.manager.gameprogress.set_progress_index(2)
+        self.manager.gameprogress.set_progress_index(3)
 
         self.setup_test()
 

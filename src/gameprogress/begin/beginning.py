@@ -24,6 +24,9 @@ class BeginStory(gp.ProgressManager):
         super().setup()
         gm.Manager.play_theme("../Assets/Music/Lily.mp3")
 
+    def re_setup(self):
+        self.can_press_key = True
+
     def event_action(self):
         for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -108,12 +111,12 @@ class BeginStory(gp.ProgressManager):
         if type(sect) is not mphouse.Room:
             return
 
-        size = sect.size
-        start_pos = pg.math.Vector2(6.2 * size, 6.5 * size)
+        point = sect.get_point("Lily")
+        start_pos = pg.math.Vector2(point.x, point.y)
 
         lily = ll.Lily(start_pos)
         lily.is_harmless = True
-        self.spawn_manager.add_special_enemy("lily", lily, mphouse.Room)
+        self.spawn_manager.add_special_entity("lily", lily, mphouse.Room)
         self.next()
 
     def __to_dream(self):
@@ -134,7 +137,7 @@ class BeginStory(gp.ProgressManager):
         player = gm.Manager.get_instance().player
         areas = gm.Manager.get_instance().gamemap.sect.areas
 
-        lily = self.spawn_manager.get_special_enemy("lily")
+        lily: ll.Lily = self.spawn_manager.get_special_entity("lily")
         lily_position = lily.get_position()
 
         player_rect = player.get_rect()
@@ -150,11 +153,7 @@ class BeginStory(gp.ProgressManager):
 
         self.next()
 
-    def __lily_to_demon(self, lily):
-        """
-        :param Any lily:
-        """
-
+    def __lily_to_demon(self, lily: ll.Lily):
         lily_position = lily.get_position()
 
         img = pg.image.load("../Assets/Enemy/Demon/bigmouth.png").convert_alpha()
@@ -169,7 +168,7 @@ class BeginStory(gp.ProgressManager):
         manager = gm.Manager.get_instance()
         player = manager.player
 
-        lily = self.spawn_manager.get_special_enemy("lily")
+        lily: ll.Lily = self.spawn_manager.get_special_entity("lily")
         player_rect = player.get_rect()
 
         if not Physic.is_collide(player_rect, lily.get_rect()):
@@ -183,5 +182,5 @@ class BeginStory(gp.ProgressManager):
         SoundUtils.clear_all_sound()
         manager.wait(2)
 
-        self.spawn_manager.remove_special_enemy("lily")
+        self.spawn_manager.remove_special_entity("lily")
         manager.set_game_progress(mandela.TheMandela(self.screen))

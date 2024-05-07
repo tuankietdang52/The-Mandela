@@ -59,3 +59,34 @@ class MenuContract(abc.ABC):
         @abc.abstractmethod
         def get_choice(self) -> int:
             pass
+
+
+class EndingContract(abc.ABC):
+    class IView(abc.ABC):
+        @abc.abstractmethod
+        def setup(self):
+            pass
+
+        @abc.abstractmethod
+        def get_elements(self):
+            pass
+
+        @abc.abstractmethod
+        def get_screen(self):
+            pass
+
+        @abc.abstractmethod
+        def draw(self):
+            pass
+
+        @abc.abstractmethod
+        def update(self):
+            pass
+
+    class IPresenter(abc.ABC):
+        @abc.abstractmethod
+        def is_enter(self):
+            pass
+
+    class IModel(abc.ABC):
+        pass

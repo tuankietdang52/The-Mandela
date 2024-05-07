@@ -10,7 +10,7 @@ class Effect:
         player = manager.player
 
         mp.set_opacity(0)
-        manager.set_appear_entity_opacity(0)
+        manager.set_appear_enemies_opacity(0)
         manager.set_appear_item_opacity(0)
         player.get_image().set_alpha(0)
         manager.set_hud_opacity(0)
@@ -27,10 +27,25 @@ class Effect:
 
         manager.screen.fill((0, 0, 0))
         mp.set_opacity(254)
-        manager.set_appear_entity_opacity(254)
+        manager.set_appear_enemies_opacity(254)
         manager.set_appear_item_opacity(254)
         manager.set_hud_opacity(254)
         player.get_image().set_alpha(254)
+
+        manager.update_UI_ip()
+
+    @staticmethod
+    def set_opacity_all(alpha: int):
+        manager = gm.Manager.get_instance()
+        mp = manager.gamemap.sect
+        player = manager.player
+
+        manager.screen.fill((0, 0, 0))
+        mp.set_opacity(alpha)
+        manager.set_appear_enemies_opacity(alpha)
+        manager.set_appear_item_opacity(alpha)
+        manager.set_hud_opacity(alpha)
+        player.get_image().set_alpha(alpha)
 
         manager.update_UI_ip()
 
@@ -49,7 +64,7 @@ class Effect:
             mp.set_opacity(alpha)
 
             if fade_in_entities:
-                manager.set_appear_entity_opacity(alpha)
+                manager.set_appear_enemies_opacity(alpha)
                 manager.set_appear_item_opacity(alpha)
                 player.get_image().set_alpha(alpha)
                 manager.set_hud_opacity(alpha)
@@ -71,7 +86,7 @@ class Effect:
             mp.set_opacity(alpha)
 
             if fade_out_entities:
-                manager.set_appear_entity_opacity(alpha)
+                manager.set_appear_enemies_opacity(alpha)
                 manager.set_appear_item_opacity(alpha)
                 player.get_image().set_alpha(alpha)
                 manager.set_hud_opacity(alpha)

@@ -1,6 +1,0 @@
-pitch: 93
-speed: default
-mouth: default
-throat: 128
-
-https://imrane03.github.io/better-sam/

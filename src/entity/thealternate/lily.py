@@ -14,6 +14,7 @@ class Lily(em.Enemy):
                          self.size)
 
     def update(self, *args, **kwargs):
+        super().update()
         self.moving()
         
     def moving(self):

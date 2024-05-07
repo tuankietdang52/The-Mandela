@@ -10,17 +10,20 @@ from src.utils import *
 
 
 class DeadMenu(gp.ProgressManager):
-    def __init__(self, screen: pg.surface.Surface, current_part: gp.ProgressManager):
+    def __init__(self, screen: pg.surface.Surface, current_progress: gp.ProgressManager):
         super().__init__(screen)
 
         self.dead_menu = dm.DeadMenuHUD(self.screen, self.manager.hud_groups)
-        self.current_part = current_part
+        self.current_progress = current_progress
 
         self.setup()
 
     def setup(self):
         self.spawn_manager.clear_enemies()
         super().setup()
+
+    def re_setup(self):
+        pass
 
     def event_action(self):
         for event in pg.event.get():
@@ -88,24 +91,30 @@ class DeadMenu(gp.ProgressManager):
     def reset_map(self):
         self.manager.set_map(mphouse.HouseNormal(self.screen))
         gamemap = self.manager.gamemap
-        player = self.manager.player
 
         gamemap.sect.create()
-        gamemap.change_sect("OutDoor")
 
+    def __reset_player(self):
+        gamemap = self.manager.gamemap
+        player = self.manager.player
+
+        player.reset()
         point = gamemap.sect.get_start_point()
         player.set_position(point)
+
+    def __reset_current_progress(self):
+        self.manager.set_game_progress(self.current_progress)
+        self.current_progress.re_setup()
+        self.manager.gameprogress.set_progress_index(0)
 
     def __replay(self):
         self.dead_menu.destroy()
 
         self.reset_map()
-        self.manager.player.reset()
-        self.manager.set_game_progress(self.current_part)
-        self.manager.gameprogress.set_progress_index(self.current_part.load_progress_index)
+        self.__reset_player()
+        self.__reset_current_progress()
 
         self.manager.reset_time()
-        Effect.fade_in_screen()
         SoundUtils.clear_all_sound()
 
     def __to_main_menu(self):

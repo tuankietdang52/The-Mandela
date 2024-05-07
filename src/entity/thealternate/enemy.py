@@ -3,6 +3,7 @@ import abc
 import pygame as pg
 import src.movingtype.movement as mv
 import src.gamemanage.game as gm
+import src.movingtype.normalmoving as normv
 
 from src.pjenum import *
 from src.eventhandle.argument import *
@@ -34,8 +35,13 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
         self.is_harmless = False
 
         self.destroy_callback = (self.on_destroy, EventArgs.empty())
+        gm.Manager.get_instance().on_entities_destroy += self.destroy_callback
 
     def update(self, *args, **kwargs):
+        if type(self.movement) is normv.NormalMovement:
+            dest = gm.Manager.get_instance().player.get_position()
+            self.movement.update_dest(dest)
+
         if self.is_hit_player():
             self.kill_player()
 
@@ -147,7 +153,7 @@ class Enemy(abc.ABC, pg.sprite.Sprite):
 
     def on_destroy(self, args: EventArgs):
         manager = gm.Manager.get_instance()
-        manager.appear_enemy.remove(self)
+        manager.appear_enemies.remove(self)
         manager.entities.remove(self)
 
         manager.on_entities_destroy -= self.destroy_callback

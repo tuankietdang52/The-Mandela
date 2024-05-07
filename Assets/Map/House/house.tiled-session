@@ -5,10 +5,10 @@
     },
     "activeFile": "MapSect/Room.tmx",
     "expandedProjectPaths": [
-        "World",
-        "Tile",
         ".",
-        "MapSect"
+        "World",
+        "MapSect",
+        "Tile"
     ],
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
@@ -20,7 +20,7 @@
             "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 112.16666666666664,
+                "x": 111.99999999999999,
                 "y": 56
             }
         },
@@ -29,46 +29,46 @@
                 8,
                 9
             ],
-            "scale": 4,
+            "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 80.125,
+                "x": 79.99999999999999,
                 "y": 104
             }
         },
         "MapSect/OutDoor.tmx": {
             "expandedObjectLayers": [
-                6,
-                10
+                10,
+                6
             ],
-            "scale": 5.5,
+            "scale": 3,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 111.9090909090909,
+                "x": 111.99999999999999,
                 "y": 80
             }
         },
         "MapSect/Room.tmx": {
             "expandedObjectLayers": [
-                8,
-                11
+                11,
+                8
             ],
-            "scale": 3,
-            "selectedLayer": 8,
+            "scale": 4,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 205.33333333333331,
-                "y": 142.66666666666663
+                "x": 141.75,
+                "y": 70.5
             }
         },
         "MapSect/Toilet.tmx": {
             "expandedObjectLayers": [
-                8,
-                7
+                7,
+                8
             ],
-            "scale": 4,
+            "scale": 3,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 40.125,
+                "x": 40,
                 "y": 96
             }
         },

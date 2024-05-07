@@ -27,6 +27,9 @@ class StartMenu(gp.ProgressManager):
         self.manager.update_UI_ip()
         self.manager.wait(1, False)
 
+    def re_setup(self):
+        self.__is_open_board = False
+
     def __draw_start_menu(self):
         elements = self.startmenu.get_elements()
 
@@ -43,10 +46,14 @@ class StartMenu(gp.ProgressManager):
         player = self.manager.player
         gamemap = self.manager.gamemap
 
-        start_point = gamemap.sect.get_start_point()
+        if not player.alive():
+            self.manager.entities.add(player)
+
+        point = gamemap.sect.get_point("Spawn")
+        position = pg.math.Vector2(point.x, point.y)
 
         player.set_image("sit", (36, 80))
-        player.set_position(start_point)
+        player.set_position(position)
         player.set_state(EState.BUSY)
 
     def __show_sponsor(self):
@@ -75,13 +82,13 @@ class StartMenu(gp.ProgressManager):
             self.next()
 
         elif choice == 2:
-            pass
-
-        elif choice == 3:
-            pass
-
-        elif choice == 4:
             sys.exit()
+
+        # elif choice == 3:
+        #     pass
+        #
+        # elif choice == 4:
+        #     pass
 
     def update(self):
         if self.get_progress_index() == 3:
