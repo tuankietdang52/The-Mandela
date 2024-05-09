@@ -163,18 +163,16 @@ class NightOne(gp.ProgressManager):
         HUDComp.create_board_text("Im full. Now I think I should looking for someone",
                                   player.get_voice("voice13"))
 
+        self.list_block_map.append(mphouse.HouseNormal)
         self.next()
 
     def __visit_sect(self):
         gamemap = self.manager.gamemap
 
         if type(gamemap) is not mptown.Town:
-            self.can_change_map = True
             return
-        else:
-            self.can_change_map = False
 
-        self.visited_sect.add(gamemap.sect)
+        self.visited_sect.add(type(gamemap.sect))
 
         if len(self.visited_sect) != len(gamemap.sections):
             return
@@ -182,13 +180,13 @@ class NightOne(gp.ProgressManager):
         HUDComp.create_board_text("Why is there no one in this town ?",
                                   self.manager.player.get_voice("voice14"))
 
-        self.can_change_map = True
+        self.list_block_map.remove(mphouse.HouseNormal)
         self.next()
 
     def __visit_police_sect(self):
         sect = self.manager.gamemap.sect
 
-        if type(sect) is mptown.Police and sect not in self.visited_sect:
+        if type(sect) is mptown.Police and type(sect) not in self.visited_sect:
             HUDComp.create_board_text("There is phone booth! |I can call for help",
                                       self.manager.player.get_voice("voice17"))
         else:

@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "MapSect/Toilet.tmx",
+    "activeFile": "MapSect/OutDoor.tmx",
     "expandedProjectPaths": [
         "Tile",
         ".",
@@ -47,8 +47,8 @@
             "scale": 8,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": -28.1875,
-                "y": 111.5
+                "x": 118.8125,
+                "y": 110.875
             }
         },
         "MapSect/Room.tmx": {
@@ -129,12 +129,12 @@
     ],
     "project": "house.tiled-project",
     "recentFiles": [
-        "MapSect/OutDoor.tmx",
-        "MapSect/Kitchen.tmx",
         "Tile/pointer_small.tsx",
         "MapSect/Room.tmx",
         "MapSect/Corridor.tmx",
         "MapSect/Toilet.tmx",
+        "MapSect/Kitchen.tmx",
+        "MapSect/OutDoor.tmx",
         "Tile/tv.tsx",
         "Tile/blackblock.tsx",
         "Tile/pointer.tsx",

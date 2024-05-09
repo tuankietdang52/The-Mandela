@@ -37,6 +37,8 @@ class ProgressManager(abc.ABC):
 
         self.manager = gm.Manager.get_instance()
 
+        self.list_block_map: list[type[mp.Map]] = list()
+
         self.spawn_manager = spm.SpawnManager(game_objects)
         self.time_hud: TimeHUD | None = None
 
@@ -104,6 +106,10 @@ class ProgressManager(abc.ABC):
         map_comp = self.manager.gamemap.get_next_map(area)
         if map_comp is None:
             return
+
+        for map_type in self.list_block_map:
+            if type(map_comp[0]) is map_type:
+                return
 
         next_map, text = map_comp
 
