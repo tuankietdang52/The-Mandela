@@ -19,7 +19,9 @@ class NightThree(gp.ProgressManager):
         self.can_change_map = True
         self.can_press_key = True
         self.can_sleep = False
+
         self.manager.progress_status.is_call_help = False
+        self.manager.progress_status.is_get_shovel = False
 
         self.spawn_manager.set_enemy_spawn_chance(50)
 
@@ -32,7 +34,9 @@ class NightThree(gp.ProgressManager):
         self.can_press_key = True
         self.can_sleep = False
         self.is_occur_start_event = False
+
         self.manager.progress_status.is_call_help = False
+        self.manager.progress_status.is_get_shovel = False
 
         self.spawn_manager.set_enemy_spawn_chance(50)
         self.spawn_manager.reset_game_objects()

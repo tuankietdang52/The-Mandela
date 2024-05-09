@@ -7,6 +7,7 @@ import src.gameprogress.progressmanager as gp
 import src.entity.ally.player as pl
 import src.mapcontainer.map as mp
 import src.gameprogress.other.deadmenu as dm
+import src.gameprogress.other.pause as ps
 
 from src.eventhandle import *
 from src.pjenum import *
@@ -34,6 +35,8 @@ class ProgressStatus:
         self.can_get_in_car = False
         self.get_in_car = False
 
+        self.can_pause = True
+
     def reset(self):
         self.is_get_potion = False
         self.is_get_gas = False
@@ -42,6 +45,8 @@ class ProgressStatus:
         self.is_call_help = False
         self.can_get_in_car = False
         self.get_in_car = False
+
+        self.can_pause = True
 
 
 class Manager:
@@ -244,6 +249,8 @@ class Game:
 
     def __init__(self):
         self.manager = Manager.init(self.screen)
+        self.pause = ps.Pause(self.screen)
+
         self.setup()
         if not self.IS_TEST:
             self.setup_manager()
@@ -261,14 +268,14 @@ class Game:
 
     def test(self):
         """test element"""
-        self.manager.gamemap = mphouse.HouseNormal(self.screen)
+        self.manager.gamemap = mptown.Town(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        self.manager.gameprogress = bg.BeginStory(self.screen)
+        self.manager.gameprogress = n4.NightFour(self.screen)
 
-        # self.manager.player.init_hud(self.manager.hud_groups)
+        self.manager.player.init_hud(self.manager.hud_groups)
         # self.manager.gameprogress.time_hud = src.hud.timehud.TimeHUD(self.manager.hud_groups)
 
-        self.manager.gamemap.change_sect("Home")
+        self.manager.gamemap.change_sect("PublicToilet")
         self.manager.gameprogress.set_progress_index(3)
 
         self.setup_test()
@@ -295,6 +302,28 @@ class Game:
     def get_time() -> int:
         return Game.dt
 
+    def __is_pause_game(self):
+        keys = pg.key.get_pressed()
+
+        if self.manager.player.get_state() == EState.DEAD:
+            return False
+
+        if not self.manager.progress_status.can_pause:
+            return False
+
+        if keys[pg.K_ESCAPE] and self.pause.is_resume:
+            return True
+
+        return False
+
+    def __pausing_game(self):
+        self.pause.show()
+        self.is_pausing = True
+
+    def __pause_update(self):
+        self.pause.update()
+        self.manager.update_UI_ip()
+
     def running_game(self):
         self.manager.wait(1)
 
@@ -304,6 +333,13 @@ class Game:
         player = self.manager.player
 
         while game_running:
+            if self.__is_pause_game():
+                self.__pausing_game()
+
+            if not self.pause.is_resume:
+                self.__pause_update()
+                continue
+
             if player.get_state() == EState.DEAD and not game_over:
                 self.__to_dead_menu()
                 game_over = True

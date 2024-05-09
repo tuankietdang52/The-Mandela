@@ -150,6 +150,10 @@ class ProgressManager(abc.ABC):
         if gamemap.sect == current:
             return
 
+        self.changing_sect()
+
+    def changing_sect(self):
+        gamemap = self.manager.gamemap
         self.spawn_manager.clear_object_and_enemies()
         self.spawn_manager.is_trigger_spawn = False
 

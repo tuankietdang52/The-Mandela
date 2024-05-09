@@ -16,6 +16,8 @@ class DeadMenu(gp.ProgressManager):
         self.dead_menu = dm.DeadMenuHUD(self.screen, self.manager.hud_groups)
         self.current_progress = current_progress
 
+        self.manager.progress_status.can_pause = False
+
         self.setup()
 
     def setup(self):
@@ -114,6 +116,8 @@ class DeadMenu(gp.ProgressManager):
         self.__reset_player()
         self.__reset_current_progress()
 
+        self.manager.progress_status.can_pause = True
+
         self.manager.reset_time()
         SoundUtils.clear_all_sound()
 
@@ -127,6 +131,8 @@ class DeadMenu(gp.ProgressManager):
     def destroy(self):
         Effect.fade_out_screen()
         self.dead_menu.destroy()
+
+        self.manager.progress_status.can_pause = True
 
     def destroy_hud(self):
         for hud in self.manager.hud_groups:

@@ -21,6 +21,9 @@ class MenuPresenter(MenuContract.IPresenter):
 
         return None
 
+    def reset_choice(self):
+        self.__model.set_choice(1)
+
     def selecting(self):
         key = self.__get_key()
         prev_choice = self.__model.get_choice()

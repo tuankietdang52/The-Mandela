@@ -36,6 +36,8 @@ class NightOne(gp.ProgressManager):
         self.is_occur_start_event = False
 
         self.manager.progress_status.reset()
+        self.manager.on_entities_destroy.clear_callback()
+        self.manager.player.interact.clear_callback()
 
         self.spawn_manager.set_enemy_spawn_chance(5)
         self.manager.hud_groups.empty()
@@ -190,6 +192,9 @@ class NightOne(gp.ProgressManager):
 
         HUDComp.create_board_text("Unfortunately, I dont have coin",
                                   player.get_voice("voice18"))
+
+        HUDComp.create_board_text("I should keep looking for someone",
+                                  player.get_voice("voice34"))
 
     def __visit_graveyard_sect(self):
         sect = self.manager.gamemap.sect

@@ -20,6 +20,8 @@ class GoodEnding(gp.ProgressManager):
         self.good_ending_hud = gdhud.GoodEnidngHUD(self.screen, self.manager.hud_groups)
         self.car: otherobj.PoiceCarFront | None = None
 
+        self.manager.progress_status.can_pause = False
+
         self.setup()
 
     def setup(self):
@@ -62,6 +64,9 @@ class GoodEnding(gp.ProgressManager):
             self.__draw_thanks_screen()
 
         elif progress == 5:
+            self.__wait_for_enter()
+
+        elif progress == 6:
             self.__to_main_menu()
 
     def __draw_good_ending_scene(self):
@@ -111,12 +116,20 @@ class GoodEnding(gp.ProgressManager):
         msg = self.good_ending_hud.get_thanks_surf()
 
         Effect.fade_in_list(self.screen, [msg])
-        gm.Manager.get_instance().wait(2)
+        self.manager.wait(2)
         Effect.fade_out_list(self.screen, [msg])
         self.good_ending_hud.draw()
 
-        Effect.fade_out_screen()
+        self.next()
 
+    def __wait_for_enter(self):
+        keys = pg.key.get_pressed()
+
+        if not keys[pg.K_RETURN]:
+            return
+
+        pg.mixer.music.fadeout(1000)
+        Effect.fade_out_screen()
         self.next()
 
     def __to_main_menu(self):

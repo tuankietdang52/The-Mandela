@@ -19,11 +19,16 @@ class Potion(go.GameObject):
         sect = self.manager.gamemap.sect
         player = self.manager.player
 
+        night = self.manager.game_night
+
         if type(sect) is not self.appear_sect:
             return
 
         if not self.area.is_overlap(player.get_rect()):
             return
+
+        if night != 2:
+            self.is_back_up = True
 
         self.destroy()
         self.manager.update_UI_ip()
@@ -120,7 +125,9 @@ class Shovel(go.GameObject):
 
         HUDComp.create_board_text("You've pick up a shovel")
         self.manager.progress_status.is_get_shovel = True
-        self.kill()
+
+        self.is_back_up = True
+        self.destroy()
 
 
 class PoliceCar(go.GameObject):

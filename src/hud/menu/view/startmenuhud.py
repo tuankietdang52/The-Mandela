@@ -71,7 +71,7 @@ class StartMenuHUD(vw.BaseMenuView):
         width, height = self.screen.get_width(), self.screen.get_height()
 
         self.elements.extend([
-            self.create_txt_element("NIGHTMARE",
+            self.create_txt_element("The Mandela",
                                     80,
                                     (255, 255, 255),
                                     (255, 0, 0),
