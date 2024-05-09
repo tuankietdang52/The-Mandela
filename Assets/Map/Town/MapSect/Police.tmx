@@ -6,6 +6,7 @@
  <tileset firstgid="1082" name="phone_small" tilewidth="16" tileheight="16" tilecount="2" columns="1">
   <image source="../Package/phone_small.png" width="16" height="32"/>
  </tileset>
+ <tileset firstgid="1084" source="../Tile/pointer.tsx"/>
  <layer id="2" name="Void" width="19" height="22">
   <data encoding="csv">
 601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,

@@ -9,6 +9,16 @@ from src.hud.hudcomp import *
 from src.eventhandle.argument import *
 
 
+class Arrow(go.GameObject):
+    def __init__(self, pos: pg.math.Vector2, appear_sect: type[mp.Sect]):
+        super().__init__(pos, "../Assets/Map/pointer.png", (32, 64), appear_sect)
+
+        self.manager.player.interact -= self.callback
+
+    def player_interact(self, args: EventArgs):
+        pass
+
+
 class Potion(go.GameObject):
     def __init__(self, pos: pg.math.Vector2, appear_sect: type[mp.Sect]):
         super().__init__(pos, "../Assets/Other/Potion.png", (25, 50), appear_sect)

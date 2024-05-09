@@ -216,7 +216,7 @@ class Manager:
             item.image.set_alpha(alpha)
 
     def reset_time(self):
-        self.game_time = [0, 0]
+        self.game_time = 0, 0
         self.game_time_second = 0
 
 
@@ -268,15 +268,15 @@ class Game:
 
     def test(self):
         """test element"""
-        self.manager.gamemap = mptown.Town(self.screen)
+        self.manager.gamemap = mphouse.HouseNormal(self.screen)
         self.manager.player = pl.Player(self.screen, self.manager.entities)
-        self.manager.gameprogress = n4.NightFour(self.screen)
+        self.manager.gameprogress = n1.NightOne(self.screen)
 
-        self.manager.player.init_hud(self.manager.hud_groups)
+        # self.manager.player.init_hud(self.manager.hud_groups)
         # self.manager.gameprogress.time_hud = src.hud.timehud.TimeHUD(self.manager.hud_groups)
 
-        self.manager.gamemap.change_sect("PublicToilet")
-        self.manager.gameprogress.set_progress_index(3)
+        self.manager.gamemap.change_sect("OutDoor")
+        self.manager.gameprogress.set_progress_index(0)
 
         self.setup_test()
 
