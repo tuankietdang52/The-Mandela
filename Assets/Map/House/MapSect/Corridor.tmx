@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="7" tilewidth="16" tileheight="16" infinite="0" nextlayerid="10" nextobjectid="13">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="14" height="7" tilewidth="16" tileheight="16" infinite="0" nextlayerid="11" nextobjectid="13">
  <tileset firstgid="1" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="2" source="../Tile/housetile.tsx"/>
+ <tileset firstgid="258" source="../Tile/pointer_small.tsx"/>
  <layer id="2" name="Void" width="14" height="7" visible="0">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -51,6 +52,17 @@
 0,233,234,235,0,0,0,0,0,0,0,0,0,0,
 0,249,250,251,0,104,104,104,104,104,104,104,0,0,
 0,0,0,0,0,103,103,103,103,103,103,103,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="10" name="ObjCanMove2" width="14" height="7">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,

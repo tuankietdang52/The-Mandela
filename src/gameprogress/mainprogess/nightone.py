@@ -5,7 +5,7 @@ import src.gameobj.otherobj as otherobj
 import src.mapcontainer.market as mk
 import src.gameprogress.progressmanager as gp
 import src.gameprogress.mainprogess.nighttwo as n2
-
+import src.mapcontainer.housenormal as mphouse
 import src.mapcontainer.town as mptown
 import src.gameobj.food as fd
 
@@ -25,7 +25,7 @@ class NightOne(gp.ProgressManager):
 
         self.visited_sect = set()
 
-        self.spawn_manager.set_enemy_spawn_chance(5)
+        self.spawn_manager.set_enemy_spawn_chance(0)
 
     def re_setup(self):
         self.can_press_key = False
@@ -108,12 +108,15 @@ class NightOne(gp.ProgressManager):
             self.next()
 
         elif progress == 4:
-            self.__spawn_items()
+            self.__spawn_arrow()
 
         elif progress == 5:
-            self.__find_someone()
+            self.__spawn_items()
 
         elif progress == 6:
+            self.__find_someone()
+
+        elif progress == 7:
             self.__visit_police_sect()
             self.__visit_graveyard_sect()
             self.__visit_sect()
@@ -126,6 +129,20 @@ class NightOne(gp.ProgressManager):
                                   self.manager.player.get_voice("voice10"))
         HUDComp.create_board_text("Maybe I should go find some food first or I will starve to death",
                                   self.manager.player.get_voice("voice11"))
+
+    def __spawn_arrow(self):
+        sect = self.manager.gamemap.sect
+        if type(sect) is not mphouse.OutDoor:
+            return
+
+        point = sect.get_point("Arrow")
+        position = pg.math.Vector2(point.x, point.y)
+
+        arrow = otherobj.Arrow(position, mphouse.OutDoor)
+        arrow.image = pg.transform.rotate(arrow.image, -90)
+        self.spawn_manager.add_object(arrow)
+
+        self.next()
 
     def __spawn_items(self):
         sect = self.manager.gamemap.sect

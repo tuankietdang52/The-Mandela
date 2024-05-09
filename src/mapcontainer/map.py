@@ -119,6 +119,9 @@ class Sect:
 
             tilesize = self.size, self.size
 
+            if surf is None:
+                continue
+
             surf = pg.transform.scale(surf, tilesize)
 
             group = self.olptiles if "OverlapPlayer" in layer.name else self.tilegroup

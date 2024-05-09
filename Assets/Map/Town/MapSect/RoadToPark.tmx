@@ -3,6 +3,7 @@
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
+ <tileset firstgid="1082" source="../Tile/pointer.tsx"/>
  <layer id="2" name="Void" width="16" height="24">
   <data encoding="csv">
 601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,
@@ -117,7 +118,7 @@
  </layer>
  <layer id="6" name="ObjCanMove2" width="16" height="24">
   <data encoding="csv">
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,3758097467,3758097466,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -140,7 +141,7 @@
 1066,1067,0,0,0,0,0,0,0,0,0,0,0,0,1052,1053,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,1068,1069,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+0,0,0,0,0,0,0,2684355643,2684355642,0,0,0,0,0,0,0
 </data>
  </layer>
  <layer id="7" name="Object" width="16" height="24">

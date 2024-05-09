@@ -3,6 +3,7 @@
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
+ <tileset firstgid="1082" source="../Tile/pointer.tsx"/>
  <layer id="9" name="Void" width="24" height="23">
   <data encoding="csv">
 601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,

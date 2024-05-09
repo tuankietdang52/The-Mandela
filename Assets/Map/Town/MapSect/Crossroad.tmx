@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="18" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="22" nextobjectid="20">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="18" height="18" tilewidth="16" tileheight="16" infinite="0" nextlayerid="23" nextobjectid="20">
  <tileset firstgid="1" source="../Tile/town.tsx"/>
  <tileset firstgid="601" source="../Tile/blackblock.tsx"/>
  <tileset firstgid="602" source="../Tile/cyberpunk.tsx"/>
+ <tileset firstgid="1082" source="../Tile/pointer.tsx"/>
  <layer id="14" name="Void" width="18" height="18">
   <data encoding="csv">
 601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,601,
@@ -89,6 +90,28 @@
 0,0,0,0,0,0,750,750,750,750,750,751,0,0,0,0,0,0,
 117,118,119,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 137,138,139,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="22" name="ObjCanMove2" width="18" height="18">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,1610613818,1610613819,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+3221226555,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1082,
+3221226554,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1083,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,2684355643,2684355642,0,0,0,0,0,2684355643,2684355642,0,0,0,0
 </data>
  </layer>
  <layer id="18" name="Object" width="18" height="18">
