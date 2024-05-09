@@ -26,9 +26,6 @@ class NightFour(gp.ProgressManager):
         self.manager.progress_status.is_get_gas = False
         self.manager.progress_status.gas_amount = 0
 
-        self.manager.progress_status.is_call_help = True
-        self.manager.progress_status.is_get_potion = True
-
         self.is_check = False
         self.__is_dizzy = False
         self.__is_spawn_gas_can = False
