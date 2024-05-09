@@ -12,5 +12,8 @@ class MenuModel(MenuContract.IModel):
     def decrease_choice(self):
         self.choice -= 1 if self.choice != 1 else 0
 
+    def set_choice(self, choice: int):
+        self.choice = choice
+
     def get_choice(self):
         return self.choice

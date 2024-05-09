@@ -11,6 +11,9 @@ class BadEnding(gp.ProgressManager):
         super().__init__(screen)
 
         self.bad_ending_hud = bdhud.BadEnidngHUD(self.screen, self.manager.hud_groups)
+
+        self.manager.progress_status.can_pause = False
+
         self.setup()
 
     def setup(self):

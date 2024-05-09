@@ -394,4 +394,3 @@ class NightFour(gp.ProgressManager):
     def __to_good_ending(self):
         good_ending = gd.GoodEnding(self.screen)
         self.manager.set_game_progress(good_ending)
-

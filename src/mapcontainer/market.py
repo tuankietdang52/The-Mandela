@@ -34,4 +34,4 @@ class MarketSect(mp.Sect):
 
         self.sectpath = path + "Market.tmx"
         self.load(self.sectpath)
-        self.init_OFFSET((15, -140), (0, 0))
+        self.init_OFFSET((15, -140), (-170, -170))

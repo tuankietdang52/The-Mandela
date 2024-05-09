@@ -15,12 +15,17 @@ class StartMenu(gp.ProgressManager):
         self.startmenu = hud_sm.StartMenuHUD(self.screen, self.manager.hud_groups)
         self.__hide_player()
 
+        self.manager.progress_status.can_pause = False
+
         self.__is_open_board = False
 
     def __hide_player(self):
-        gm.Manager.get_instance().player.get_image().set_alpha(0)
+        self.manager.player.get_image().set_alpha(0)
 
     def setup(self):
+        SoundUtils.clear_all_sound()
+        pg.mixer.music.stop()
+
         self.__setup_map()
         self.__setup_player()
 
@@ -28,6 +33,8 @@ class StartMenu(gp.ProgressManager):
         self.manager.wait(1, False)
 
     def re_setup(self):
+        self.manager.progress_status.can_pause = False
+
         self.__is_open_board = False
 
     def __draw_start_menu(self):
@@ -145,3 +152,4 @@ class StartMenu(gp.ProgressManager):
         player.set_state(EState.FREE)
 
         self.manager.set_game_progress(bg.BeginStory(self.screen))
+        self.manager.progress_status.can_pause = True

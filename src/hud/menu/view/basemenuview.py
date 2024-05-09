@@ -5,11 +5,14 @@ import src.hud.menu.model.menumodel as smm
 from src.hud.menu.contract import *
 
 
-class BaseMenuView(MenuContract.IView, pg.sprite.Sprite):
+class BaseMenuView(pg.sprite.Sprite, MenuContract.IView):
     FONTPATH = "../Assets/Font/Crang.ttf"
 
-    def __init__(self, screen, max_choice: int, groups: pg.sprite.Group):
-        super().__init__(groups)
+    def __init__(self, screen, max_choice: int, groups: pg.sprite.Group = None):
+        if groups is not None:
+            super().__init__(groups)
+        else:
+            pg.sprite.Sprite.__init__(self)
 
         self.image = None
         self.rect = None
@@ -54,6 +57,9 @@ class BaseMenuView(MenuContract.IView, pg.sprite.Sprite):
 
     def get_screen(self):
         pass
+
+    def reset_choice(self):
+        self.presenter.reset_choice()
 
     def set_choice(self, choice: int):
         pass

@@ -24,3 +24,6 @@ class EventHandle:
             args = event[1]
 
             callback(args)
+
+    def clear_callback(self):
+        self.event_handle.clear()

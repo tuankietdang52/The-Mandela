@@ -43,6 +43,10 @@ class MenuContract(abc.ABC):
             pass
 
         @abc.abstractmethod
+        def reset_choice(self):
+            pass
+
+        @abc.abstractmethod
         def selecting(self):
             """checking user input"""
             pass
@@ -54,6 +58,10 @@ class MenuContract(abc.ABC):
 
         @abc.abstractmethod
         def decrease_choice(self):
+            pass
+
+        @abc.abstractmethod
+        def set_choice(self, choice: int):
             pass
 
         @abc.abstractmethod
