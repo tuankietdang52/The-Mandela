@@ -5,7 +5,6 @@ from src.tilemap import *
 
 
 class Physic:
-
     @staticmethod
     def is_collide(rect1: pg.rect.Rect, rect2: pg.rect.Rect) -> bool:
         point = rect2.center

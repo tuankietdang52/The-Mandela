@@ -25,7 +25,7 @@ class NightOne(gp.ProgressManager):
 
         self.visited_sect = set()
 
-        self.spawn_manager.set_enemy_spawn_chance(0)
+        self.spawn_manager.set_enemy_spawn_chance(5)
 
     def re_setup(self):
         self.can_press_key = False
