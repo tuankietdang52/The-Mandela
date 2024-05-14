@@ -223,7 +223,7 @@ class Map(abc.ABC):
         self.screen = screen
         self.path = path
 
-        self.sect = None
+        self.sect: Sect | None = None
         self.sections: list[tuple[str, Sect]] = list()
 
         self.ori_block_size = 16
@@ -236,7 +236,7 @@ class Map(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_next_map(self, area_name):
+    def get_next_map(self, area_name: str):
         pass
 
     def change_sect(self, name: str):

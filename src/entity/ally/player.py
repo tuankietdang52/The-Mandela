@@ -9,7 +9,6 @@ from src.eventhandle import *
 
 
 class Player(pg.sprite.Sprite):
-    _instance = None
     __path = "../Assets/Ally/Viole/"
     animatepth = "walk0"
     __frame = 0

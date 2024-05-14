@@ -295,11 +295,10 @@ class Game:
 
     @staticmethod
     def ticking_time():
-        """USE CAREFULLY HAHAHAHAHAH"""
         Game.dt = Game.clock.tick(Game.FPS) / 1000
 
     @staticmethod
-    def get_time() -> int:
+    def get_time() -> float:
         return Game.dt
 
     def __is_pause_game(self):
@@ -351,5 +350,5 @@ class Game:
             Game.ticking_time()
 
     def __to_dead_menu(self):
-        current_part = self.manager.gameprogress
-        self.manager.set_game_progress(dm.DeadMenu(self.screen, current_part))
+        current_progress = self.manager.gameprogress
+        self.manager.set_game_progress(dm.DeadMenu(self.screen, current_progress))
