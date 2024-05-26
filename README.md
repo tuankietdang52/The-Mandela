@@ -2,7 +2,7 @@
 
 A game create for my school project
 
-In this project, Most assets im using not my work
+In this project, Most assets im using not my work and this project is NOT for commercial
 
 # To the Mandela Town
 The idea of the game is based on Mandela Catalogue by Alex Kister. You will play as Viole, the main character of the game in the Mandela Town. You must to survive until the help arrive
