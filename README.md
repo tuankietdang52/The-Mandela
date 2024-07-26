@@ -11,5 +11,5 @@ The idea of the game is based on Mandela Catalogue by Alex Kister. You will play
 ![menu](https://github.com/tuankietdang52/The-Mandela/assets/79842421/ea5d1611-063c-4811-a197-33ef101f4ace)
 ![alternate](https://github.com/tuankietdang52/The-Mandela/assets/79842421/133b4980-6f7b-4efb-9099-88a3a09139b5)
 
-# Download Link
-https://drive.google.com/file/d/1WgSZT7amG_Ch1_FTtQy_4rrX8_H2q-6t/view?usp=sharing
+# Download
+Get thhe game in <b>Release<b>, extract and run exe file
